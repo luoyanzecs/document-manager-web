@@ -15,23 +15,23 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('@/components/admin/UserManage.vue')
+        component: () => import('@/components/admin/body/UserManage.vue')
       },
       {
         path: 'userManage',
-        component: () => import('@/components/admin/UserManage.vue')
+        component: () => import('@/components/admin/body/UserManage.vue')
       },
       {
         path: 'behaviorManage',
-        component: () => import('@/components/admin/BehaviorManage.vue')
+        component: () => import('@/components/admin/body/BehaviorManage.vue')
       },
       {
         path: 'fileManage',
-        component: () => import('@/components/admin/FileManage.vue')
+        component: () => import('@/components/admin/body/FileManage.vue')
       },
       {
         path: 'noticeManage',
-        component: () => import('@/components/admin/NoticeManage.vue')
+        component: () => import('@/components/admin/body/NoticeManage.vue')
       }
     ]
   },

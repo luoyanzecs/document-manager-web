@@ -19,18 +19,10 @@ const componentItem = {
   1: Collapse,
   2: Expand
 }
-onBeforeMount(() => {
-  type.value = window.innerWidth > 768 ? 2 : 1
-})
+onBeforeMount(() => type.value = window.innerWidth > 768 ? 2 : 1)
 
 onMounted(() => {
-  window.addEventListener("resize", () => {
-    if (window.innerWidth <= 768) {
-      type.value = 1
-    } else {
-      type.value = 2
-    }
-  })
+  window.addEventListener("resize", () => type.value = window.innerWidth <= 768 ? 1 : 2)
 })
 
 </script>

@@ -18,19 +18,19 @@ const routes = [
         component: () => import('@/components/admin/body/UserManage.vue')
       },
       {
-        path: 'userManage',
+        path: 'user',
         component: () => import('@/components/admin/body/UserManage.vue')
       },
       {
-        path: 'behaviorManage',
+        path: 'behavior',
         component: () => import('@/components/admin/body/BehaviorManage.vue')
       },
       {
-        path: 'fileManage',
+        path: 'file',
         component: () => import('@/components/admin/body/FileManage.vue')
       },
       {
-        path: 'noticeManage',
+        path: 'notice',
         component: () => import('@/components/admin/body/NoticeManage.vue')
       }
     ]

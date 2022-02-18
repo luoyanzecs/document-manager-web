@@ -7,7 +7,7 @@
           <div v-for="(item, index) in menu"
                :key="index"
                @click="menuSelect(index)"
-               class="hover:bg-blue-200 rounded-md px-2 py-1.5 cursor-pointer text-gray-700"
+               :class="{'select-menu': index === currentIndex, 'menu-base': true}"
           >{{ item }}
           </div>
         </div>
@@ -21,7 +21,9 @@
           </keep-alive>
         </template>
         <template v-slot:avatar>
-          <el-popover placement="bottom" :width="200" trigger="hover">
+          <el-popover placement="bottom"
+                      :width="200"
+                      trigger="hover">
             <template #reference>
               <el-avatar :icon="UserFilled"></el-avatar>
             </template>
@@ -37,7 +39,13 @@
 </template>
 
 <style>
+.menu-base {
+  @apply hover:text-blue-500 rounded-md px-2 py-1.5 cursor-pointer text-gray-700
+}
 
+.select-menu {
+  @apply bg-blue-200 text-blue-500 italic;
+}
 </style>
 
 <script setup>
@@ -52,36 +60,21 @@ import Aside from "@/components/common/Aside";
 import Header from "@/components/common/Header";
 
 const headType = ref(1)
-
 const headComponent = reactive({
   0: UserTool,
   1: BehaviorTool,
   2: FileTool,
   3: NoticeTool
 })
+const currentIndex = ref(0)
 
-const menu = ref(['用户管理', '记录管理', '文件管理', '发布通知'])
+const menu = ['用户管理', '记录管理', '文件管理', '发布通知']
+const routes = ['user', 'behavior', 'file', 'notice']
 
 const menuSelect = (index) => {
-  let root = '/admin'
-  switch (index) {
-    case 0:
-      headType.value = 0
-      router.push(`${root}/userManage`)
-      break
-    case 1:
-      headType.value = 1
-      router.push(`${root}/behaviorManage`)
-      break
-    case 2:
-      headType.value = 2
-      router.push(`${root}/fileManage`)
-      break
-    case 3:
-      headType.value = 3
-      router.push(`${root}/noticeManage`)
-      break
-  }
+  currentIndex.value = index
+  headType.value = index
+  router.push(`/admin/${routes[index]}`)
 }
 
 </script>

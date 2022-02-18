@@ -23,7 +23,7 @@ onMounted(() => {
     "table", "lineHeight", "foreColor", "backColor", "link", "list", "justify",
     "quote", "image", "code", "splitLine", "undo", "redo"]
 
-  o.config.zIndex = 1
+  o.config.zIndex = 0
   o.config.onchange = () => {
     console.log('change');
   }

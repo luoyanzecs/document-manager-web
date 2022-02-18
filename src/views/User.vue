@@ -1,24 +1,23 @@
 <template>
-  <el-container
-      style="height: 100vh; width:100vw; overflow: hidden"
-  >
+  <div class="container max-w-screen-2xl flex">
     <Aside>
       <template v-slot:right>
-        <el-button type="primary">部门</el-button>
+        <header-button type="primary">部门</header-button>
       </template>
       <template v-slot:context>
         <div>
           <el-scrollbar>
-            <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
+            <el-tree :data="data"
+                     :props="defaultProps"
+                     @node-click="handleNodeClick" />
           </el-scrollbar>
         </div>
       </template>
 
     </Aside>
 
-    <el-container>
-      <el-header>
-        <Header>
+    <div class="h-screen flex-grow">
+      <Header>
           <template v-slot:tools>
             <head-tool :banners="banners"
                        @editor="click"/>
@@ -32,15 +31,14 @@
             </el-popover>
           </template>
         </Header>
-      </el-header>
-      <el-main style="overflow: scroll; padding: 0">
+      <div>
         <Editor ref="editor"/>
         <el-divider content-position="left">
           <el-icon color="#909399" :size="30"><comment/></el-icon>
         </el-divider>
-      </el-main>
-    </el-container>
-  </el-container>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style>
@@ -61,6 +59,7 @@ import { Comment, UserFilled } from "@element-plus/icons-vue"
 import Aside from "@/components/common/Aside";
 import Header from "@/components/common/Header";
 import HeadTool from "@/components/user/HeadTool";
+import HeaderButton from "@/components/common/HeaderButton";
 
 const editor = ref()
 

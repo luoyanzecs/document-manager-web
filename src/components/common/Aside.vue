@@ -1,26 +1,27 @@
 <template>
-  <el-button class="menu-btn"
-             type="primary"
-             @click="clickHandler"
-  ><el-icon size="20px">
-    <CollectionTag/>
-  </el-icon></el-button>
-  <el-aside width="200px"
-            v-show="isAsideShow"
-            style="height:100vh; color: #333; border-right: 1px solid #eee;">
-    <div style="margin-left: 16px">
-      <el-row justify="end"
-              style="height: 60px; box-sizing: border-box; padding: 14px 14px 0 14px; margin-bottom: 16px">
-        <slot name="right"></slot>
-      </el-row>
-      <slot name="context"></slot>
+  <div class="border-r border-gray-200 border-opacity-70">
+    <div class="z-10 absolute h-16 flex items-center px-4">
+      <my-button @click="clickHandler">
+        <span>边栏</span>
+      </my-button>
     </div>
-  </el-aside>
+    <div class="w-52 h-screen"
+         v-show="isAsideShow">
+      <div class="mx-4">
+        <div class="h-16 flex justify-end items-center px-4">
+          <slot name="right"></slot>
+        </div>
+        <div class="pt-4">
+          <slot name="context"></slot>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import {onMounted, ref} from "vue";
-import {CollectionTag} from "@element-plus/icons-vue";
+import MyButton from "@/components/common/HeaderButton";
 const isAsideShow = ref(true)
 
 onMounted(() => {
@@ -42,10 +43,4 @@ const clickHandler = () => {
 
 </script>
 <style scoped>
-.menu-btn {
-  position: absolute;
-  left: 16px;
-  top: 14px;
-  z-index: 2
-}
 </style>

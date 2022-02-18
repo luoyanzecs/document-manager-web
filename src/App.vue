@@ -1,30 +1,25 @@
 <template>
-  <router-view/>
+    <router-view/>
 </template>
 
 
 <script setup>
-import { onMounted, h } from "vue";
-import { ElNotification } from 'element-plus'
+// import { onMounted, h } from "vue";
+// import { ElNotification } from 'element-plus'
 
-onMounted(() => {
-  ElNotification({
-    title: 'Title',
-    message: h('i', { style: 'color: teal' }, 'This is a reminder'),
-    type: 'success',
-    position: 'bottom-right'
-  })
-})
+// onMounted(() => {
+//   ElNotification({
+//     title: 'Title',
+//     message: h('i', { style: 'color: teal' }, 'This is a reminder'),
+//     type: 'success',
+//     position: 'top-right'
+//   })
+// })
 
 </script>
 <style>
 :root {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
   'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-}
-body,
-html{
-  padding: 0;
-  margin: 0;
 }
 </style>

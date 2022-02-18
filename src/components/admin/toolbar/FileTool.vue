@@ -1,8 +1,8 @@
 <template>
   <tool>
     <template #tools>
-      <el-button type="primary" @click="click(0)">部门</el-button>
-      <el-button type="primary" @click="click(1)">删除</el-button>
+      <my-button  @click="click(0)">部门</my-button>
+      <my-button  @click="click(1)">删除</my-button>
     </template>
   </tool>
 </template>
@@ -11,6 +11,7 @@
 import Tool from "@/components/common/Tool";
 
 import {defineEmits} from "vue";
+import MyButton from "@/components/common/HeaderButton";
 
 const emit = defineEmits(['file-button'])
 const click = (index) => {

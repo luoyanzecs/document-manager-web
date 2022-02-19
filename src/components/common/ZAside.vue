@@ -1,9 +1,9 @@
 <template>
   <div class="border-r border-gray-200 border-opacity-70 absolute z-10 bg-gray-50 md:relative">
     <div class="z-20 absolute h-16 flex items-center px-4">
-      <my-button @click="clickHandler">
+      <z-header-button @click="clickHandler">
         <span>边栏</span>
-      </my-button>
+      </z-header-button>
     </div>
     <div class="w-52 h-screen flex flex-col overflow-scroll"
          v-show="isAsideShow">
@@ -21,7 +21,7 @@
 
 <script setup>
 import {onMounted, ref} from "vue";
-import MyButton from "@/components/common/HeaderButton";
+import ZHeaderButton from "@/components/common/head/ZHeaderButton";
 const isAsideShow = ref(true)
 
 onMounted(() => {

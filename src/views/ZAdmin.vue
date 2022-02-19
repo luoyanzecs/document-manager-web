@@ -1,6 +1,5 @@
 <template>
-  <div class="container max-w-screen-2xl flex">
-    <Aside>
+  <z-aside>
       <template v-slot:context>
         <div class="my-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">管理员界面</div>
         <div class="flex flex-col gap-2 text-xl font-light tracking-widest mt-4">
@@ -12,9 +11,9 @@
           </div>
         </div>
       </template>
-    </Aside>
-    <div class="h-screen flex-grow overflow-scroll">
-      <Header>
+    </z-aside>
+  <div class="h-screen flex-grow overflow-scroll">
+      <z-header>
         <template v-slot:tools>
           <keep-alive>
             <component :is="headComponent[headType]"/>
@@ -30,12 +29,11 @@
             <h1>hello</h1>
           </el-popover>
         </template>
-      </Header>
+      </z-header>
       <div class="m-4">
         <router-view/>
       </div>
     </div>
-  </div>
 </template>
 
 <style>
@@ -52,17 +50,17 @@
 import {ref, reactive} from "vue";
 import router from "@/router";
 import { UserFilled } from "@element-plus/icons-vue"
-import UserTool from "@/components/admin/toolbar/UserTool.vue"
-import BehaviorTool from "@/components/admin/toolbar/BehaviorTool.vue"
-import NoticeTool from "@/components/admin/toolbar/NoticeTool.vue"
-import FileTool from "@/components/admin/toolbar/FileTool.vue"
-import Aside from "@/components/common/Aside";
-import Header from "@/components/common/Header";
+import UserTool from "@/components/admin/toolbar/ZUserTool.vue"
+import RecordTool from "@/components/admin/toolbar/ZRecordTool.vue"
+import NoticeTool from "@/components/admin/toolbar/ZNoticeTool.vue"
+import FileTool from "@/components/admin/toolbar/ZFileTool.vue"
+import ZAside from "@/components/common/ZAside";
+import ZHeader from "@/components/common/ZHeader";
 
 const headType = ref(1)
 const headComponent = reactive({
   0: UserTool,
-  1: BehaviorTool,
+  1: RecordTool,
   2: FileTool,
   3: NoticeTool
 })

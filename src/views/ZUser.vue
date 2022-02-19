@@ -1,10 +1,10 @@
 <template>
-  <div class="container max-w-screen-2xl flex">
-    <Aside>
+  <z-aside>
       <template v-slot:right>
-        <header-button type="primary">部门</header-button>
+        <z-header-button type="primary">部门</z-header-button>
       </template>
       <template v-slot:context>
+<!--        TODO: 树状目录样式和admin的边栏保持相似-->
         <div>
           <el-scrollbar>
             <el-tree :data="data"
@@ -12,11 +12,10 @@
                      @node-click="handleNodeClick" />
           </el-scrollbar>
         </div>
+<!--        -->
       </template>
-
-    </Aside>
-
-    <div class="h-screen flex-grow">
+  </z-aside>
+  <div class="h-screen flex-grow">
       <Header>
           <template v-slot:tools>
             <head-tool :banners="banners"
@@ -27,39 +26,34 @@
               <template #reference>
                 <el-avatar :icon="UserFilled"></el-avatar>
               </template>
+<!--              TODO：头像悬浮的组件 建议抽离出来-->
               <h1>hello</h1>
+<!--              -->
             </el-popover>
           </template>
         </Header>
       <div>
         <Editor ref="editor"/>
+        <!--          TODO: 评论区， 显示时间， 内容， user 注意字体颜色和对齐方式-->
         <el-divider content-position="left">
           <el-icon color="#909399" :size="30"><comment/></el-icon>
         </el-divider>
       </div>
     </div>
-  </div>
 </template>
 
 <style>
-.el-header {
-  background-color: #FFFFFF;
-  color: #333;
-  line-height: 60px;
-  border-bottom: 1px solid #eee;
-}
-
 </style>
 
 <script setup>
-import Editor from "@/components/Editor";
+import Editor from "@/components/ZEditor";
 import { ElDivider } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { Comment, UserFilled } from "@element-plus/icons-vue"
-import Aside from "@/components/common/Aside";
-import Header from "@/components/common/Header";
+import Header from "@/components/common/ZHeader";
 import HeadTool from "@/components/user/HeadTool";
-import HeaderButton from "@/components/common/HeaderButton";
+import ZAside from "@/components/common/ZAside";
+import ZHeaderButton from "@/components/common/head/ZHeaderButton";
 
 const editor = ref()
 

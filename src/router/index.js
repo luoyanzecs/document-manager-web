@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/views/Home'
+import Home from '@/views/ZHome'
 
 const routes = [
   {
@@ -11,7 +11,7 @@ const routes = [
     path: '/admin',
     name: 'Admin',
 
-    component: () => import(/* webpackChunkName: "about" */ '@/views/Admin.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '@/views/ZAdmin.vue'),
     children: [
       {
         path: '',
@@ -38,7 +38,7 @@ const routes = [
   {
     path: '/user',
     name: 'User',
-    component: () => import('../views/User.vue')
+    component: () => import('../views/ZUser.vue')
   }
 ]
 

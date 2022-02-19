@@ -1,17 +1,17 @@
 <template>
   <tool>
     <template #tools>
-      <my-button  @click="click(0)">部门</my-button>
-      <my-button  @click="click(1)">删除</my-button>
+      <z-header-button  @click="click(0)">部门</z-header-button>
+      <z-header-button  @click="click(1)">删除</z-header-button>
     </template>
   </tool>
 </template>
 
 <script setup>
-import Tool from "@/components/common/Tool";
+import Tool from "@/components/common/ZHeadMenu";
 
 import {defineEmits} from "vue";
-import MyButton from "@/components/common/HeaderButton";
+import ZHeaderButton from "@/components/common/head/ZHeaderButton";
 
 const emit = defineEmits(['file-button'])
 const click = (index) => {

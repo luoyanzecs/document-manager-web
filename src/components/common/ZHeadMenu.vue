@@ -10,8 +10,8 @@
 </template>
 
 <script setup>
-import Collapse from "@/components/common/Collapse"
-import Expand from "@/components/common/Expand"
+import Collapse from "@/components/common/head/ZCollapse"
+import Expand from "@/components/common/head/ZExpand"
 import { ref, onBeforeMount, onMounted } from "vue";
 
 const type = ref(1)

@@ -1,14 +1,14 @@
 <template>
-  <div class="border-r border-gray-200 border-opacity-70">
-    <div class="z-10 absolute h-16 flex items-center px-4">
-      <my-button @click="clickHandler">
+  <div class="border-r border-gray-200 border-opacity-70 absolute z-10 bg-gray-50 md:relative">
+    <div class="z-20 absolute h-16 flex items-center px-4">
+      <z-header-button @click="clickHandler">
         <span>边栏</span>
-      </my-button>
+      </z-header-button>
     </div>
-    <div class="w-52 h-screen"
+    <div class="w-52 h-screen flex flex-col overflow-scroll"
          v-show="isAsideShow">
       <div class="mx-4">
-        <div class="h-16 flex justify-end items-center px-4">
+        <div class="h-16 flex justify-end items-center px-4 sticky top-0">
           <slot name="right"></slot>
         </div>
         <div class="pt-4">
@@ -21,7 +21,7 @@
 
 <script setup>
 import {onMounted, ref} from "vue";
-import MyButton from "@/components/common/HeaderButton";
+import ZHeaderButton from "@/components/common/head/ZHeaderButton";
 const isAsideShow = ref(true)
 
 onMounted(() => {

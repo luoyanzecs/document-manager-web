@@ -1,5 +1,7 @@
 <template>
+  <div class="container max-w-screen-2xl flex">
     <router-view/>
+  </div>
 </template>
 
 

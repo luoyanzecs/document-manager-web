@@ -1,5 +1,8 @@
 <template>
-  <z-table :fields="fields" :items="users" :keys="keys"/>
+  <z-table :fields="fields"
+           :cols="cols"
+           :items="users"
+           :keys="keys"/>
 </template>
 
 <script setup>
@@ -8,6 +11,7 @@ import ZTable from "@/components/admin/ZTable";
 
 const fields = ref(['编号', '姓名', '部门', '电话'])
 const keys = ref(['id', 'name', 'bu', 'tel'])
+const cols = ref([4, 4, 4, 4])
 
 const users = ref([
   {

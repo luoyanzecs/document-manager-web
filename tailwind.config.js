@@ -10,5 +10,14 @@ module.exports = {
     },
     extend: {},
   },
+  variants: {
+    extend: {
+      ringColor: ['hover'],
+      ringOffsetWidth: ['hover'],
+      ringWidth: ['hover'],
+      margin: ['hover'],
+      fontWeight: ['group-hover']
+    }
+  },
   plugins: [],
 }

@@ -1,5 +1,7 @@
 <template>
-  <h1>FileManage</h1>
+  <div class="w-14 h-14 bg-gray-500">
+    <slot></slot>
+  </div>
 </template>
 
 <script setup>

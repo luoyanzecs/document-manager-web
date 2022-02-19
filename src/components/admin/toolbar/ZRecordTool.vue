@@ -11,7 +11,7 @@
 <script setup>
 import Tool from "@/components/common/ZHeadMenu";
 import {defineEmits} from "vue";
-import ZHeadButton from "@/components/common/head/ZHeaderButton";
+import ZHeadButton from "@/components/common/ZButton";
 
 const emit = defineEmits(['behavior-button'])
 const click = (index) => {

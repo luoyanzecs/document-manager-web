@@ -1,9 +1,10 @@
 <template>
   <z-aside>
       <template v-slot:right>
-        <z-header-button type="primary">部门</z-header-button>
+        <z-button type="primary">部门</z-button>
       </template>
       <template v-slot:context>
+        <div class="my-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
 <!--        TODO: 树状目录样式和admin的边栏保持相似-->
         <div>
           <el-scrollbar>
@@ -53,7 +54,7 @@ import { Comment, UserFilled } from "@element-plus/icons-vue"
 import Header from "@/components/common/ZHeader";
 import HeadTool from "@/components/user/HeadTool";
 import ZAside from "@/components/common/ZAside";
-import ZHeaderButton from "@/components/common/head/ZHeaderButton";
+import ZButton from "@/components/common/ZButton";
 
 const editor = ref()
 

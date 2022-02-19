@@ -12,7 +12,7 @@
 <script setup>
 import Tool from "@/components/common/ZHeadMenu";
 import {defineEmits} from "vue";
-import ZHeaderButton from "@/components/common/head/ZHeaderButton";
+import ZHeaderButton from "@/components/common/ZButton";
 
 const emit = defineEmits(['notice-button'])
 const click = (index) => {

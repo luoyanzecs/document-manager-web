@@ -21,7 +21,7 @@
 
 <script setup>
 import {onMounted, ref} from "vue";
-import ZHeaderButton from "@/components/common/head/ZHeaderButton";
+import ZHeaderButton from "@/components/common/ZButton";
 const isAsideShow = ref(true)
 
 onMounted(() => {

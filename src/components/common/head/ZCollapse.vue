@@ -9,7 +9,7 @@
 
 <script setup>
 import {ref} from 'vue'
-import ZHeaderButton from "@/components/common/head/ZHeaderButton";
+import ZHeaderButton from "@/components/common/ZButton";
 
 const show = ref(false)
 

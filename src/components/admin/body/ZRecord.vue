@@ -1,35 +1,15 @@
 <template>
-  <div class="flex flex-col gap-4">
-    <div class="record-item font-bold text-gray-600 bg-blue-400 text-lg">
-      <div :class="[toggleAll ? 'checkbox-check' : '', 'checkbox']" @click="toggle(-1)"></div>
-      <div class="pos-center w-14 md:w-24 ">uid</div>
-      <div class="pos-center w-14 md:w-24 ">操作</div>
-      <div class="pos-center w-14 md:w-24 ">部门</div>
-      <div class="pos-center w-24 md:w-48 ">fid</div>
-      <div class="pos-center w-24 md:w-48 ">时间</div>
-    </div>
-    <div v-for="(item, index) in records"
-         :key="index"
-         @click="toggle(index)"
-         class="group item-hover record-item font-light text-black bg-gray-200">
-      <div :class="[isSelect[index] ? 'checkbox-check' : '', 'checkbox']"></div>
-      <div class="pos-center group-hover:font-normal text-lg w-14 md:w-24 ">{{ item.id }}</div>
-      <div class="pos-center group-hover:font-normal text-lg w-14 md:w-24 ">{{ item.oprate }}</div>
-      <div class="pos-center group-hover:font-normal text-lg w-14 md:w-24 ">{{ item.bu }}</div>
-      <div class="pos-center group-hover:font-normal text-base w-24 md:w-48 ">{{ item.fid }}</div>
-      <div class="pos-center group-hover:font-normal text-base w-24 md:w-48 ">{{ item.oprateTime }}</div>
-    </div>
-  </div>
+  <z-table :fields="fields"
+           :keys="keys"
+           :items="records"/>
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue'
+import {ref} from 'vue'
+import ZTable from "@/components/admin/ZTable";
 
-const isSelect = ref([])
-
-onMounted(() => {
-  isSelect.value = new Array(records.value.length).fill(false)
-})
+const fields = ref(['uid', '操作', '部门', 'fid', '时间'])
+const keys = ref(['id', 'oprate', 'bu', 'fid', 'oprateTime'])
 
 const records = ref([
   {
@@ -96,19 +76,6 @@ const records = ref([
   },
 ])
 
-const toggleAll = ref(false)
-
-const toggle = (index) => {
-  if (index === -1) {
-    toggleAll.value = !toggleAll.value
-    for (let i = 0; i < isSelect.value.length; i++) {
-      isSelect.value[i] = toggleAll.value
-    }
-  } else {
-    isSelect.value[index] = !isSelect.value[index]
-  }
-}
-
 </script>
 
 <style scoped>
@@ -120,6 +87,6 @@ const toggle = (index) => {
 }
 
 .record-item {
-  @apply flex gap-2 md:gap-4 items-center px-4 py-1.5 rounded-xl max-w-4xl md:tracking-wide shadow
+  @apply flex gap-2 md:gap-4 items-center px-4 py-1.5 rounded-xl max-w-5xl md:tracking-wide shadow
 }
 </style>

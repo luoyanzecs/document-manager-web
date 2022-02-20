@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 min-w-60">
     <div :class="['field-item', 'row-base', gridN]">
       <div :class="[isToggleAll ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"
            @click="toggle(-1)"/>
@@ -10,7 +10,7 @@
          @click="expand(i)"
          :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'item-hover', 'item-base', 'row-base']">
       <div v-show="!isExpand[i]"
-          :class="[isSelect[i] ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'bg-white', 'flex-shrink-0', 'rounded-full']"
+          :class="[isSelect[i] ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'bg-white', 'rounded-full']"
            @click="toggle(i)"/>
       <div v-show="isExpand[i]" class="font-normal w-20">
         <span class="text-blue-500 cursor-pointer" @click.stop="switchToCollapse(i)">关闭</span>
@@ -18,14 +18,13 @@
       <div v-for="(key, keyIndex) in keys"
            :key="keyIndex"
            :class="[isExpand[i] ? 'flex' : '',  colSpanList[keyIndex]]">
-        <div v-if="isExpand[i]" class="font-normal w-20 flex-shrink-0 grid"><span>{{ fields[keyIndex] }} </span></div>
-        <div class="max-h-20 overflow-hidden">
+        <div v-if="isExpand[i]" class="font-normal w-20 grid"><span>{{ fields[keyIndex] }} </span></div>
+        <div class="max-h-20 overflow-hidden text-sm md:text-base">
           {{ list[key] }}
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup >

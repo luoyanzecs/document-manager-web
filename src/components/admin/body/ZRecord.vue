@@ -1,6 +1,7 @@
 <template>
   <z-table :fields="fields"
            :keys="keys"
+           :cols="cols"
            :items="records"/>
 </template>
 
@@ -10,6 +11,7 @@ import ZTable from "@/components/admin/ZTable";
 
 const fields = ref(['uid', '操作', '部门', 'fid', '时间'])
 const keys = ref(['id', 'oprate', 'bu', 'fid', 'oprateTime'])
+const cols = ref([3, 3, 3, 4, 7])
 
 const records = ref([
   {

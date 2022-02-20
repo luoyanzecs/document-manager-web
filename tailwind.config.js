@@ -33,6 +33,12 @@ module.exports = {
       '4': '4rem',
       '60': '60%'
     },
+    minHeight: {
+      '0': '0px',
+      'full': '100%',
+      'screen': '100vh',
+      'notice': '5rem'
+    },
     container: {
       center: true
     },

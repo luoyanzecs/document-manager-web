@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/views/Home'
+import Home from '@/views/ZHomeView'
 
 const routes = [
   {
@@ -11,34 +11,34 @@ const routes = [
     path: '/admin',
     name: 'Admin',
 
-    component: () => import(/* webpackChunkName: "about" */ '@/views/Admin.vue'),
+    component: () => import('@/views/ZAdminView.vue'),
     children: [
       {
         path: '',
-        component: () => import('@/components/admin/body/UserManage.vue')
+        component: () => import('@/components/admin/body/ZUser.vue')
       },
       {
-        path: 'userManage',
-        component: () => import('@/components/admin/body/UserManage.vue')
+        path: 'user',
+        component: () => import('@/components/admin/body/ZUser.vue')
       },
       {
-        path: 'behaviorManage',
-        component: () => import('@/components/admin/body/BehaviorManage.vue')
+        path: 'behavior',
+        component: () => import('@/components/admin/body/ZRecord.vue')
       },
       {
-        path: 'fileManage',
-        component: () => import('@/components/admin/body/FileManage.vue')
+        path: 'file',
+        component: () => import('@/components/admin/body/ZFile.vue')
       },
       {
-        path: 'noticeManage',
-        component: () => import('@/components/admin/body/NoticeManage.vue')
+        path: 'notice',
+        component: () => import('@/components/admin/body/ZNotice.vue')
       }
     ]
   },
   {
     path: '/user',
     name: 'User',
-    component: () => import('../views/User.vue')
+    component: () => import('../views/ZUserView.vue')
   }
 ]
 

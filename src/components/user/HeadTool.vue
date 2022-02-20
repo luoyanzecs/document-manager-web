@@ -12,9 +12,9 @@
 </template>
 
 <script setup>
-import Tool from "@/components/common/Tool";
+import Tool from "@/components/common/ZHeadMenu";
 import { defineProps, defineEmits } from "vue";
-import HeaderButton from "@/components/common/HeaderButton";
+import HeaderButton from "@/components/common/ZButton";
 
 defineProps( {
   banners: Object

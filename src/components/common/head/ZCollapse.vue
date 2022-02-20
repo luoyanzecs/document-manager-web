@@ -1,15 +1,15 @@
 <template>
-  <header-button v-show="!show" @click="switchTool">工具</header-button>
+  <z-header-button v-show="!show" @click="switchTool">工具</z-header-button>
   <div v-show="show"
       class="flex flex-col gap-6 pt-4 px-3 absolute bg-gray-100 absolute right-0 top-0 h-screen z-10">
-    <header-button @click="switchTool">收起</header-button>
+    <z-header-button @click="switchTool">收起</z-header-button>
     <slot name="collapse"></slot>
   </div>
 </template>
 
 <script setup>
 import {ref} from 'vue'
-import HeaderButton from "@/components/common/HeaderButton";
+import ZHeaderButton from "@/components/common/ZButton";
 
 const show = ref(false)
 

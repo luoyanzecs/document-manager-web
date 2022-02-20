@@ -1,0 +1,112 @@
+<template>
+  <div class="flex flex-col gap-4 min-w-60">
+    <div :class="['field-item', 'row-base', gridN]">
+      <div :class="[isToggleAll ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"
+           @click="toggle(-1)"/>
+      <div v-for="(value, index) in fields" :key="index" :class="colSpanList[index]">{{ value }}</div>
+    </div>
+    <div v-for="(list, i) in lists"
+         :key="i"
+         @click="expand(i)"
+         :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'item-hover', 'item-base', 'row-base']">
+      <div v-show="!isExpand[i]"
+          :class="[isSelect[i] ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'bg-white', 'rounded-full']"
+           @click="toggle(i)"/>
+      <div v-show="isExpand[i]" class="font-normal w-20">
+        <span class="text-blue-500 cursor-pointer" @click.stop="switchToCollapse(i)">关闭</span>
+      </div>
+      <div v-for="(key, keyIndex) in keys"
+           :key="keyIndex"
+           :class="[isExpand[i] ? 'flex' : '',  colSpanList[keyIndex]]">
+        <div v-if="isExpand[i]" class="font-normal w-20 grid"><span>{{ fields[keyIndex] }} </span></div>
+        <div class="max-h-20 overflow-hidden text-sm md:text-base">
+          {{ list[key] }}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup >
+import {ref, defineProps, computed, onBeforeMount} from 'vue'
+
+const props = defineProps({
+  cols: {
+    type: Array,
+    required: false
+  },
+  items: {
+    type: Array,
+    required: true
+  },
+  fields: {
+    type: Array,
+    required: true
+  },
+  keys: {
+    type: Array,
+    required: true
+  }
+})
+const lists = computed(() => props.items)
+const fields = computed(() => props.fields)
+const cols = computed(() => props.cols)
+const isSelect = ref([])
+const isToggleAll = ref(false)
+const isExpand = ref([])
+const gridN = ref('')
+const colSpanList = ref([])
+
+onBeforeMount(() => {
+  let count = 1, i = 0
+  for (let k in cols.value) {
+    count += cols.value[k]
+    colSpanList.value[i++] = `col-span-${cols.value[k]}`
+  }
+  gridN.value = `grid-cols-${count > 24 ? 24 : count}`
+  isSelect.value = new Array(lists.value.length).fill(false)
+  isExpand.value = new Array(lists.value.length).fill(false)
+})
+
+const expand = (index) => isExpand.value[index] = true
+const switchToCollapse = (index) => isExpand.value[index] = false
+
+const toggle = (index) => {
+  if (index === -1) {
+    isToggleAll.value = !isToggleAll.value
+    for (let i = 0; i < isSelect.value.length; i++) {
+      isSelect.value[i] = isToggleAll.value
+    }
+  } else {
+    isSelect.value[index] = !isSelect.value[index]
+  }
+}
+</script>
+
+<style scoped>
+.item-base {
+  @apply cursor-pointer
+}
+
+.row-base {
+  @apply grid items-center gap-2 px-4 py-1.5 rounded-xl max-w-5xl md:tracking-wide shadow
+}
+
+.field-item {
+  @apply font-bold text-gray-600 bg-blue-400 text-xl
+}
+
+.collapse-item {
+  @apply overflow-hidden items-center group font-light text-black bg-gray-200
+}
+
+.item-hover {
+  @apply hover:ring hover:bg-green-500 hover:my-0.5 hover:ring-green-500 hover:ring-offset-4
+}
+
+.expand-item {
+  @apply bg-gray-200 font-light max-w-5xl rounded-xl p-4 tracking-widest
+}
+
+
+</style>

@@ -5,17 +5,19 @@
         <span>边栏</span>
       </z-header-button>
     </div>
-    <div class="w-52 h-screen flex flex-col overflow-scroll"
-         v-show="isAsideShow">
-      <div class="mx-4">
-        <div class="h-16 flex justify-end items-center px-4 sticky top-0">
-          <slot name="right"></slot>
-        </div>
-        <div class="pt-4">
-          <slot name="context"></slot>
+    <transition name="aside">
+      <div class="w-52 h-screen flex flex-col overflow-scroll"
+           v-show="isAsideShow">
+        <div class="mx-4">
+          <div class="h-16 flex justify-end items-center px-4 sticky top-0">
+            <slot name="right"></slot>
+          </div>
+          <div class="pt-4">
+            <slot name="context"></slot>
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -43,4 +45,23 @@ const clickHandler = () => {
 
 </script>
 <style scoped>
+.aside-leave-active {
+  animation: asideoff ease-in-out .7s reverse;
+}
+
+.aside-enter-to {
+  animation: asideoff ease-in-out .7s ;
+}
+
+@keyframes asideoff {
+  from {
+    @apply w-0 opacity-0
+  }
+  50% {
+    @apply w-52 opacity-5
+  }
+  to {
+    @apply w-52
+  }
+}
 </style>

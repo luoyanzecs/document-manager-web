@@ -26,7 +26,7 @@
                 <span class="author-time">{{item.time}}</span>
             </div>
             <div class="icon-btn">
-                <span @click="showReplyInput(i,item.name,item.id)"><i class="iconfont"><el-icon><ChatDotSquare/></el-icon></i>{{item.commentNum}}</span>
+                <span @click="showReplyInput(i,item.name,item.id)"><i class="iconfont">icon</i>{{item.commentNum}}</span>
             </div>
             <div class="talk-box">
                 <p>
@@ -41,7 +41,7 @@
                         <span class="author-time">{{reply.time}}</span>
                     </div>
                     <div class="icon-btn">
-                        <span @click="showReplyInput(i,reply.from,reply.id)"><i class="iconfont"><el-icon><ChatDotSquare/></el-icon></i>{{reply.commentNum}}</span>
+                        <span @click="showReplyInput(i,reply.from,reply.id)"><i class="iconfont">icon</i>{{reply.commentNum}}</span>
                     </div>
                     <div class="talk-box">
                         <p>
@@ -69,7 +69,6 @@
 
 <script>
 
-import { ChatDotSquare} from '@element-plus/icons'
 const clickoutside = {
     // 初始化指令
     bind(el, binding) {
@@ -98,7 +97,6 @@ const clickoutside = {
 export default {
     name:'ArticleComment',
     components:{
-        ChatDotSquare
     },
     data(){
         return{

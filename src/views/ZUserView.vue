@@ -33,21 +33,41 @@
             </el-popover>
           </template>
         </Header>
-      <div>
+      <div class >
         <Editor ref="editor"/>
         <!--          TODO: 评论区， 显示时间， 内容， user 注意字体颜色和对齐方式-->
         <el-divider content-position="left">
           <el-icon color="#909399" :size="30"><comment/></el-icon>
         </el-divider>
+        <ZComment></ZComment>
       </div>
     </div>
 </template>
 
+
 <style>
+.el-tree-node:focus>.el-tree-node__content{
+      background-color: #5daaf0;
+}
+.el-tree-node__content:hover
+ { 
+        background:#89c2f7;
+}
+.el-tree-node__label {
+width: auto;
+margin-top: 12px;
+float: right;
+font-family: “Trebuchet MS”, Arial, Helvetica, sans-serif;
+font-size: 14px;
+color: #999999;
+line-height: 25px;
+letter-spacing: 1px;
+}
 </style>
 
 <script setup>
 import Editor from "@/components/ZEditor";
+import ZComment from "@/components/ZComment"
 import { ElDivider } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { Comment, UserFilled } from "@element-plus/icons-vue"

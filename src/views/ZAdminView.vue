@@ -24,7 +24,7 @@
                       :width="200"
                       trigger="hover">
             <template #reference>
-              <el-avatar :icon="UserFilled"></el-avatar>
+              <z-avatar :icon="UserFilled"/>
             </template>
             <h1>hello</h1>
           </el-popover>
@@ -56,6 +56,7 @@ import NoticeTool from "@/components/admin/toolbar/ZNoticeTool.vue"
 import FileTool from "@/components/admin/toolbar/ZFileTool.vue"
 import ZAside from "@/components/common/ZAside";
 import ZHeader from "@/components/common/ZHeader";
+import ZAvatar from "@/components/ZAvatar";
 
 const headType = ref(1)
 const headComponent = reactive({

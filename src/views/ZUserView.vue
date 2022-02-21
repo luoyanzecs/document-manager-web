@@ -16,7 +16,7 @@
 <!--        -->
       </template>
   </z-aside>
-  <div class="h-screen flex-grow">
+  <div class="h-screen flex-grow overflow-scroll">
       <Header>
           <template v-slot:tools>
             <head-tool :banners="banners"
@@ -25,7 +25,7 @@
           <template v-slot:avatar>
             <el-popover placement="bottom" :width="200" trigger="hover">
               <template #reference>
-                <el-avatar :icon="UserFilled"></el-avatar>
+                <z-avatar :icon="UserFilled"/>
               </template>
 <!--              TODO：头像悬浮的组件 建议抽离出来-->
               <h1>hello</h1>
@@ -75,6 +75,7 @@ import Header from "@/components/common/ZHeader";
 import HeadTool from "@/components/user/HeadTool";
 import ZAside from "@/components/common/ZAside";
 import ZButton from "@/components/common/ZButton";
+import ZAvatar from "@/components/ZAvatar";
 
 const editor = ref()
 

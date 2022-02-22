@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col gap-4 min-w-60">
-    <div :class="['field-item', 'row-base', gridN]">
+  <div class="flex flex-col gap-1.5 md:min-w-75">
+    <div :class="['field-item', 'row-base', 'md:tracking-wide', gridN]">
       <div :class="[isToggleAll ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"
-           @click="toggle(-1)"/>
+           @click.stop="toggle(-1)"/>
       <div v-for="(value, index) in fields" :key="index" :class="colSpanList[index]">{{ value }}</div>
     </div>
     <div v-for="(list, i) in lists"
@@ -10,17 +10,17 @@
          @click="expand(i)"
          :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'item-hover', 'item-base', 'row-base']">
       <div v-show="!isExpand[i]"
-          :class="[isSelect[i] ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'bg-white', 'rounded-full']"
-           @click="toggle(i)"/>
+          :class="[isSelect[i] ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"
+           @click.stop="toggle(i)"/>
       <div v-show="isExpand[i]" class="font-normal w-20">
         <span class="text-blue-500 cursor-pointer" @click.stop="switchToCollapse(i)">关闭</span>
       </div>
       <div v-for="(key, keyIndex) in keys"
            :key="keyIndex"
            :class="[isExpand[i] ? 'flex' : '',  colSpanList[keyIndex]]">
-        <div v-if="isExpand[i]" class="font-normal w-20 grid"><span>{{ fields[keyIndex] }} </span></div>
-        <div class="max-h-20 overflow-hidden text-sm md:text-base">
-          {{ list[key] }}
+        <div v-if="isExpand[i]" class="font-normal w-20 grid flex-shrink-0"><span>{{ fields[keyIndex] }} </span></div>
+        <div class="max-h-12 text-sm md:text-base">
+          <p :class="{'truncate' : !isExpand[i]}">{{ list[key] }}</p>
         </div>
       </div>
     </div>
@@ -89,23 +89,23 @@ const toggle = (index) => {
 }
 
 .row-base {
-  @apply grid items-center gap-2 px-4 py-1.5 rounded-xl max-w-5xl md:tracking-wide shadow
+  @apply grid items-center gap-2 px-4 py-0.5 rounded-lg max-w-5xl
 }
 
 .field-item {
-  @apply font-bold text-gray-600 bg-blue-400 text-xl
+  @apply font-bold text-gray-700 bg-gray-400 text-xl
 }
 
 .collapse-item {
-  @apply overflow-hidden items-center group font-light text-black bg-gray-200
+  @apply overflow-ellipsis items-center group font-light text-black bg-gray-200
 }
 
 .item-hover {
-  @apply hover:ring hover:bg-green-500 hover:my-0.5 hover:ring-green-500 hover:ring-offset-4
+  @apply hover:ring-2 hover:bg-green-500 hover:my-0.5 hover:ring-green-500 hover:ring-offset-2
 }
 
 .expand-item {
-  @apply bg-gray-200 font-light max-w-5xl rounded-xl p-4 tracking-widest
+  @apply bg-gray-200 font-light max-w-5xl rounded-xl p-4
 }
 
 

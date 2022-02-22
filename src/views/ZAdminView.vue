@@ -30,7 +30,7 @@
           </el-popover>
         </template>
       </z-header>
-      <div class="py-8 px-8 pos-center">
+      <div class="py-4 px-8 flex flex-col justify-center items-center">
         <router-view/>
       </div>
     </div>

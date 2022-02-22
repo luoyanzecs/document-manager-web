@@ -1,20 +1,12 @@
 <template>
   <z-aside>
-      <template v-slot:right>
-        <z-button type="primary">部门</z-button>
-      </template>
-      <template v-slot:context>
-        <div class="my-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
-<!--        TODO: 树状目录样式和admin的边栏保持相似-->
-        <div>
-          <el-scrollbar>
-            <el-tree :data="data"
-                     :props="defaultProps"
-                     @node-click="handleNodeClick" />
-          </el-scrollbar>
-        </div>
-<!--        -->
-      </template>
+    <template #right>
+      <z-button type="primary">部门</z-button>
+    </template>
+    <template #context>
+      <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
+      <z-tree :catalogue="items" @select-file="selectFileHandler"/>
+    </template>
   </z-aside>
   <div class="h-screen flex-grow overflow-scroll">
       <Header>
@@ -76,12 +68,17 @@ import HeadTool from "@/components/user/HeadTool";
 import ZAside from "@/components/common/ZAside";
 import ZButton from "@/components/common/ZButton";
 import ZAvatar from "@/components/ZAvatar";
+import ZTree from "@/components/common/ZTree";
 
 const editor = ref()
 
 const banners = reactive({
   editorBtn: '编辑'
 })
+
+const selectFileHandler = (param) =>{
+  console.log(param)
+}
 
 const click = () => {
   if (banners.editorBtn === '编辑') {
@@ -92,66 +89,134 @@ const click = () => {
     editor.value.enable()
   }
 }
-const data = [
+const items = [
   {
-    label: 'Level one 1',
+    id: '0001',
+    title: 'Level one 1',
     children: [
       {
-        label: 'Level two 1-1',
+        id: '0002',
+        title: 'Level two 1-1',
         children: [
           {
-            label: 'Level three 1-1-1',
+            title: 'Level three 1-1-1',
+            children: [
+              {
+                id: '0002',
+                title: 'Level two 1-1',
+                children: [
+                  {
+                    title: 'Level three 1-1-1',
+                    children: [
+                      {
+                        id: '0002',
+                        title: 'Level two 1-1',
+                        children: [
+                          {
+                            title: 'Level three 1-1-1',
+                            children: [
+                              {
+                                id: '0002',
+                                title: 'Level two 1-1',
+                                children: [
+                                  {
+                                    title: 'Level three 1-1-1',
+                                    children: [
+                                      {
+                                        id: '12313',
+                                        title: 'Level two 1-1',
+                                        children: [
+                                          {
+                                            title: 'Level three 1-1-1',
+                                            children: [
+                                              {
+                                                id: '0002',
+                                                title: 'Level two 1-1',
+                                                children: [
+                                                  {
+                                                    title: 'Level three 1-1-1',
+                                                    children: []
+                                                  },
+                                                ],
+                                              },
+                                            ],
+                                          },
+                                        ],
+                                      },
+                                    ],
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
     ],
   },
   {
-    label: 'Level one 2',
+    id: '0003',
+    title: 'Level one 2',
     children: [
       {
-        label: 'Level two 2-1',
+        id: '0004',
+        title: 'Level two 2-1',
         children: [
           {
-            label: 'Level three 2-1-1',
+            id: '0005',
+            title: 'Level three 2-1-1',
+            children: []
           },
         ],
       },
       {
-        label: 'Level two 2-2',
+        id: '0006',
+        title: 'Level two 2-2',
         children: [
           {
-            label: 'Level three 2-2-1',
+            id: '0007',
+            title: 'Level three 2-2-1',
+            children: []
           },
         ],
       },
     ],
   },
   {
-    label: 'Level one 3',
+    id: '0008',
+    title: 'Level one 3',
     children: [
       {
-        label: 'Level two 3-1',
+        id: '0009',
+        title: 'Level two 3-1',
         children: [
           {
-            label: 'Level three 3-1-1',
+            id: '0010',
+            title: 'Level three 3-1-1',
+            children: []
           },
         ],
       },
       {
-        label: 'Level two 3-2',
+        id: '0011',
+        title: 'Level two 3-2',
         children: [
           {
-            label: 'Level three 3-2-1',
+            id: '0012',
+            title: 'Level three 3-2-1',
+            children: []
           },
         ],
       },
     ],
   }
 ]
-
-const handleNodeClick = (data) => {
-  console.log(data)
-}
 
 </script>

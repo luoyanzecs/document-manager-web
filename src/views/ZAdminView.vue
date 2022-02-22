@@ -1,8 +1,8 @@
 <template>
   <z-aside>
       <template v-slot:context>
-        <div class="my-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">管理员界面</div>
-        <div class="flex flex-col gap-2 text-xl font-light tracking-widest mt-4">
+        <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">管理员界面</div>
+        <div class="mx-4 flex flex-col gap-2 text-xl font-light tracking-widest mt-4">
           <div v-for="(item, index) in menu"
                :key="index"
                @click="menuSelect(index)"
@@ -30,7 +30,7 @@
           </el-popover>
         </template>
       </z-header>
-      <div class="py-8 px-8 pos-center">
+      <div class="py-4 px-8 flex flex-col justify-center items-center">
         <router-view/>
       </div>
     </div>

@@ -52,11 +52,11 @@ const messageType = computed(() => {
   switch (props.type) {
       // 1: 成功 2: 失败
     case 1:
-      return 'notice-success'
+      return 'bg-green-500'
     case 2 :
-      return 'notice-error'
+      return 'bg-red-500'
     default:
-      return 'notice-info'
+      return 'bg-yellow-500'
   }
 })
 
@@ -88,19 +88,6 @@ const closeHandler = () => {
     @apply h-0 py-0 my-0 shadow-none
   }
 }
-
-.notice-success {
-  @apply bg-green-500
-}
-
-.notice-error {
-  @apply bg-red-500
-}
-
-.notice-info {
-  @apply bg-yellow-500
-}
-
 .notice-base {
   @apply overflow-hidden relative w-80 h-20 z-40 rounded-lg bg-gray-50 flex items-center gap-1 my-2 p-2 shadow hover:shadow-lg
 }

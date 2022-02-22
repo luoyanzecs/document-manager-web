@@ -8,13 +8,11 @@
     <transition name="aside">
       <div class="w-52 h-screen flex flex-col overflow-scroll"
            v-show="isAsideShow">
-        <div class="mx-4">
-          <div class="h-16 flex justify-end items-center px-4 sticky top-0">
-            <slot name="right"></slot>
-          </div>
-          <div class="pt-4">
-            <slot name="context"></slot>
-          </div>
+        <div class="mx-4 h-16 flex justify-end items-center px-4 sticky top-0">
+          <slot name="right"></slot>
+        </div>
+        <div class="pt-4 overflow-scroll">
+          <slot name="context"></slot>
         </div>
       </div>
     </transition>
@@ -24,6 +22,7 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import ZHeaderButton from "@/components/common/ZButton";
+
 const isAsideShow = ref(true)
 
 onMounted(() => {
@@ -49,8 +48,8 @@ const clickHandler = () => {
   animation: asideoff ease-in-out .7s reverse;
 }
 
-.aside-enter-to {
-  animation: asideoff ease-in-out .7s ;
+.aside-enter-active {
+  animation: asideoff ease-in-out .7s;
 }
 
 @keyframes asideoff {

@@ -49,7 +49,7 @@ const clickHandler = () => {
   animation: asideoff ease-in-out .7s reverse;
 }
 
-.aside-enter-to {
+.aside-enter-active {
   animation: asideoff ease-in-out .7s ;
 }
 

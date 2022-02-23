@@ -1,10 +1,28 @@
 <template>
-  <div class="w-14 h-14 bg-gray-500">
-    <slot></slot>
+  <div class="w-12 h-12 rounded-full bg-gray-300 pos-center">
+    <img v-if="image != null"
+         :src="image"
+         alt=""
+         class="rounded-full"
+    />
+    <component v-else :is="iconComponent" class="m-2 text-white"/>
   </div>
 </template>
 
-<script setup>
+<script setup >
+import { defineProps, computed, } from "vue";
+
+const props = defineProps({
+  icon: {},
+  image: {
+    type: String,
+    default: null,
+    required:false
+  }
+});
+
+const iconComponent = computed(() => props.icon)
+
 </script>
 
 <style scoped>

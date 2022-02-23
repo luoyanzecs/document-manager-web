@@ -14,20 +14,8 @@
              type="password"
              v-model="password"
              placeholder="输入密码">
-      <div class="flex gap-x-4 h-10 items-center pl-5">
-        <div :class="{'switch-text': true, 'font-blue': !switchValue}">员工</div>
-        <el-switch width="40"
-                   v-model="switchValue"
-                   size="large"
-                   active-color="#3B82F6"
-                   inactive-color="#3B82F6"
-        />
-        <div :class="{'switch-text': true, 'font-blue': switchValue}">管理员</div>
-      </div>
-
-      <div>
-        <home-button @click="loginHandler">登录</home-button>
-      </div>
+      <z-switch class="py-2 font-light" left="管理员" right="员工" v-model:value="switchValue"/>
+      <home-button @click="loginHandler">登录</home-button>
     </div>
     <div class="justify-center text-gray-400 py-8 ">
         <p>Copyright © 2021-2022 Yanze Luo</p>
@@ -39,6 +27,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import HomeButton from "@/components/common/ZHomeButton";
+import ZSwitch from "@/components/common/ZSwitch";
 
 const router = useRouter()
 const switchValue = ref(true)
@@ -47,9 +36,9 @@ const password = ref('')
 
 const loginHandler = () => {
   if (switchValue.value) {
-    router.push('/admin')
-  } else {
     router.push('/user')
+  } else {
+    router.push('/admin')
   }
 }
 </script>

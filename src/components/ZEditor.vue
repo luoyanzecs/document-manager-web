@@ -1,7 +1,7 @@
 <template>
   <div ref="toolbarContainer" style="height: 35px;"></div>
   <el-row justify="start">
-    <p style="color: #C0C4CC; padding-left: 16px">{{ banners.lastEditor }}</p>
+    <p style="color: #C0C4CC; padding-left: 16px;">{{ banners.lastEditor }}</p>
   </el-row>
   <div ref="textContainer" style="margin: 16px 40px"></div>
 </template>

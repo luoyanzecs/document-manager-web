@@ -1,9 +1,9 @@
 <template>
   <tool>
     <template #tools>
-      <z-head-button @click="click(0)">筛选</z-head-button>
-      <z-head-button @click="click(1)">删除</z-head-button>
-      <z-head-button @click="click(2)">所有</z-head-button>
+      <z-head-button fill="筛选" @click="click(0)"/>
+      <z-head-button fill="删除" @click="click(1)"/>
+      <z-head-button fill="所有" @click="click(2)"/>
     </template>
   </tool>
 </template>

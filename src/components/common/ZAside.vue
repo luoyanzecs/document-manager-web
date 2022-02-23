@@ -1,28 +1,35 @@
 <template>
-  <div class="border-r border-gray-200 border-opacity-70 absolute z-10 bg-gray-50 md:relative">
-    <div class="z-20 absolute h-16 flex items-center px-4">
-      <z-header-button @click="clickHandler">
+  <div v-if="isAsideShow"
+       class="absolute w-screen h-screen z-10 bg-gray-700 opacity-40 md:hidden"
+       @click.stop="toggleAside"/>
+  <div class="border-r border-gray-200 border-opacity-70 absolute z-30 bg-gray-50 md:relative"
+       @click.stop>
+    <div class="z-30 absolute h-16 flex items-center px-4">
+      <z-header-button @click="toggleAside">
         <span>边栏</span>
       </z-header-button>
     </div>
-    <div class="w-52 h-screen flex flex-col overflow-scroll"
-         v-show="isAsideShow">
-      <div class="mx-4">
-        <div class="h-16 flex justify-end items-center px-4 sticky top-0">
+    <transition name="aside">
+      <div class="w-52 h-screen flex flex-col"
+           v-show="isAsideShow">
+        <div class="mx-4 mb-4 h-16 flex justify-end items-center px-4 sticky top-0">
           <slot name="right"></slot>
         </div>
-        <div class="pt-4">
-          <slot name="context"></slot>
-        </div>
+        <slot name="context"></slot>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import ZHeaderButton from "@/components/common/ZButton";
-const isAsideShow = ref(true)
+
+const isAsideShow = ref(false)
+
+onBeforeMount(() => {
+    isAsideShow.value = window.innerWidth > 768
+})
 
 onMounted(() => {
   let lastWidth = window.innerWidth
@@ -37,10 +44,29 @@ onMounted(() => {
   })
 })
 
-const clickHandler = () => {
+const toggleAside = () => {
   isAsideShow.value = !isAsideShow.value
 }
 
 </script>
 <style scoped>
+.aside-leave-active {
+  animation: asideoff ease-in-out .5s reverse;
+}
+
+.aside-enter-active {
+  animation: asideoff ease-in-out .5s;
+}
+
+@keyframes asideoff {
+  from {
+    @apply w-0 opacity-0
+  }
+  60% {
+    @apply w-52 opacity-5
+  }
+  to {
+    @apply w-52
+  }
+}
 </style>

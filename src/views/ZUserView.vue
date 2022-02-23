@@ -5,7 +5,9 @@
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
-      <z-tree :catalogue="items" @select-file="selectFileHandler"/>
+      <div class=" overflow-scroll flex-grow">
+        <z-tree :catalogue="items" @select-file="selectFileHandler"/>
+      </div>
     </template>
   </z-aside>
   <div class="h-screen flex-grow overflow-scroll">

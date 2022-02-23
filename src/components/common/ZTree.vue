@@ -1,33 +1,31 @@
 <template>
-  <div v-for="(catalogue, index) in catalogueList"
-       :key="catalogue.id"
-       :class="[{'border-l' : level !== 0}, 'border-blue-200']"
-  >
-    <div v-if="catalogue.children.length === 0"
-         class="ml-2 flex items-center"
-         @click.stop="fileClickHandler(catalogue)"
-    ><p class="catalogue-base hover:bg-blue-200 text-blue-500 underline ">
+  <div>
+    <ul v-for="(catalogue, index) in catalogueList"
+        :key="catalogue.id"
+        :class="[{'border-l' : level !== 0}, 'border-blue-200', 'overflow-y-hidden']"
+    >
+      <li v-if="catalogue.children.length === 0"
+          class="ml-2 flex items-center"
+          @click.stop="fileClickHandler(catalogue)"
+      ><p class="catalogue-base hover:bg-blue-200 text-blue-500 underline ">
         {{ catalogue.title }}
       </p>
-    </div>
+      </li>
 
-    <div v-else class="ml-2">
-      <div class="text-gray-500 flex items-center"
-           @click.stop="folderClickHandler(index)"
-      ><p class="catalogue-base">
+      <li v-else class="ml-2">
+        <p class="catalogue-base text-gray-500 flex items-center whitespace-nowrap"
+           @click.stop="folderClickHandler(index)">
           {{ catalogue.title }}
         </p>
-      </div>
-
-      <transition name="scrollin" mode="in-out">
-        <div v-show="isShow[index]" class="overflow-hidden">
-          <z-tree :catalogue="catalogue.children"
+        <transition name="scrollin" mode="in-out">
+          <z-tree v-show="isShow[index]"
+                  :catalogue="catalogue.children"
                   :level="level + 1"
                   :is-show-componet="childToggle"
                   @select-file="fileClickHandler"/>
-        </div>
-      </transition>
-    </div>
+        </transition>
+      </li>
+    </ul>
   </div>
 </template>
 

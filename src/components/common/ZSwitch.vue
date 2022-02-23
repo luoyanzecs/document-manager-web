@@ -11,8 +11,9 @@
 </template>
 
 <script setup>
-import {defineProps} from "vue";
+import {defineProps, defineEmits} from "vue";
 
+defineEmits(['update:value'])
 defineProps({
   left: {
     type: [String, Object],

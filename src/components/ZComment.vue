@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-clickoutside="hideReplyBtn" @click="inputFocus" class="my-reply">
-            <z-avatar class="header-img" ></z-avatar>
+            <z-avatar class="header-img" :image = "myHeader" ></z-avatar>
             <div class="reply-info" >
                 <div 
                 tabindex="0" 
@@ -22,22 +22,22 @@
             </div>
         </div>
         <div v-for="(item,i) in comments" :key="i" class="author-title p-3">
-            <el-avatar class="header-img" :size="40" :src="item.headImg"></el-avatar>
+            <z-avatar class="header-img"  :image="item.headImg"></z-avatar>
             <div class="author-info">
                 <span class="author-name">{{item.name}}</span>
                 <span class="text-sm">{{item.time}}</span>
             </div>
-            <div class="w-4/12 p-0 !important  float-right">
+            <div class="w-4/12 p-0 !important float-right">
                 <span class="cursor-pointer" @click="showReplyInput(i,item.name,item.id)"><i class="m-2">icon</i>{{item.commentNum}}</span>
             </div>
             <div class="mx-16">
                 <p>
-                    <span class="reply-sm text-black ">{{item.comment}}</span>
+                    <span class="tetext-basext-sm text-black ">{{item.comment}}</span>
                 </p>
             </div>
             <div class="ml-16 mt-4 bg-gray-200">
                 <div v-for="(reply,j) in item.reply" :key="j" class="p-6">
-                    <el-avatar class="header-img" :size="40" :src="reply.fromHeadImg"></el-avatar>
+                    <z-avatar class="header-img" :image="reply.fromHeadImg"></z-avatar>
                     <div class="author-info">
                         <span class="author-name">{{reply.from}}</span>
                         <span class="text-sm">{{reply.time}}</span>
@@ -48,7 +48,7 @@
                     <div class="mx-16">
                         <p>
                             <span>回复{{reply.to}}:</span>
-                            <span class="reply-sm text-black ">{{reply.comment}}</span>
+                            <span class="text-base text-black ">{{reply.comment}}</span>
                         </p>
                     </div>
                     <div class="ml-16 mt-4 bg-gray-50">
@@ -56,9 +56,9 @@
                 </div>
             </div>
             <div  v-show="_inputShow(i)" class="my-reply ml-16">
-                <el-avatar class="header-img" :size="40" :src="myHeader"></el-avatar>
+                <z-avatar class="header-img" :image="myHeader"></z-avatar>
                 <div class="reply-info" >
-                    <div tabindex="0" contenteditable="true" spellcheck="false" placeholder="输入评论..."  @input="onDivInput($event)"  class="w-auto flex reply-comment-input"></div>
+                    <div tabindex="0" contenteditable="true" spellcheck="false" placeholder="输入评论..."  @input="onDivInput($event)"  class="reply-input reply-comment-input"></div>
                 </div>
                 <div class="reply-btn-box">
                     <z-button class="reply-btn" @click="sendCommentReply(i,j)" type="primary">发表评论</z-button>
@@ -188,8 +188,8 @@ export default {
     methods: {
         inputFocus(){
             var replyInput = document.getElementById('replyInput');
-            replyInput.style.padding= "8px 8px"
-            replyInput.style.border ="2px solid blue"
+            // replyInput.style.padding= "8px 8px"
+            // replyInput.style.border ="2px solid blue"
             replyInput.focus()
         },  
         showReplyBtn(){
@@ -294,7 +294,7 @@ export default {
 <style scoped>
 
 .my-reply{
-    @apply p-1 bg-gray-50 
+    @apply p-1 bg-gray-100 
 }
 
 .header-img{
@@ -306,11 +306,12 @@ export default {
 }    
 
 .reply-input{
-    @apply min-h-full leading-5 p-4 rounded placeholder-black placeholder-opacity-100 ;
+    @apply h-10 min-h-full leading-8 p-2 rounded placeholder-black placeholder-opacity-100 bg-white  ;
 }
 
 .reply-input:focus{
-    @apply p-4 rounded-2xl border-blue-900 shadow outline-none
+    @apply p-2 outline-none ring-2 ring-blue-600 border-transparent text-base
+    /* focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent */
 }
     
 .reply-btn-box{

@@ -3,7 +3,7 @@
     <img v-if="image != null"
          :src="image"
          alt=""
-         class="w-8 h-8"
+         class="bg-cover rounded-full"
     />
     <component v-else :is="iconComponent" class="w-8 h-8 text-white"/>
   </div>

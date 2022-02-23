@@ -10,14 +10,12 @@
       </z-header-button>
     </div>
     <transition name="aside">
-      <div class="w-52 h-screen flex flex-col overflow-scroll"
+      <div class="w-52 h-screen flex flex-col"
            v-show="isAsideShow">
-        <div class="mx-4 h-16 flex justify-end items-center px-4 sticky top-0">
+        <div class="mx-4 mb-4 h-16 flex justify-end items-center px-4 sticky top-0">
           <slot name="right"></slot>
         </div>
-        <div class="pt-4 overflow-scroll">
-          <slot name="context"></slot>
-        </div>
+        <slot name="context"></slot>
       </div>
     </transition>
   </div>

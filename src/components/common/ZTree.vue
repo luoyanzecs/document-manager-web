@@ -20,7 +20,7 @@
       </div>
 
       <transition name="scrollin" mode="in-out">
-        <div v-show="isShow[index]" class="overflow-hidden">
+        <div v-show="isShow[index]" class="overflow-x-visible overflow-y-hidden">
           <z-tree :catalogue="catalogue.children"
                   :level="level + 1"
                   :is-show-componet="childToggle"

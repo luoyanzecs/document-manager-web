@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-clickoutside="hideReplyBtn" @click="inputFocus" class="my-reply">
-            <el-avatar class="header-img" :size="40" :src="myHeader"></el-avatar>
+            <z-avatar class="header-img" ></z-avatar>
             <div class="reply-info" >
                 <div 
                 tabindex="0" 
@@ -16,51 +16,52 @@
                 </div>
             </div>
             <div class="reply-btn-box" v-show="btnShow">
-                <el-button class="reply-btn" size="medium" @click="sendComment" type="primary">发表评论</el-button>
+                <!-- <el-button class="reply-btn" size="medium" @click="sendComment" type="primary">发表评论</el-button> -->
+                <z-button class="reply-btn" @click="sendComment" type="primary">发表评论</z-button>
+
             </div>
         </div>
-        <div v-for="(item,i) in comments" :key="i" class="author-title reply-father">
+        <div v-for="(item,i) in comments" :key="i" class="author-title p-3">
             <el-avatar class="header-img" :size="40" :src="item.headImg"></el-avatar>
             <div class="author-info">
                 <span class="author-name">{{item.name}}</span>
-                <span class="author-time">{{item.time}}</span>
+                <span class="text-sm">{{item.time}}</span>
             </div>
-            <div class="icon-btn">
-                <span @click="showReplyInput(i,item.name,item.id)"><i class="iconfont">icon</i>{{item.commentNum}}</span>
+            <div class="w-4/12 p-0 !important  float-right">
+                <span class="cursor-pointer" @click="showReplyInput(i,item.name,item.id)"><i class="m-2">icon</i>{{item.commentNum}}</span>
             </div>
-            <div class="talk-box">
+            <div class="mx-16">
                 <p>
-                    <span class="reply">{{item.comment}}</span>
+                    <span class="reply-sm text-black ">{{item.comment}}</span>
                 </p>
             </div>
-            <div class="reply-box">
-                <div v-for="(reply,j) in item.reply" :key="j" class="author-title">
+            <div class="ml-16 mt-4 bg-gray-200">
+                <div v-for="(reply,j) in item.reply" :key="j" class="p-6">
                     <el-avatar class="header-img" :size="40" :src="reply.fromHeadImg"></el-avatar>
                     <div class="author-info">
                         <span class="author-name">{{reply.from}}</span>
-                        <span class="author-time">{{reply.time}}</span>
+                        <span class="text-sm">{{reply.time}}</span>
                     </div>
-                    <div class="icon-btn">
-                        <span @click="showReplyInput(i,reply.from,reply.id)"><i class="iconfont">icon</i>{{reply.commentNum}}</span>
+                    <div class="w-4/12 p-0 !important  float-right">
+                        <span class="cursor-pointer" @click="showReplyInput(i,reply.from,reply.id)"><i class="m-2">icon</i>{{reply.commentNum}}</span>
                     </div>
-                    <div class="talk-box">
+                    <div class="mx-16">
                         <p>
-                            <span>回复 {{reply.to}}:</span>
-                            <span class="reply">{{reply.comment}}</span>
+                            <span>回复{{reply.to}}:</span>
+                            <span class="reply-sm text-black ">{{reply.comment}}</span>
                         </p>
                     </div>
-                    <div class="reply-box">
-
+                    <div class="ml-16 mt-4 bg-gray-50">
                     </div>
                 </div>
             </div>
-            <div  v-show="_inputShow(i)" class="my-reply my-comment-reply">
+            <div  v-show="_inputShow(i)" class="my-reply ml-16">
                 <el-avatar class="header-img" :size="40" :src="myHeader"></el-avatar>
                 <div class="reply-info" >
-                    <div tabindex="0" contenteditable="true" spellcheck="false" placeholder="输入评论..."  @input="onDivInput($event)"  class="reply-input reply-comment-input"></div>
+                    <div tabindex="0" contenteditable="true" spellcheck="false" placeholder="输入评论..."  @input="onDivInput($event)"  class="w-auto flex reply-comment-input"></div>
                 </div>
-                <div class=" reply-btn-box">
-                    <el-button class="reply-btn" size="medium" @click="sendCommentReply(i,j)" type="primary">发表评论</el-button>
+                <div class="reply-btn-box">
+                    <z-button class="reply-btn" @click="sendCommentReply(i,j)" type="primary">发表评论</z-button>
             </div>
         </div>
         </div>
@@ -68,6 +69,8 @@
 </template>
 
 <script>
+import ZButton from './common/ZButton.vue';
+import ZAvatar from "./ZAvatar.vue";
 
 const clickoutside = {
     // 初始化指令
@@ -97,6 +100,8 @@ const clickoutside = {
 export default {
     name:'ArticleComment',
     components:{
+        ZButton,
+        ZAvatar,
     },
     data(){
         return{
@@ -286,92 +291,46 @@ export default {
 </script>
 
 
-<style lang="stylus" scoped>
-.my-reply
-    padding 10px
-    background-color #fafbfc
-    .header-img
-        display inline-block
-        vertical-align top
-    .reply-info    
-        display inline-block
-        margin-left 5px
-        width 90%
-        @media screen and (max-width:1200px) {
-            width 80%
-        }
-        .reply-input
-            min-height 20px
-            line-height 22px
-            padding 10px 10px
-            color #ccc
-            background-color #fff
-            border-radius 5px
-            &:empty:before
-                content attr(placeholder)
-            &:focus:before
-                content none
-            &:focus
-                padding 8px 8px
-                border 2px solid blue
-                box-shadow none
-                outline none
-    .reply-btn-box
-        height 25px
-        margin 10px 0
-        .reply-btn
-            position relative
-            float right
-            margin-right 15px
-.my-comment-reply
-    margin-left 50px
-    .reply-input
-        width flex
-.author-title:not(:last-child)
-    border-bottom: 1px solid rgba(178,186,194,.3)
-.author-title
-    padding 10px
-    .header-img
-        display inline-block
-        vertical-align top
-    .author-info
-        display inline-block
-        margin-left 5px
-        width 60%
-        height 40px
-        line-height 20px
-        >span 
-            display block
-            cursor pointer
-            overflow hidden
-            white-space nowrap
-            text-overflow ellipsis
-        .author-name
-            color #000
-            font-size 18px
-            font-weight bold
-        .author-time
-            font-size 14px
-    .icon-btn
-        width 30%
-        padding 0 !important 
-        float right
-        @media screen and (max-width : 1200px){
-            width 20%
-            padding 7px
-        }
-        >span 
-            cursor pointer
-        .iconfont 
-            margin 0 5px
-    .talk-box
-        margin 0 50px
-        >p
-           margin 0
-        .reply
-            font-size 16px
-            color #000
-    .reply-box
-        margin 10px 0 0 50px
-        background-color #efefef
+<style scoped>
+
+.my-reply{
+    @apply p-1 bg-gray-50 
+}
+
+.header-img{
+    @apply inline-block align-top
+}
+
+.reply-info{
+    @apply inline-block m-4 w-11/12;
+}    
+
+.reply-input{
+    @apply min-h-full leading-5 p-4 rounded placeholder-black placeholder-opacity-100 ;
+}
+
+.reply-input:focus{
+    @apply p-4 rounded-2xl border-blue-900 shadow outline-none
+}
+    
+.reply-btn-box{
+    @apply h-8 mx-4
+}
+.reply-btn{
+    @apply relative float-right mr-4
+}
+.author-title:not(:last-child){
+    @apply border-2  border-solid  border-blue-200
+}
+
+.author-info{
+    @apply inline-block ml-4 w-8/12 h-5 leading-5
+}
+.author-info>span {
+    @apply block cursor-pointer overflow-hidden whitespace-nowrap overflow-ellipsis
+}
+.author-name{
+    @apply text-black text-2xl font-bold 
+    
+}
 </style>

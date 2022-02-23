@@ -1,12 +1,15 @@
 <template>
-  <z-switch left="管理员" right="员工" v-model:value="value"/>
+<!--  <z-switch v-model:value="switchValue"/>-->
+<!--  {{switchValue}}-->
+  <z-comment/>
 </template>
 
 <script setup>
-import ZSwitch from "@/components/common/ZSwitch";
-import {ref} from "vue";
+// import {ref} from "vue";
+// import ZSwitch from "@/components/common/ZSwitch";
 
-const value = ref(false)
+// const switchValue = ref(true)
+import ZComment from "@/components/common/ZComment";
 </script>
 
 <style scoped>

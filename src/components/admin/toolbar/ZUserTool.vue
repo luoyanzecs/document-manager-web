@@ -1,10 +1,10 @@
 <template>
   <tool>
     <template #tools>
-      <z-head-button @click="click(0)">新增</z-head-button>
-      <z-head-button @click="click(1)">删除</z-head-button>
-      <z-head-button @click="click(2)">保存</z-head-button>
-      <z-head-button @click="click(3)">记录</z-head-button>
+      <z-head-button fill="新增" @click="click(0)"/>
+      <z-head-button fill="删除" @click="click(1)"/>
+      <z-head-button fill="保存" @click="click(2)"/>
+      <z-head-button fill="记录" @click="click(3)"/>
     </template>
   </tool>
 </template>

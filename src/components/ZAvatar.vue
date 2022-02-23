@@ -1,11 +1,11 @@
 <template>
-  <div class="w-12 h-12 rounded-full p-1 bg-gray-300 pos-center">
+  <div class="w-12 h-12 rounded-full bg-gray-300 pos-center">
     <img v-if="image != null"
          :src="image"
          alt=""
-         class="bg-cover rounded-full"
+         class="rounded-full"
     />
-    <component v-else :is="iconComponent" class="w-8 h-8 text-white"/>
+    <component v-else :is="iconComponent" class="m-2 text-white"/>
   </div>
 </template>
 

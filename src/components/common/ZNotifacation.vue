@@ -61,7 +61,7 @@ const messageType = computed(() => {
 })
 
 onMounted(() => {
-  setTimeout(() => mountClass.value = '', 700)
+  setTimeout(() => mountClass.value = '', 500)
   setTimeout(() => isVisable.value = false, anmationDelay.value)
 })
 
@@ -74,10 +74,10 @@ const closeHandler = () => {
 
 <style scoped>
 .mount-transition {
-  animation: slideoff ease-in-out .7s reverse;
+  animation: slideoff ease-in-out .5s reverse;
 }
 .notice-leave-active {
-  animation: slideoff ease-in-out .7s;
+  animation: slideoff ease-in-out .5s;
 }
 
 @keyframes slideoff {

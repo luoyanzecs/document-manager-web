@@ -13,12 +13,12 @@
   <div class="h-screen flex-grow overflow-scroll">
       <Header>
           <template v-slot:tools>
-            <head-tool :banners="banners"
+            <head-tool :banner="banner"
                        @editor="click"/>
           </template>
           <template v-slot:avatar>
 <!--              TODO：头像悬浮的组件 建议抽离出来-->
-            <z-avatar :icon="UserFilled"/>
+            <z-avatar/>
 <!--              -->
           </template>
         </Header>
@@ -36,8 +36,7 @@
 
 <script setup>
 import Editor from "@/components/ZEditor";
-import { ref, reactive } from 'vue'
-import { UserFilled } from "@element-plus/icons-vue"
+import { ref } from 'vue'
 import Header from "@/components/common/ZHeader";
 import HeadTool from "@/components/user/HeadTool";
 import ZAside from "@/components/common/ZAside";
@@ -48,20 +47,18 @@ import ZComment from "@/components/common/ZComment";
 
 const editor = ref()
 
-const banners = reactive({
-  editorBtn: '编辑'
-})
+const banner = ref('编辑')
 
 const selectFileHandler = (param) =>{
   console.log(param)
 }
 
 const click = () => {
-  if (banners.editorBtn === '编辑') {
-    banners.editorBtn = '更新'
+  if (banner.value === '编辑') {
+    banner.value = '更新'
     editor.value.disable()
   } else {
-    banners.editorBtn = '编辑'
+    banner.value = '编辑'
     editor.value.enable()
   }
 }

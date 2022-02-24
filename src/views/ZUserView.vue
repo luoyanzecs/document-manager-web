@@ -17,14 +17,9 @@
                        @editor="click"/>
           </template>
           <template v-slot:avatar>
-            <el-popover placement="bottom" :width="200" trigger="hover">
-              <template #reference>
-                <z-avatar :icon="UserFilled"/>
-              </template>
 <!--              TODO：头像悬浮的组件 建议抽离出来-->
-              <h1>hello</h1>
+            <z-avatar :icon="UserFilled"/>
 <!--              -->
-            </el-popover>
           </template>
         </Header>
       <div class >

@@ -20,14 +20,7 @@
           </keep-alive>
         </template>
         <template v-slot:avatar>
-          <el-popover placement="bottom"
-                      :width="200"
-                      trigger="hover">
-            <template #reference>
-              <z-avatar :icon="UserFilled"/>
-            </template>
-            <h1>hello</h1>
-          </el-popover>
+          <z-avatar :icon="UserFilled"/>
         </template>
       </z-header>
       <div class="py-4 px-8 flex flex-col justify-center items-center">

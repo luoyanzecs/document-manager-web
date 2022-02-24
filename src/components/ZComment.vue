@@ -16,9 +16,7 @@
                 </div>
             </div>
             <div class="reply-btn-box" v-show="btnShow">
-                <!-- <el-button class="reply-btn" size="medium" @click="sendComment" type="primary">发表评论</el-button> -->
                 <z-button class="reply-btn" @click="sendComment" type="primary">发表评论</z-button>
-
             </div>
         </div>
         <div v-for="(item,i) in comments" :key="i" class="author-title p-3">

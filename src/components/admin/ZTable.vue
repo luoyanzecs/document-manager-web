@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-1.5 md:min-w-75">
+  <div class="flex flex-col md:min-w-75">
     <div :class="['field-item', 'row-base', 'md:tracking-wide', gridN]">
       <div :class="[isToggleAll ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"
            @click.stop="toggle(-1)"/>
@@ -89,11 +89,11 @@ const toggle = (index) => {
 }
 
 .row-base {
-  @apply grid items-center gap-2 px-4 py-0.5 rounded-lg max-w-5xl
+  @apply grid items-center gap-2 px-4 py-0.5 rounded-lg max-w-5xl my-1
 }
 
 .field-item {
-  @apply font-bold text-gray-700 bg-gray-400 text-xl
+  @apply font-bold text-gray-700 bg-gray-400 text-xl mb-1.5
 }
 
 .collapse-item {
@@ -101,7 +101,7 @@ const toggle = (index) => {
 }
 
 .item-hover {
-  @apply hover:ring-2 hover:bg-green-500 hover:my-0.5 hover:ring-green-500 hover:ring-offset-2
+  @apply hover:ring-2 hover:bg-green-500 hover:ring-green-500 hover:ring-offset-1
 }
 
 .expand-item {

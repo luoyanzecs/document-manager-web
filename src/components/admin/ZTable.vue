@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col md:min-w-75">
     <div :class="['field-item', 'row-base', 'md:tracking-wide', gridN]">
-      <div :class="[isToggleAll ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"
+      <div :class="[isToggleAll ? 'bg-green-600' : 'bg-white', 'col-span-1', 'w-4', 'h-4', 'rounded-full']"
            @click.stop="toggle(-1)"/>
       <div v-for="(value, index) in fields" :key="index" :class="colSpanList[index]">{{ value }}</div>
     </div>
@@ -10,7 +10,7 @@
          @click="expand(i)"
          :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'item-hover', 'item-base', 'row-base']">
       <div v-show="!isExpand[i]"
-          :class="[isSelect[i] ? 'bg-green-400' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"
+          :class="[isSelect[i] ? 'bg-green-600' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"
            @click.stop="toggle(i)"/>
       <div v-show="isExpand[i]" class="font-normal w-20">
         <span class="text-blue-500 cursor-pointer" @click.stop="switchToCollapse(i)">关闭</span>
@@ -101,7 +101,7 @@ const toggle = (index) => {
 }
 
 .item-hover {
-  @apply hover:ring-2 hover:bg-green-500 hover:ring-green-500 hover:ring-offset-1
+  @apply hover:ring-2 hover:bg-indigo-300 hover:ring-indigo-300 hover:ring-offset-1
 }
 
 .expand-item {

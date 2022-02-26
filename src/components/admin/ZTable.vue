@@ -7,22 +7,22 @@
     </div>
     <div v-for="(list, i) in lists"
          :key="i"
-         @click="expand(i)"
          :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'item-hover', 'item-base', 'row-base']">
       <div v-show="!isExpand[i]"
           :class="[isSelect[i] ? 'bg-green-600' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"
            @click.stop="toggle(i)"/>
-      <div v-show="isExpand[i]" class="font-normal w-20">
+      <div v-show="isExpand[i]" class="w-20">
         <span class="text-blue-500 cursor-pointer" @click.stop="switchToCollapse(i)">关闭</span>
       </div>
       <div v-for="(key, keyIndex) in keys"
            :key="keyIndex"
            :class="[isExpand[i] ? 'flex' : '',  colSpanList[keyIndex]]">
-        <div v-if="isExpand[i]" class="font-normal w-20 grid flex-shrink-0"><span>{{ fields[keyIndex] }} </span></div>
+        <div v-if="isExpand[i]" class="w-20 grid flex-shrink-0"><span>{{ fields[keyIndex] }} </span></div>
         <div class="max-h-12 text-sm md:text-base">
           <p :class="{'truncate' : !isExpand[i]}">{{ list[key] }}</p>
         </div>
       </div>
+      <svg v-show="!isExpand[i]" @click="expand(i)" class="text-gray-400 cursor-pointer p-3" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-042ca774=""><path fill="currentColor" d="M104.704 338.752a64 64 0 0190.496 0l316.8 316.8 316.8-316.8a64 64 0 0190.496 90.496L557.248 791.296a64 64 0 01-90.496 0L104.704 429.248a64 64 0 010-90.496z"></path></svg>
     </div>
   </div>
 </template>
@@ -58,7 +58,7 @@ const gridN = ref('')
 const colSpanList = ref([])
 
 onBeforeMount(() => {
-  let count = 1, i = 0
+  let count = 2, i = 0
   for (let k in cols.value) {
     count += cols.value[k]
     colSpanList.value[i++] = `col-span-${cols.value[k]}`
@@ -97,7 +97,7 @@ const toggle = (index) => {
 }
 
 .collapse-item {
-  @apply overflow-ellipsis items-center group font-light text-black bg-gray-200
+  @apply overflow-ellipsis items-center group text-black bg-gray-200
 }
 
 .item-hover {
@@ -105,7 +105,7 @@ const toggle = (index) => {
 }
 
 .expand-item {
-  @apply bg-gray-200 font-light max-w-5xl rounded-xl p-4 my-1
+  @apply bg-gray-200 max-w-5xl rounded-xl p-4 my-1
 }
 
 

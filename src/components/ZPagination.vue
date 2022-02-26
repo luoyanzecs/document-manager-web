@@ -1,9 +1,9 @@
 <template>
   <div class="pos-center flex-shrink-0">
-    <p class="pagination-text">首页</p>
+    <p class="pagination-text mr-4">首页</p>
     <template v-for="i of 5" :key="currentPage - i + 3">
       <p v-if="currentPage + i - 3 > 0"
-         :class="['pagination-text', {'underline': i === 3}]"
+         :class="['pagination-text', {'ring-1': i === 3}]"
          @click="$emit('selectPage', currentPage + i - 3)"
       >{{ currentPage + i - 3}}</p>
     </template>
@@ -49,6 +49,6 @@ const go = () => emit('selectPage', input.value.value)
 
 <style scoped>
 .pagination-text {
-  @apply text-blue-600 cursor-pointer hover:bg-gray-300 rounded-lg py-1 px-1.5
+  @apply text-blue-600 cursor-pointer hover:bg-gray-300 rounded-lg py-1 px-2
 }
 </style>

@@ -105,7 +105,7 @@ const toggle = (index) => {
 }
 
 .expand-item {
-  @apply bg-gray-200 font-light max-w-5xl rounded-xl p-4
+  @apply bg-gray-200 font-light max-w-5xl rounded-xl p-4 my-1
 }
 
 

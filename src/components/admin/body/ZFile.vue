@@ -1,92 +1,103 @@
 <template>
-  <z-table :keys="keys"
-           :cols="cols"
-           :fields="fields"
-           :items="files"/>
+  <z-table :keys="tableProp.keys"
+           :cols="tableProp.cols"
+           :fields="tableProp.fields"
+           :items="tableProp.items"/>
+  <z-pagination class="my-4"
+                :visible="pageProp.visible"
+                :current-page="pageProp.page"
+                :total-page="pageProp.totalPage"/>
 </template>
 
 <script setup>
 import {ref} from 'vue'
 
 import ZTable from "@/components/admin/ZTable";
+import ZPagination from "@/components/ZPagination";
 
-const fields = ref(['编号', '作者', '部门', '标题', '创建时间'])
-const keys = ref(['id', 'owner', 'bu', 'title', 'createTime'])
-const cols = ref([2, 2, 2, 8, 4])
+const pageProp = ref({
+  page: 1,
+  visible: false,
+  totalPage: 20
+})
 
-const files = ref([
-  {
-    id: '123456',
-    owner: 'user',
-    title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-    bu: '开发',
-    createTime: '2020-01-02: 17:45'
-  },
-  {
-    id: '123456',
-    owner: 'user',
-    title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-    bu: '开发',
-    createTime: '2020-01-02: 17:45'
-  },
-  {
-    id: '123456',
-    owner: 'user',
-    title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-    bu: '开发',
-    createTime: '2020-01-02: 17:45'
-  },
-  {
-    id: '123456',
-    owner: 'user',
-    title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-    bu: '开发',
-    createTime: '2020-01-02: 17:45'
-  },
-  {
-    id: '123456',
-    owner: 'user',
-    title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-    bu: '开发',
-    createTime: '2020-01-02: 17:45'
-  },
-  {
-    id: '123456',
-    owner: 'user',
-    title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-    bu: '开发',
-    createTime: '2020-01-02: 17:45'
-  },
-  {
-    id: '123456',
-    owner: 'user',
-    title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-    bu: '开发',
-    createTime: '2020-01-02: 17:45'
-  },
-  {
-    id: '123456',
-    owner: 'user',
-    title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-    bu: '开发',
-    createTime: '2020-01-02: 17:45'
-  },
-  {
-    id: '123456',
-    owner: 'user',
-    title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-    bu: '开发',
-    createTime: '2020-01-02: 17:45'
-  },
-  {
-    id: '123456',
-    owner: 'user',
-    title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-    bu: '开发',
-    createTime: '2020-01-02: 17:45'
-  },
-])
-
+const tableProp = ref({
+  fields: ['编号', '作者', '部门', '标题', '创建时间'],
+  keys: ['id', 'owner', 'bu', 'title', 'createTime'],
+  cols: [2, 2, 2, 8, 4],
+  items: [
+    {
+      id: '123456',
+      owner: 'user',
+      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
+      bu: '开发',
+      createTime: '2020-01-02: 17:45'
+    },
+    {
+      id: '123456',
+      owner: 'user',
+      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
+      bu: '开发',
+      createTime: '2020-01-02: 17:45'
+    },
+    {
+      id: '123456',
+      owner: 'user',
+      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
+      bu: '开发',
+      createTime: '2020-01-02: 17:45'
+    },
+    {
+      id: '123456',
+      owner: 'user',
+      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
+      bu: '开发',
+      createTime: '2020-01-02: 17:45'
+    },
+    {
+      id: '123456',
+      owner: 'user',
+      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
+      bu: '开发',
+      createTime: '2020-01-02: 17:45'
+    },
+    {
+      id: '123456',
+      owner: 'user',
+      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
+      bu: '开发',
+      createTime: '2020-01-02: 17:45'
+    },
+    {
+      id: '123456',
+      owner: 'user',
+      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
+      bu: '开发',
+      createTime: '2020-01-02: 17:45'
+    },
+    {
+      id: '123456',
+      owner: 'user',
+      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
+      bu: '开发',
+      createTime: '2020-01-02: 17:45'
+    },
+    {
+      id: '123456',
+      owner: 'user',
+      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
+      bu: '开发',
+      createTime: '2020-01-02: 17:45'
+    },
+    {
+      id: '123456',
+      owner: 'user',
+      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
+      bu: '开发',
+      createTime: '2020-01-02: 17:45'
+    },
+  ]
+})
 
 </script>
 

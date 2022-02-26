@@ -14,13 +14,13 @@
         <p class="text-gray-500 text-xs">{{ comment.time }}</p>
         <p class="text-justify">{{ comment.comment }}</p>
       </div>
-      <div class="bg-gray-300 px-2.5 rounded-lg" v-if="comment.reply.length !== 0">
-        <div v-for="reply in comment.reply" :key="reply.id" class="my-1.5 w-full flex-grow">
+      <ul class="bg-gray-300 px-2.5 rounded-lg" v-if="comment.reply.length !== 0">
+        <li v-for="reply in comment.reply" :key="reply.id" class="my-1 w-full flex-grow">
           <p class="font-bold text-sm">{{ reply.name }}</p>
           <p class="text-gray-700 text-xs">{{ reply.time }}</p>
           <p class="text-sm">{{ reply.comment }}</p>
-        </div>
-      </div>
+        </li>
+      </ul>
       <p class="text-blue-500 cursor-pointer text-sm" @click="showReplyClick(index, $event)">回复</p>
       <transition name="reply">
         <div class="flex gap-3 items-center overflow-y-hidden" v-show="isRepleyShow[index]">

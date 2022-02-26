@@ -6,19 +6,23 @@
       </header-button>
       <header-button type="primary">新建</header-button>
       <header-button type="primary">附件</header-button>
-      <header-button type="primary" @click="click">{{ banners.editorBtn }}</header-button>
+      <header-button type="primary" @click="click">{{ banner }}</header-button>
     </template>
   </tool>
 </template>
 
 <script setup>
 import Tool from "@/components/common/ZHeadMenu";
-import { defineProps, defineEmits } from "vue";
+import {defineProps, defineEmits} from "vue";
 import HeaderButton from "@/components/common/ZButton";
 
 defineProps( {
-  banners: Object
+  banner: {
+    type: String,
+    required: true
+  }
 })
+
 
 const emit = defineEmits(['editor'])
 

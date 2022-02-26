@@ -20,14 +20,7 @@
           </keep-alive>
         </template>
         <template v-slot:avatar>
-          <el-popover placement="bottom"
-                      :width="200"
-                      trigger="hover">
-            <template #reference>
-              <z-avatar :icon="UserFilled"/>
-            </template>
-            <h1>hello</h1>
-          </el-popover>
+          <z-avatar />
         </template>
       </z-header>
       <div class="py-4 px-8 flex flex-col justify-center items-center">
@@ -49,7 +42,6 @@
 <script setup>
 import {ref, reactive} from "vue";
 import router from "@/router";
-import { UserFilled } from "@element-plus/icons-vue"
 import UserTool from "@/components/admin/toolbar/ZUserTool.vue"
 import RecordTool from "@/components/admin/toolbar/ZRecordTool.vue"
 import NoticeTool from "@/components/admin/toolbar/ZNoticeTool.vue"

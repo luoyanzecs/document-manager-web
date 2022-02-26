@@ -6,25 +6,22 @@
     >
       <li v-if="catalogue.children.length === 0"
           class="ml-2 flex items-center"
-          @click.stop="fileClickHandler(catalogue)"
-      ><p class="catalogue-base hover:bg-blue-200 text-blue-500 underline ">
-        {{ catalogue.title }}
-      </p>
+          @click.stop="fileClickHandler(catalogue)">
+        <p class="catalogue-base hover:bg-blue-200 text-blue-500 underline ">{{ catalogue.title }}</p>
       </li>
-
-      <li v-else class="ml-2">
+      <li v-else class="ml-2"
+      >
         <p class="catalogue-base text-gray-500 flex items-center whitespace-nowrap"
            @click.stop="folderClickHandler(index)">
           {{ catalogue.title }}
         </p>
-
-      <transition name="scrollin" mode="in-out">
-        <div v-show="isShow[index]" class="overflow-x-visible overflow-y-hidden">
-          <z-tree :catalogue="catalogue.children"
-                  :level="level + 1"
-                  :is-show-componet="childToggle"
-                  @select-file="fileClickHandler"/>
-        </div>
+        <transition name="scrollin" mode="in-out">
+          <div v-show="isShow[index]" class="overflow-x-visible overflow-y-hidden">
+            <z-tree :catalogue="catalogue.children"
+                    :level="level + 1"
+                    :is-show-componet="childToggle"
+                    @select-file="fileClickHandler"/>
+          </div>
         </transition>
       </li>
     </ul>

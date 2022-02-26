@@ -4,30 +4,29 @@
       <z-button type="primary">部门</z-button>
     </template>
     <template #context>
-      <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
-      <div class=" overflow-scroll flex-grow">
+      <div class="m-2 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
+      <div class="overflow-scroll flex-grow">
         <z-tree :catalogue="items" @select-file="selectFileHandler"/>
       </div>
     </template>
   </z-aside>
   <div class="h-screen flex-grow overflow-scroll">
-      <Header>
-          <template v-slot:tools>
-            <head-tool :banner="banner"
-                       @editor="click"/>
-          </template>
-          <template v-slot:avatar>
-<!--              TODO：头像悬浮的组件 建议抽离出来-->
-            <z-avatar/>
-<!--              -->
-          </template>
-        </Header>
-      <div class >
-        <Editor ref="editor"/>
-        <hr class="my-4">
-        <z-comment :info="myInfo" :comments-list="comments"/>
-      </div>
+    <Header>
+      <template #tools>
+        <head-tool :banner="banner" @editor="click"/>
+      </template>
+      <template #avatar>
+        <!--              TODO：头像悬浮的组件 建议抽离出来-->
+        <z-avatar/>
+        <!--              -->
+      </template>
+    </Header>
+    <div class>
+      <Editor ref="editor"/>
+      <hr class="my-4">
+      <z-comment :info="myInfo" :comments-list="comments"/>
     </div>
+  </div>
 </template>
 
 
@@ -36,7 +35,7 @@
 
 <script setup>
 import Editor from "@/components/ZEditor";
-import { ref } from 'vue'
+import {ref} from 'vue'
 import Header from "@/components/common/ZHeader";
 import HeadTool from "@/components/user/HeadTool";
 import ZAside from "@/components/common/ZAside";
@@ -49,7 +48,7 @@ const editor = ref()
 
 const banner = ref('编辑')
 
-const selectFileHandler = (param) =>{
+const selectFileHandler = (param) => {
   console.log(param)
 }
 
@@ -89,7 +88,7 @@ const items = [
         children: [
           {
             id: '0005',
-            title: 'Level three 2-1-1',
+            title: 'Level three 2-1-1--------- aaa bbb ccc',
             children: []
           },
         ],

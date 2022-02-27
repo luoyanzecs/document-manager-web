@@ -111,3 +111,11 @@ Mock.mock('http://localhost:8081/api/admin/notices', 'post', {
         'endTime': '@datetime("yyyy年MM月dd日 HH:mm")'
     }]
 })
+
+Mock.mock('http://localhost:8081/api/notice', 'get', {
+    'notices|0-2': [{
+        'id': /\d{8}/,
+        'type|1-3': 1,
+        'message': '@csentence(10, 12)'
+    }]
+})

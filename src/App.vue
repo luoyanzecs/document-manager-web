@@ -40,7 +40,7 @@ onMounted(() => {
     })
     return interval
   }
-  setInterval(interval(), 15000)
+  setInterval(interval(), 30000)
 })
 
 const noticeCloseHandler = (id) => notifications.value = notifications.value.filter(notice => notice.id !== id)
@@ -57,9 +57,6 @@ const getDelay = () => {
   lastNoticeStartTime = now
   return delay
 }
-
-onMounted(() => {
-})
 
 </script>
 <style>

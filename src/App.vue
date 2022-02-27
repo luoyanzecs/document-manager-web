@@ -18,45 +18,26 @@
 
 
 <script setup>
-import {onMounted, ref} from "vue";
+import {computed, onMounted} from "vue";
+import { useStore } from 'vuex'
 import ZNotifacation from "@/components/common/ZNotifacation";
 import {NOTICE_GLOBAL} from "@/api";
 
-let lastNoticeStartTime = 0 // ms
-let lastDelay = 0
-const noticeAliveTime = 7000 // ms
-const animationTime = 700 // ms
-
-const notifications = ref([])
+const store = useStore()
+const notifications = computed(() => store.state.notificationQuene)
 
 onMounted(() => {
   function interval() {
     NOTICE_GLOBAL({}).then(res => {
       console.log(res.data)
-      res.data.notices.forEach(notice => {
-        notice.delay = getDelay()
-        notifications.value.unshift(notice)
-      })
+      res.data.notices.forEach(notice => store.commit('unshiftNotice', notice))
     })
     return interval
   }
   setInterval(interval(), 30000)
 })
 
-const noticeCloseHandler = (id) => notifications.value = notifications.value.filter(notice => notice.id !== id)
-
-const getDelay = () => {
-  let now = Date.now(), delay = 0
-  if (lastNoticeStartTime === 0 || now - lastNoticeStartTime > animationTime) {
-    delay = noticeAliveTime + animationTime
-  }
-  if (now - lastNoticeStartTime <=  animationTime ) {
-    delay = lastDelay + animationTime
-  }
-  lastDelay = delay
-  lastNoticeStartTime = now
-  return delay
-}
+const noticeCloseHandler = (id) => store.commit('removeNotice', id)
 
 </script>
 <style>

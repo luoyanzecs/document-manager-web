@@ -6,99 +6,46 @@
   <z-pagination class="my-4"
                 :visible="pageProp.visible"
                 :current-page="pageProp.page"
-                :total-page="pageProp.totalPage"/>
+                :total-page="pageProp.totalPage"
+                @select-page="selectPageHandler"/>
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 
 import ZTable from "@/components/admin/ZTable";
 import ZPagination from "@/components/ZPagination";
+import {FILE_LIST} from "@/api";
 
 const pageProp = ref({
-  page: 1,
+  page: 0,
   visible: false,
-  totalPage: 20
+  totalPage: 0
 })
 
 const tableProp = ref({
-  fields: ['编号', '作者', '部门', '标题', '创建时间'],
-  keys: ['id', 'owner', 'bu', 'title', 'createTime'],
-  cols: [2, 2, 2, 8, 4],
-  items: [
-    {
-      id: '123456',
-      owner: 'user',
-      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-      bu: '开发',
-      createTime: '2020-01-02: 17:45'
-    },
-    {
-      id: '123456',
-      owner: 'user',
-      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-      bu: '开发',
-      createTime: '2020-01-02: 17:45'
-    },
-    {
-      id: '123456',
-      owner: 'user',
-      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-      bu: '开发',
-      createTime: '2020-01-02: 17:45'
-    },
-    {
-      id: '123456',
-      owner: 'user',
-      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-      bu: '开发',
-      createTime: '2020-01-02: 17:45'
-    },
-    {
-      id: '123456',
-      owner: 'user',
-      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-      bu: '开发',
-      createTime: '2020-01-02: 17:45'
-    },
-    {
-      id: '123456',
-      owner: 'user',
-      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-      bu: '开发',
-      createTime: '2020-01-02: 17:45'
-    },
-    {
-      id: '123456',
-      owner: 'user',
-      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-      bu: '开发',
-      createTime: '2020-01-02: 17:45'
-    },
-    {
-      id: '123456',
-      owner: 'user',
-      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-      bu: '开发',
-      createTime: '2020-01-02: 17:45'
-    },
-    {
-      id: '123456',
-      owner: 'user',
-      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-      bu: '开发',
-      createTime: '2020-01-02: 17:45'
-    },
-    {
-      id: '123456',
-      owner: 'user',
-      title: 'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.',
-      bu: '开发',
-      createTime: '2020-01-02: 17:45'
-    },
-  ]
+  fields: [],
+  keys: [],
+  cols: [],
+  items: []
 })
 
+onMounted(() => {
+  selectPageHandler(1)
+})
+
+const selectPageHandler = (param) => {
+  pageProp.value.visible = true
+  FILE_LIST({
+    page: param
+  }).then(res => {
+    pageProp.value.visible = false
+    console.log(res.data)
+    pageProp.value.page = param
+    pageProp.value.totalPage = res.data.totalPage
+    tableProp.value = res.data
+  })
+}
 </script>
 
 <style scoped>

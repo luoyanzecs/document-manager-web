@@ -1,5 +1,5 @@
 <template>
-  <div class="pos-center flex-shrink-0">
+  <div v-if="currentPage !== 0" class="pos-center flex-shrink-0">
     <p class="pagination-text mr-4">首页</p>
     <template v-for="i of 5" :key="currentPage - i + 3">
       <p v-if="currentPage + i - 3 > 0"

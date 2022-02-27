@@ -29,16 +29,6 @@
     </div>
 </template>
 
-<style>
-.menu-base {
-  @apply hover:text-blue-500 rounded-md px-2 py-1.5 cursor-pointer text-gray-700
-}
-
-.select-menu {
-  @apply bg-blue-200 text-blue-500 italic;
-}
-</style>
-
 <script setup>
 import {ref} from "vue";
 import router from "@/router";
@@ -69,3 +59,13 @@ const menuSelect = (index) => {
 }
 
 </script>
+
+<style>
+.menu-base {
+  @apply hover:text-blue-500 rounded-md px-2 py-1.5 cursor-pointer text-gray-700
+}
+
+.select-menu {
+  @apply bg-blue-200 text-blue-500 italic;
+}
+</style>

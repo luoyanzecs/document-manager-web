@@ -5,12 +5,12 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref, reactive, defineExpose} from 'vue';
+import { onMounted, onBeforeUnmount, ref, defineExpose} from 'vue';
 import WangEditor from 'wangeditor';
 
 const toolbarContainer = ref();
 const textContainer = ref();
-const banners = reactive({
+const banners = ref({
   lastEditor: `last edit by luoyanze at 2022-2-6 19:30`
 })
 let o;

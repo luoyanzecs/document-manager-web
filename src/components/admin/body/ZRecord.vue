@@ -6,88 +6,45 @@
   <z-pagination class="my-4"
                 :current-page="pageProp.page"
                 :visible="pageProp.visible"
-                :total-page="pageProp.totalPage"/>
+                :total-page="pageProp.totalPage"
+                @select-page="selectPageHandler"/>
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {ref, onMounted} from 'vue'
 import ZTable from "@/components/admin/ZTable";
 import ZPagination from "@/components/ZPagination";
+import {RECORD_LIST} from "@/api";
+
 const pageProp = ref({
-  page: 1,
+  page: 0,
   visible: false,
-  totalPage: 20
+  totalPage: 0
 })
 
 const tableProp = ref({
-  fields: ['uid', '操作', '部门', 'fid', '时间'],
-  keys: ['id', 'oprate', 'bu', 'fid', 'oprateTime'],
-  cols: [3, 3, 3, 4, 7],
-  items: [
-    {
-      id: '123456',
-      fid: 'ADSASFWWE',
-      bu: '开发',
-      oprateTime: '2020-01-02: 17:45',
-      oprate: 'update'
-    },{
-      id: '123456',
-      fid: 'ADSASFWWE',
-      bu: '开发',
-      oprateTime: '2020-01-02: 17:45',
-      oprate: 'update'
-    },
-    {
-      id: '123456',
-      fid: 'ADSASFWWE',
-      bu: '开发',
-      oprateTime: '2020-01-02: 17:45',
-      oprate: 'update'
-    },
-    {
-      id: '123456',
-      fid: 'ADSASFWWE',
-      bu: '开发',
-      oprateTime: '2020-01-02: 17:45',
-      oprate: 'update'
-    },
-    {
-      id: '123456',
-      fid: 'ADSASFWWE',
-      bu: '开发',
-      oprateTime: '2020-01-02: 17:45',
-      oprate: 'update'
-    },
-    {
-      id: '123456',
-      fid: 'ADSASFWWE',
-      bu: '开发',
-      oprateTime: '2020-01-02: 17:45',
-      oprate: 'update'
-    },
-    {
-      id: '123456',
-      fid: 'ADSASFWWE',
-      bu: '开发',
-      oprateTime: '2020-01-02: 17:45',
-      oprate: 'update'
-    },
-    {
-      id: '123456',
-      fid: 'ADSASFWWE',
-      bu: '开发',
-      oprateTime: '2020-01-02: 17:45',
-      oprate: 'update'
-    },
-    {
-      id: '123456',
-      fid: 'ADSASFWWE',
-      bu: '开发',
-      oprateTime: '2020-01-02: 17:45',
-      oprate: 'update'
-    },
-  ]
+  fields: [],
+  keys: [],
+  cols: [],
+  items: []
 })
+
+onMounted(() => {
+  selectPageHandler(1)
+})
+
+const selectPageHandler = (param) => {
+  pageProp.value.visible = true
+  RECORD_LIST({
+    page: param
+  }).then(res => {
+    pageProp.value.visible = false
+    console.log(res.data)
+    pageProp.value.page = param
+    pageProp.value.totalPage = res.data.totalPage
+    tableProp.value = res.data
+  })
+}
 </script>
 
 <style scoped>

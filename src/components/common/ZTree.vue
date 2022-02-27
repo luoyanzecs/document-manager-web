@@ -1,4 +1,13 @@
 <template>
+  <template v-if="level === 0 && isMenuLoad">
+    <div v-for="i of 3" :key="i" class="animate-pulse flex flex-col space-y-1 m-2">
+      <div class="bg-gray-300 h-4 rounded"/>
+      <div class="bg-gray-300 h-4 rounded ml-4"/>
+      <div class="bg-gray-300 h-4 rounded ml-4"/>
+      <div class="bg-gray-300 h-4 rounded ml-4"/>
+    </div>
+  </template>
+  <template v-if="catalogueList.length !== 0">
     <ul v-for="(catalogue, index) in catalogueList"
         :key="catalogue.id"
         :class="[{'border-l' : level !== 0}, 'border-gray-300', 'pl-2']"
@@ -20,6 +29,7 @@
         </transition>
       </li>
     </ul>
+  </template>
 </template>
 
 <script setup>
@@ -36,6 +46,11 @@ const props = defineProps({
     required: false
   },
   isShowComponet: {
+    type: Boolean,
+    default: false,
+    required: false
+  },
+  isMenuLoad: {
     type: Boolean,
     default: false,
     required: false

@@ -7,11 +7,13 @@
       </div>
       <input class="input-home"
              type="text"
-             v-model="acount"
+             required
+             v-model="account"
              spellcheck="false"
              placeholder="输入账号"/>
       <input class="input-home"
              type="password"
+             required
              v-model="password"
              placeholder="输入密码">
       <z-switch class="py-2 font-light" left="管理员" right="员工" v-model:value="switchValue"/>
@@ -31,37 +33,42 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {computed, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import HomeButton from "@/components/common/ZHomeButton";
 import ZSwitch from "@/components/common/ZSwitch";
 import {LOGIN} from "@/api";
+import {useStore} from "vuex";
 
 const router = useRouter()
+const store = useStore()
 
 const switchValue = ref(true)
-const acount = ref('')
+const account = ref('')
 const password = ref('')
 const loadVisible = ref(false)
+const loginCheck = computed(() => account.value.length >= 6 && password.value.length >= 8)
 
 const loginHandler = () => {
+  if (!loginCheck.value) {
+    return
+  }
   loadVisible.value = true
   LOGIN({
-    acount: acount.value,
+    acount: account.value,
     password: password.value
-  }).then(
-      res => {
-        console.log(res)
-        loadVisible.value = false
-        router.push(switchValue.value ? '/user' : '/admin')
-      }
-  )
+  }).then(res => {
+    console.log(res.data)
+    loadVisible.value = false
+    store.commit('updateUserInfo', res.data.userInfo)
+    router.push(switchValue.value ? '/user' : '/admin')
+  })
 }
 </script>
 
 <style>
 .input-home {
-  @apply bg-gray-300 rounded-full py-3 px-6 text-gray-500 w-72 focus:border-blue-500 tracking-widest
+  @apply bg-gray-300 rounded-full py-3 px-6 text-gray-500 w-72 focus:border-blue-500
 }
 .switch-text {
   @apply font-light tracking-widest;

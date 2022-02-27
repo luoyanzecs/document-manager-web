@@ -20,7 +20,7 @@
           </keep-alive>
         </template>
         <template v-slot:avatar>
-          <z-avatar />
+          <z-avatar :image="userInfo.avatar"/>
         </template>
       </z-header>
       <div class="py-4 px-8 flex flex-col justify-center items-center">
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import router from "@/router";
 import UserTool from "@/components/admin/toolbar/ZUserTool.vue"
 import RecordTool from "@/components/admin/toolbar/ZRecordTool.vue"
@@ -39,6 +39,10 @@ import FileTool from "@/components/admin/toolbar/ZFileTool.vue"
 import ZAside from "@/components/common/ZAside";
 import ZHeader from "@/components/common/ZHeader";
 import ZAvatar from "@/components/ZAvatar";
+import {useStore} from "vuex";
+
+const store = useStore()
+const userInfo = computed(() => store.state.userInfo)
 
 const headType = ref(1)
 const headComponent = ref({

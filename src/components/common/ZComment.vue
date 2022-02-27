@@ -40,6 +40,7 @@
 import ZAvatar from "@/components/ZAvatar";
 import {computed, onBeforeMount, ref, defineProps} from "vue";
 import ZButton from "@/components/common/ZButton";
+import {useStore} from "vuex";
 
 const props = defineProps({
   info: {
@@ -52,7 +53,9 @@ const props = defineProps({
   }
 })
 
-const myInfo = computed(() => props.info)
+const store = useStore()
+
+const myInfo = computed(() => store.state.userInfo)
 const comments = computed(() => props.commentsList)
 const isRepleyShow = ref([])
 

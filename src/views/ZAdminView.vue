@@ -40,7 +40,7 @@
 </style>
 
 <script setup>
-import {ref, reactive} from "vue";
+import {ref} from "vue";
 import router from "@/router";
 import UserTool from "@/components/admin/toolbar/ZUserTool.vue"
 import RecordTool from "@/components/admin/toolbar/ZRecordTool.vue"
@@ -51,7 +51,7 @@ import ZHeader from "@/components/common/ZHeader";
 import ZAvatar from "@/components/ZAvatar";
 
 const headType = ref(1)
-const headComponent = reactive({
+const headComponent = ref({
   0: UserTool,
   1: RecordTool,
   2: FileTool,

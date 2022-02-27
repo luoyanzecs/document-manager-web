@@ -1,6 +1,7 @@
 <template>
   <transition name="notice">
     <div v-if="isVisable"
+         ref="notice"
          :class="['notice-base', mountClass]">
       <div :class="['pos-center', 'notice-type', messageType]">
         <svg v-if="iconType === 1" class="icon w-8 h-8 text-white" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M77.248 415.04a64 64 0 0190.496 0l226.304 226.304L846.528 188.8a64 64 0 1190.56 90.496l-543.04 543.04-316.8-316.8a64 64 0 010-90.496z"></path></svg>
@@ -18,7 +19,7 @@
 </template>
 
 <script setup>
-import {ref, defineProps, computed, onMounted, defineEmits} from "vue";
+import {ref, defineProps, computed, onMounted, defineEmits, onBeforeUnmount} from "vue";
 
 const props = defineProps({
   id: {
@@ -59,15 +60,20 @@ const messageType = computed(() => {
   }
 })
 
+const notice = ref()
+
 onMounted(() => {
-  setTimeout(() => mountClass.value = '', 500)
+  notice.value.addEventListener('animationend', dropMountClass)
   setTimeout(() => closeHandler(), anmationDelay.value)
 })
 
+const dropMountClass =  () => mountClass.value = ''
 const closeHandler = () => {
   isVisable.value = false
   setTimeout(() => emit('close', unique.value), 500)
 }
+
+onBeforeUnmount(() => notice.value && notice.value.removeEventListener('animationend', dropMountClass))
 
 </script>
 

@@ -34,13 +34,15 @@ onMounted(() => {
 })
 
 const selectPageHandler = (param) => {
+  let selectPage = parseInt(param)
   pageProp.value.visible = true
   RECORD_LIST({
-    page: param
+    page: selectPage
   }).then(res => {
     pageProp.value.visible = false
     console.log(res.data)
-    pageProp.value.page = param
+    pageProp.value.page = selectPage
+    console.log("page:" + pageProp.value.page)
     pageProp.value.totalPage = res.data.totalPage
     tableProp.value = res.data
   })

@@ -56,7 +56,7 @@ Mock.mock('http://localhost:8081/api/admin/files', 'post', {
     'cols': [2, 2, 2, 8, 4],
     'currentPage|0-50': 1,
     'totalPage': 50,
-    'items|15': [{
+    'items|12': [{
         'id': /\d{8}/,
         'owner': '@FIRST LAST',
         'userId': /\d{8}/,
@@ -67,12 +67,12 @@ Mock.mock('http://localhost:8081/api/admin/files', 'post', {
 })
 
 Mock.mock('http://localhost:8081/api/admin/users', 'post', {
-    'fields': ['编号', '姓名', '部门', '电话'],
+    'fields': ['编号', '姓名', '部门', '联系方式'],
     'keys': ['id', 'name', 'bu', 'tel'],
     'cols': [4, 4, 4, 4],
     'currentPage|0-50': 1,
     'totalPage': 50,
-    'items|15': [{
+    'items|12': [{
         'id': /\d{8}/,
         'name': '@FIRST LAST',
         'userId': /\d{8}/,
@@ -87,7 +87,7 @@ Mock.mock('http://localhost:8081/api/admin/records', 'post', {
     'cols': [3, 3, 3, 4, 7],
     'currentPage|0-50': 1,
     'totalPage': 50,
-    'items|15': [{
+    'items|12': [{
         'id': /\d{8}/,
         'fid': /\d{8}/,
         'bu': "@pick(['开发', '人事', '产品', '运营'])",
@@ -102,12 +102,20 @@ Mock.mock('http://localhost:8081/api/admin/notices', 'post', {
     'cols': [2, 2, 2, 7, 4, 4],
     'currentPage|0-50': 1,
     'totalPage': 50,
-    'items|15': [{
+    'items|12': [{
         'id': /\d{8}/,
         'to': /\d{8}/,
         'bu': "@pick(['开发', '人事', '产品', '运营'])",
         'ctx': "@csentence(10, 20)",
         'startTime': '@datetime("yyyy年MM月dd日 HH:mm")',
         'endTime': '@datetime("yyyy年MM月dd日 HH:mm")'
+    }]
+})
+
+Mock.mock('http://localhost:8081/api/notice', 'get', {
+    'notices|0-2': [{
+        'id': /\d{8}/,
+        'type|1-3': 1,
+        'message': '@csentence(10, 12)'
     }]
 })

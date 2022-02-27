@@ -20,6 +20,7 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import ZNotifacation from "@/components/common/ZNotifacation";
+import {NOTICE_GLOBAL} from "@/api";
 
 let lastNoticeStartTime = 0 // ms
 let lastDelay = 0
@@ -27,23 +28,22 @@ const noticeAliveTime = 7000 // ms
 const animationTime = 700 // ms
 
 const notifications = ref([])
-const notifications1 = [
-  {
-    message: 'Vivamus suscipit tortor eget felis porttitor volutpat.',
-    type: 1,
-    id: '0001'
-  },
-  {
-    message: 'Vivamus suscipit tortor eget felis porttitor volutpat.',
-    type: 2,
-    id: '0002'
-  },
-  {
-    message: 'Vivamus suscipit tortor eget felis porttitor volutpat.',
-    type: 3,
-    id: '0003'
+
+onMounted(() => {
+  function interval() {
+    NOTICE_GLOBAL({}).then(res => {
+      console.log(res.data)
+      res.data.notices.forEach(notice => {
+        notice.delay = getDelay()
+        notifications.value.unshift(notice)
+      })
+    })
+    return interval
   }
-]
+  setInterval(interval(), 30000)
+})
+
+const noticeCloseHandler = (id) => notifications.value = notifications.value.filter(notice => notice.id !== id)
 
 const getDelay = () => {
   let now = Date.now(), delay = 0
@@ -57,25 +57,6 @@ const getDelay = () => {
   lastNoticeStartTime = now
   return delay
 }
-
-onMounted(() => {
-  notifications1.forEach(item => {
-    item.delay = getDelay()
-    notifications.value.unshift(item)
-  })
-
-  setTimeout(() => notifications.value.unshift({
-    message: 'Vivamus suscipit tortor eget felis porttitor volutpat.',
-    type: 1,
-    id: '0004',
-    delay: getDelay()
-  }), 3000)
-})
-
-const noticeCloseHandler = (id) => notifications.value = notifications.value.filter(item => item.id !== id)
-
-onMounted(() => {
-})
 
 </script>
 <style>

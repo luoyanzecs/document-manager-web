@@ -94,7 +94,7 @@ onBeforeUnmount(() => notice.value && notice.value.removeEventListener('animatio
   }
 }
 .notice-base {
-  @apply overflow-hidden relative w-80 h-16 z-40 rounded-2xl bg-gray-100 flex items-center gap-1 my-2 p-2 shadow hover:shadow-lg
+  @apply overflow-hidden relative w-80 h-16 rounded-2xl bg-gray-100 flex items-center gap-1 my-2 p-2 shadow hover:shadow-lg
 }
 
 .notice-type {

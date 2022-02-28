@@ -17,12 +17,14 @@
            @click.stop="folderClickHandler(index)">
           {{ catalogue.title }}
         </p>
-        <transition name="scrollin" mode="in-out">
-          <z-tree v-show="isShow[index]"
-                  :catalogue="catalogue.children"
+
+      <transition name="scrollin" mode="in-out">
+        <div v-show="isShow[index]" class="overflow-x-visible overflow-y-hidden">
+          <z-tree :catalogue="catalogue.children"
                   :level="level + 1"
                   :is-show-componet="childToggle"
                   @select-file="fileClickHandler"/>
+        </div>
         </transition>
       </li>
     </ul>

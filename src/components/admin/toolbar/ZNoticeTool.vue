@@ -1,10 +1,10 @@
 <template>
   <tool>
     <template #tools>
-      <z-header-button type="primary" @click="click(0)">新增</z-header-button>
-      <z-header-button type="primary" @click="click(1)">所有</z-header-button>
-      <z-header-button type="primary" @click="click(2)">筛选</z-header-button>
-      <z-header-button type="primary" @click="click(3)">删除</z-header-button>
+      <z-header-button fill="新增" @click="click(0)"/>
+      <z-header-button fill="所有" @click="click(1)"/>
+      <z-header-button fill="筛选" @click="click(2)"/>
+      <z-header-button fill="删除" @click="click(3)"/>
     </template>
   </tool>
 </template>

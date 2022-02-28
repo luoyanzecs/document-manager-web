@@ -1,18 +1,16 @@
 <template>
   <div ref="toolbarContainer" style="height: 35px;"></div>
-  <el-row justify="start">
-    <p style="color: #C0C4CC; padding-left: 16px;">{{ banners.lastEditor }}</p>
-  </el-row>
+  <p style="color: #C0C4CC; padding-left: 16px;">{{ banners.lastEditor }}</p>
   <div ref="textContainer" style="margin: 16px 40px"></div>
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref, reactive, defineExpose} from 'vue';
+import { onMounted, onBeforeUnmount, ref, defineExpose} from 'vue';
 import WangEditor from 'wangeditor';
 
 const toolbarContainer = ref();
 const textContainer = ref();
-const banners = reactive({
+const banners = ref({
   lastEditor: `last edit by luoyanze at 2022-2-6 19:30`
 })
 let o;

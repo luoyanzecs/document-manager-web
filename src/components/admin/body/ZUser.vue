@@ -1,80 +1,52 @@
 <template>
-  <z-table :fields="fields"
-           :cols="cols"
-           :items="users"
-           :keys="keys"/>
+  <z-table :fields="tableProp.fields"
+           :cols="tableProp.cols"
+           :items="tableProp.items"
+           :keys="tableProp.keys"/>
+  <z-pagination class="my-4"
+                :current-page="pageProp.page"
+                :visible="pageProp.visible"
+                :total-page="pageProp.totalPage"
+                @select-page="selectPageHandler"/>
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {ref, onMounted} from 'vue'
 import ZTable from "@/components/admin/ZTable";
+import ZPagination from "@/components/ZPagination";
+import {USER_LIST} from "@/api";
 
-const fields = ref(['编号', '姓名', '部门', '电话'])
-const keys = ref(['id', 'name', 'bu', 'tel'])
-const cols = ref([4, 4, 4, 4])
+const pageProp = ref({
+  page: 0,
+  visible: false,
+  totalPage: 0
+})
 
-const users = ref([
-  {
-    id: '123456',
-    name: 'user',
-    bu: '开发',
-    tel: '13311112222'
-  },
-  {
-    id: '123456',
-    name: 'user',
-    bu: '开发',
-    tel: '13311112222'
-  },
-  {
-    id: '123456',
-    name: 'user',
-    bu: '开发',
-    tel: '13311112222'
-  },
-  {
-    id: '123456',
-    name: 'user',
-    bu: '开发',
-    tel: '13311112222'
-  },
-  {
-    id: '123456',
-    name: 'user',
-    bu: '开发',
-    tel: '13311112222'
-  },
-  {
-    id: '123456',
-    name: 'user',
-    bu: '开发',
-    tel: '13311112222'
-  },
-  {
-    id: '123456',
-    name: 'user',
-    bu: '开发',
-    tel: '13311112222'
-  },
-  {
-    id: '123456',
-    name: 'user',
-    bu: '开发',
-    tel: '13311112222'
-  },
-  {
-    id: '123456',
-    name: 'user',
-    bu: '开发',
-    tel: '13311112222'
-  },
-  {
-    id: '123456',
-    name: 'user',
-    bu: '开发',
-    tel: '13311112222'
-  },
-])
+const tableProp = ref({
+  fields: [],
+  keys: [],
+  cols: [],
+  items: []
+})
+
+onMounted(() => {
+  selectPageHandler(1)
+})
+
+const selectPageHandler = (param) => {
+  let selectPage = parseInt(param)
+  pageProp.value.visible = true
+  USER_LIST({
+    page: selectPage
+  }).then(res => {
+    pageProp.value.visible = false
+    console.log(res.data)
+    pageProp.value.page = selectPage
+    pageProp.value.totalPage = res.data.totalPage
+    tableProp.value = res.data
+  })
+}
+
 </script>
 
 <style scoped>

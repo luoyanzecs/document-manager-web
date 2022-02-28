@@ -20,14 +20,7 @@
           </keep-alive>
         </template>
         <template v-slot:avatar>
-          <el-popover placement="bottom"
-                      :width="200"
-                      trigger="hover">
-            <template #reference>
-              <z-avatar :icon="UserFilled"/>
-            </template>
-            <h1>hello</h1>
-          </el-popover>
+          <z-avatar :image="userInfo.avatar"/>
         </template>
       </z-header>
       <div class="py-4 px-8 flex flex-col justify-center items-center">
@@ -36,20 +29,9 @@
     </div>
 </template>
 
-<style>
-.menu-base {
-  @apply hover:text-blue-500 rounded-md px-2 py-1.5 cursor-pointer text-gray-700
-}
-
-.select-menu {
-  @apply bg-blue-200 text-blue-500 italic;
-}
-</style>
-
 <script setup>
-import {ref, reactive} from "vue";
+import {computed, ref} from "vue";
 import router from "@/router";
-import { UserFilled } from "@element-plus/icons-vue"
 import UserTool from "@/components/admin/toolbar/ZUserTool.vue"
 import RecordTool from "@/components/admin/toolbar/ZRecordTool.vue"
 import NoticeTool from "@/components/admin/toolbar/ZNoticeTool.vue"
@@ -57,9 +39,13 @@ import FileTool from "@/components/admin/toolbar/ZFileTool.vue"
 import ZAside from "@/components/common/ZAside";
 import ZHeader from "@/components/common/ZHeader";
 import ZAvatar from "@/components/ZAvatar";
+import {useStore} from "vuex";
+
+const store = useStore()
+const userInfo = computed(() => store.state.userInfo)
 
 const headType = ref(1)
-const headComponent = reactive({
+const headComponent = ref({
   0: UserTool,
   1: RecordTool,
   2: FileTool,
@@ -77,3 +63,13 @@ const menuSelect = (index) => {
 }
 
 </script>
+
+<style>
+.menu-base {
+  @apply hover:text-blue-500 rounded-md px-2 py-1.5 cursor-pointer text-gray-700
+}
+
+.select-menu {
+  @apply bg-blue-200 text-blue-500 italic;
+}
+</style>

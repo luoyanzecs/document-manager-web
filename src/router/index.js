@@ -15,7 +15,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('@/components/admin/body/ZUser.vue')
+        redirect: 'user'
       },
       {
         path: 'user',

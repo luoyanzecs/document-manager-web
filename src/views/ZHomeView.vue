@@ -69,11 +69,4 @@ const loginHandler = () => {
 .input-home {
   @apply bg-gray-300 rounded-full py-3 px-6 text-gray-500 w-72 focus:border-blue-500
 }
-.switch-text {
-  @apply font-light tracking-widest;
-}
-
-.font-blue {
-  @apply text-blue-500;
-}
 </style>

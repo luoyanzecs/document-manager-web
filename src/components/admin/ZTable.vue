@@ -1,31 +1,40 @@
 <template>
-    <div v-if="fields.length !== 0" class="flex flex-col md:min-w-75">
-      <div :class="['field-item', 'row-base', 'md:tracking-wide', gridN]">
-        <div :class="[isToggleAll ? 'bg-green-600' : 'bg-white', 'col-span-1', 'w-4', 'h-4', 'rounded-full']"
-             @click.stop="toggle(-1)"/>
-        <div v-for="(value, index) in fields" :key="index" :class="['pos-center', colSpanList[index]]">{{ value }}</div>
-      </div>
-      <template v-if="items.length !== 0">
-        <div v-for="(list, i) in items"
-             :key="list.id"
-             :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'item-hover', 'row-base']"
-        >
-          <div v-show="!isExpand[i]" @click.stop="toggle(i)" :class="[isSelect[i] ? 'bg-green-600' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"/>
-          <span v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-20" @click.stop="switchToCollapse(i)">关闭</span>
-          <div v-for="(key, keyIndex) in keys"
-               :key="list.id + keyIndex"
-               :class="[isExpand[i] ? 'flex' : 'pos-center',  colSpanList[keyIndex]]"
-          >
-            <span v-if="isExpand[i]" class="w-20 grid flex-shrink-0">{{ fields[keyIndex] }}</span>
-            <span :class="!isExpand[i] ? ['text-sm', 'md:text-base', 'truncate'] :''">{{ list[key] }}</span>
-          </div>
-          <svg v-show="!isExpand[i]" @click="expand(i)" class="text-gray-400 cursor-pointer w-5 h-5" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-042ca774=""><path fill="currentColor" d="M104.704 338.752a64 64 0 0190.496 0l316.8 316.8 316.8-316.8a64 64 0 0190.496 90.496L557.248 791.296a64 64 0 01-90.496 0L104.704 429.248a64 64 0 010-90.496z"></path></svg>
-        </div>
-      </template>
+  <div v-if="fields.length === 0" class="flex flex-col md:min-w-75 animate-pulse">
+    <div class="field-item row-base h-10 bg-gray-400"/>
+    <div v-for=" i of 10" :key="i" class="row-base collapse-item h-8"/>
+  </div>
+  <div v-else class="flex flex-col md:min-w-75">
+    <div :class="['field-item', 'row-base', 'md:tracking-wide', gridN]">
+      <div :class="[isToggleAll ? 'bg-green-600' : 'bg-white', 'col-span-1', 'w-4', 'h-4', 'rounded-full']"
+           @click.stop="toggle(-1)"/>
+      <div v-for="(value, index) in fields" :key="index" :class="['pos-center', colSpanList[index]]">{{ value }}</div>
     </div>
+    <template v-if="items.length !== 0">
+      <div v-for="(list, i) in items"
+           :key="list.id"
+           :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'item-hover', 'row-base']"
+      >
+        <div v-show="!isExpand[i]" @click.stop="toggle(i)"
+             :class="[isSelect[i] ? 'bg-green-600' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"/>
+        <span v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-20" @click.stop="switchToCollapse(i)">关闭</span>
+        <div v-for="(key, keyIndex) in keys"
+             :key="list.id + keyIndex"
+             :class="[isExpand[i] ? 'flex' : 'pos-center',  colSpanList[keyIndex]]"
+        >
+          <span v-if="isExpand[i]" class="w-20 grid flex-shrink-0">{{ fields[keyIndex] }}</span>
+          <span :class="!isExpand[i] ? ['text-sm', 'md:text-base', 'truncate'] :''">{{ list[key] }}</span>
+        </div>
+        <svg v-show="!isExpand[i]" @click="expand(i)" class="text-gray-400 cursor-pointer w-5 h-5"
+             viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-042ca774="">
+          <path fill="currentColor"
+                d="M104.704 338.752a64 64 0 0190.496 0l316.8 316.8 316.8-316.8a64 64 0 0190.496 90.496L557.248 791.296a64 64 0 01-90.496 0L104.704 429.248a64 64 0 010-90.496z"></path>
+        </svg>
+      </div>
+    </template>
+  </div>
 </template>
 
-<script setup >
+<script setup>
 import {ref, defineProps, onBeforeMount, watch} from 'vue'
 
 const props = defineProps({
@@ -104,6 +113,4 @@ const toggle = (index) => {
 .expand-item {
   @apply bg-gray-200 max-w-5xl rounded-xl p-4 my-1
 }
-
-
 </style>

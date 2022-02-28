@@ -3,7 +3,7 @@
     <div class="container max-w-screen-2xl overflow-hidden flex">
       <router-view/>
     </div>
-    <div class="absolute notice-right-top flex flex-col">
+    <div class="absolute notice-right-top z-40 max-h-screen overflow-scroll">
       <z-notifacation v-for="notice in notifications"
                       :key="notice.id"
                       :message="notice.message"
@@ -41,6 +41,10 @@ const noticeCloseHandler = (id) => store.commit('removeNotice', id)
 
 </script>
 <style>
+
+:root {
+  font-family: Inter var,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+}
 
 .notice-right-top {
   @apply right-4 top-4

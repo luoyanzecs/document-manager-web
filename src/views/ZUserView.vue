@@ -17,7 +17,7 @@
       </template>
       <template #avatar>
         <!--              TODO：头像悬浮的组件 建议抽离出来-->
-        <z-avatar/>
+        <z-avatar :image="userInfo.avatar"/>
         <!--              -->
       </template>
     </Header>
@@ -35,7 +35,7 @@
 
 <script setup>
 import Editor from "@/components/ZEditor";
-import {onMounted, ref} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import Header from "@/components/common/ZHeader";
 import HeadTool from "@/components/user/HeadTool";
 import ZAside from "@/components/common/ZAside";
@@ -44,6 +44,10 @@ import ZAvatar from "@/components/ZAvatar";
 import ZTree from "@/components/common/ZTree";
 import ZComment from "@/components/common/ZComment";
 import { FILE_MENU, COMMENT } from "@/api";
+import {useStore} from "vuex";
+
+const store = useStore()
+const userInfo = computed(() => store.state.userInfo)
 
 const editor = ref()
 const banner = ref('编辑')

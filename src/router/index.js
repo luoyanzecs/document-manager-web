@@ -15,7 +15,7 @@ const routes = [
     children: [
       {
         path: '',
-        redirect: 'user'
+        redirect: '/admin/user'
       },
       {
         path: 'user',

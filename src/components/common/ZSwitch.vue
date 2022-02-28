@@ -1,10 +1,8 @@
 <template>
   <div class="flex items-center gap-4">
     <div :class="['whitespace-nowrap', {'text-blue-500' : !value}]">{{ left }}</div>
-
-    <div @click="$emit('update:value', !value)"
-         :class="['box-base', value ? 'justify-end' : 'justify-start']">
-      <div class="w-7 h-full bg-white transform scale-95 rounded-full shadow-lg"/>
+    <div @click="$emit('update:value', !value)" class="box-base">
+      <div :class="['dot-base', value ? 'ml-7' : 'ml-0']"/>
     </div>
     <div :class="['whitespace-nowrap', {'text-blue-500' : value}]">{{ right }}</div>
   </div>
@@ -35,9 +33,10 @@ defineProps({
 </script>
 
 <style scoped>
-
 .box-base {
-  @apply w-14 h-7 bg-blue-500 flex items-center rounded-full flex-shrink-0
+  @apply w-14 h-7 bg-blue-500 flex items-center rounded-full flex-shrink-0 p-px
 }
-
+.dot-base {
+  @apply w-7 h-full bg-white scale-95 rounded-full shadow-lg transition-all duration-200
+}
 </style>

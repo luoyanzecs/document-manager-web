@@ -7,7 +7,9 @@
     <div :class="['field-item', 'row-base', 'md:tracking-wide', gridN]">
       <div :class="[isToggleAll ? 'bg-green-600' : 'bg-white', 'col-span-1', 'w-4', 'h-4', 'rounded-full']"
            @click.stop="toggle(-1)"/>
-      <div v-for="(value, index) in fields" :key="index" :class="['pos-center', colSpanList[index]]">{{ value }}</div>
+      <div v-for="(value, index) in fields" :key="index" :class="['pos-center', colSpanList[index]]">
+        <span class="truncate">{{ value }}</span>
+      </div>
     </div>
     <template v-if="items.length !== 0">
       <div v-for="(list, i) in items"
@@ -99,11 +101,11 @@ const toggle = (index) => {
 }
 
 .field-item {
-  @apply font-bold text-gray-700 bg-gray-400 text-xl
+  @apply font-bold text-gray-700 bg-gray-400 text-base md:text-xl
 }
 
 .collapse-item {
-  @apply overflow-ellipsis items-center group text-black bg-gray-200
+  @apply items-center group text-black bg-gray-200
 }
 
 .item-hover {

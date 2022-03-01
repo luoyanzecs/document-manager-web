@@ -4,7 +4,7 @@
       <z-button type="primary">部门</z-button>
     </template>
     <template #context>
-      <div class="m-2 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
+      <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
       <div class="overflow-scroll flex-grow">
         <z-tree :catalogue="items" :is-menu-load="isMenuLoad" @select-file="selectFileHandler"/>
       </div>
@@ -21,11 +21,11 @@
         <!--              -->
       </template>
     </Header>
-    <div class>
-      <Editor ref="editor"/>
-      <hr class="my-4">
-      <z-comment :info="myInfo" :comments-list="comments"/>
+    <div>
+      <z-tinymce v-model="content"/>
     </div>
+    <hr class="my-4">
+    <z-comment :info="myInfo" :comments-list="comments"/>
   </div>
 </template>
 
@@ -34,7 +34,6 @@
 </style>
 
 <script setup>
-import Editor from "@/components/ZEditor";
 import {computed, onMounted, ref} from 'vue'
 import Header from "@/components/common/ZHeader";
 import HeadTool from "@/components/user/HeadTool";
@@ -45,10 +44,12 @@ import ZTree from "@/components/common/ZTree";
 import ZComment from "@/components/common/ZComment";
 import { FILE_MENU, COMMENT } from "@/api";
 import {useStore} from "vuex";
+import ZTinymce from "@/components/ZTinymce";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
 
+const content = ref("")
 const editor = ref()
 const banner = ref('编辑')
 const items = ref([])

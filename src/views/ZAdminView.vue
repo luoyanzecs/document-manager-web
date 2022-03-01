@@ -36,8 +36,8 @@ import UserTool from "@/components/admin/toolbar/ZUserTool.vue"
 import RecordTool from "@/components/admin/toolbar/ZRecordTool.vue"
 import NoticeTool from "@/components/admin/toolbar/ZNoticeTool.vue"
 import FileTool from "@/components/admin/toolbar/ZFileTool.vue"
-import ZAside from "@/components/common/ZAside";
-import ZHeader from "@/components/common/ZHeader";
+import ZAside from "@/components/ZAside";
+import ZHeader from "@/components/ZHeader";
 import ZAvatar from "@/components/ZAvatar";
 import {useStore} from "vuex";
 

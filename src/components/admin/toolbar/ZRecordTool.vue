@@ -9,9 +9,9 @@
 </template>
 
 <script setup>
-import Tool from "@/components/common/ZHeadMenu";
+import Tool from "@/components/head/ZHeadMenu";
 import {defineEmits} from "vue";
-import ZHeadButton from "@/components/common/ZButton";
+import ZHeadButton from "@/components/ZButton";
 
 const emit = defineEmits(['behavior-button'])
 const click = (index) => {

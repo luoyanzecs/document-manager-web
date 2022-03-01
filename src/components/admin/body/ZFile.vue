@@ -13,7 +13,7 @@
 <script setup>
 import {onMounted, ref} from 'vue'
 
-import ZTable from "@/components/admin/ZTable";
+import ZTable from "@/components/ZTable";
 import ZPagination from "@/components/ZPagination";
 import {FILE_LIST} from "@/api";
 

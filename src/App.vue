@@ -20,7 +20,7 @@
 <script setup>
 import {computed, onMounted} from "vue";
 import { useStore } from 'vuex'
-import ZNotifacation from "@/components/common/ZNotifacation";
+import ZNotifacation from "@/components/ZNotifacation";
 import {NOTICE_GLOBAL} from "@/api";
 
 const store = useStore()

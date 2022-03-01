@@ -35,13 +35,13 @@
 
 <script setup>
 import {computed, onMounted, ref} from 'vue'
-import Header from "@/components/common/ZHeader";
+import Header from "@/components/ZHeader";
 import HeadTool from "@/components/user/HeadTool";
-import ZAside from "@/components/common/ZAside";
-import ZButton from "@/components/common/ZButton";
+import ZAside from "@/components/ZAside";
+import ZButton from "@/components/ZButton";
 import ZAvatar from "@/components/ZAvatar";
-import ZTree from "@/components/common/ZTree";
-import ZComment from "@/components/common/ZComment";
+import ZTree from "@/components/ZTree";
+import ZComment from "@/components/ZComment";
 import { FILE_MENU, COMMENT } from "@/api";
 import {useStore} from "vuex";
 import ZTinymce from "@/components/ZTinymce";

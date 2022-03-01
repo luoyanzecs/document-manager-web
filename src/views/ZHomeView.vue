@@ -26,8 +26,8 @@
 <script setup>
 import {computed, ref} from 'vue'
 import { useRouter } from 'vue-router'
-import HomeButton from "@/components/common/ZHomeButton";
-import ZSwitch from "@/components/common/ZSwitch";
+import HomeButton from "@/components/ZHomeButton";
+import ZSwitch from "@/components/ZSwitch";
 import {LOGIN} from "@/api";
 import {useStore} from "vuex";
 

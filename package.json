@@ -20,8 +20,7 @@
     "tinymce": "^5.10.3",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.2",
-    "wangeditor": "^4.7.11"
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

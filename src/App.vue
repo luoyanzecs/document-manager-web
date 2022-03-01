@@ -3,7 +3,7 @@
     <div class="container max-w-screen-2xl overflow-hidden flex">
       <router-view/>
     </div>
-    <div class="absolute notice-right-top flex flex-col">
+    <div class="absolute w-full flex flex-col items-center top-0 sm:right-4 sm:top-4 sm:w-80 z-40 max-h-screen overflow-scroll">
       <z-notifacation v-for="notice in notifications"
                       :key="notice.id"
                       :message="notice.message"
@@ -18,73 +18,31 @@
 
 
 <script setup>
-import {onMounted, ref} from "vue";
-import ZNotifacation from "@/components/common/ZNotifacation";
+import {computed, onMounted} from "vue";
+import { useStore } from 'vuex'
+import ZNotifacation from "@/components/ZNotifacation";
+import {NOTICE_GLOBAL} from "@/api";
 
-let lastNoticeStartTime = 0 // ms
-let lastDelay = 0
-const noticeAliveTime = 7000 // ms
-const animationTime = 700 // ms
-
-const notifications = ref([])
-const notifications1 = [
-  {
-    message: 'Vivamus suscipit tortor eget felis porttitor volutpat.',
-    type: 1,
-    id: '0001'
-  },
-  {
-    message: 'Vivamus suscipit tortor eget felis porttitor volutpat.',
-    type: 2,
-    id: '0002'
-  },
-  {
-    message: 'Vivamus suscipit tortor eget felis porttitor volutpat.',
-    type: 3,
-    id: '0003'
-  }
-]
-
-const getDelay = () => {
-  let now = Date.now(), delay = 0
-  if (lastNoticeStartTime === 0 || now - lastNoticeStartTime > animationTime) {
-    delay = noticeAliveTime + animationTime
-  }
-  if (now - lastNoticeStartTime <=  animationTime ) {
-    delay = lastDelay + animationTime
-  }
-  lastDelay = delay
-  lastNoticeStartTime = now
-  return delay
-}
+const store = useStore()
+const notifications = computed(() => store.state.notificationQuene)
 
 onMounted(() => {
-  notifications1.forEach(item => {
-    item.delay = getDelay()
-    notifications.value.unshift(item)
-  })
-
-  setTimeout(() => notifications.value.unshift({
-    message: 'Vivamus suscipit tortor eget felis porttitor volutpat.',
-    type: 1,
-    id: '0004',
-    delay: getDelay()
-  }), 3000)
+  function interval() {
+    NOTICE_GLOBAL({}).then(res => {
+      console.log(res.data)
+      res.data.notices.forEach(notice => store.commit('unshiftNotice', notice))
+    })
+    return interval
+  }
+  setInterval(interval(), 30000)
 })
 
-const noticeCloseHandler = (id) => notifications.value = notifications.value.filter(item => item.id !== id)
-
-onMounted(() => {
-})
+const noticeCloseHandler = (id) => store.commit('removeNotice', id)
 
 </script>
 <style>
 
-.notice-right-top {
-  @apply right-4 top-4
-}
-
-.notice-top {
-  @apply top-4 left-2/4 transform translate-x-2/4
+:root {
+  font-family: Inter var,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
 }
 </style>

@@ -6,87 +6,47 @@
   <z-pagination class="my-4"
                 :current-page="pageProp.page"
                 :visible="pageProp.visible"
-                :total-page="pageProp.totalPage"/>
+                :total-page="pageProp.totalPage"
+                @select-page="selectPageHandler"/>
 </template>
 
 <script setup>
-import {ref} from 'vue'
-import ZTable from "@/components/admin/ZTable";
+import {ref, onMounted} from 'vue'
+import ZTable from "@/components/ZTable";
 import ZPagination from "@/components/ZPagination";
+import {USER_LIST} from "@/api";
 
 const pageProp = ref({
-  page: 8,
+  page: 0,
   visible: false,
-  totalPage: 20
+  totalPage: 0
 })
 
 const tableProp = ref({
-  fields: ['编号', '姓名', '部门', '电话'],
-  keys: ['id', 'name', 'bu', 'tel'],
-  cols: [4, 4, 4, 4],
-  items: [
-    {
-      id: '123456',
-      name: 'user',
-      bu: '开发',
-      tel: '13311112222'
-    },
-    {
-      id: '123456',
-      name: 'user',
-      bu: '开发',
-      tel: '13311112222'
-    },
-    {
-      id: '123456',
-      name: 'user',
-      bu: '开发',
-      tel: '13311112222'
-    },
-    {
-      id: '123456',
-      name: 'user',
-      bu: '开发',
-      tel: '13311112222'
-    },
-    {
-      id: '123456',
-      name: 'user',
-      bu: '开发',
-      tel: '13311112222'
-    },
-    {
-      id: '123456',
-      name: 'user',
-      bu: '开发',
-      tel: '13311112222'
-    },
-    {
-      id: '123456',
-      name: 'user',
-      bu: '开发',
-      tel: '13311112222'
-    },
-    {
-      id: '123456',
-      name: 'user',
-      bu: '开发',
-      tel: '13311112222'
-    },
-    {
-      id: '123456',
-      name: 'user',
-      bu: '开发',
-      tel: '13311112222'
-    },
-    {
-      id: '123456',
-      name: 'user',
-      bu: '开发',
-      tel: '13311112222'
-    },
-  ]
+  fields: [],
+  keys: [],
+  cols: [],
+  items: []
 })
+
+onMounted(() => {
+  selectPageHandler(1)
+})
+
+const selectPageHandler = (param) => {
+  let selectPage = parseInt(param)
+  pageProp.value.visible = true
+  USER_LIST({
+    page: selectPage
+  }).then(res => {
+    pageProp.value.visible = false
+    console.log(res.data)
+    pageProp.value.page = selectPage
+    pageProp.value.totalPage = res.data.totalPage
+    tableProp.value = res.data
+  })
+}
+
 </script>
 
 <style scoped>

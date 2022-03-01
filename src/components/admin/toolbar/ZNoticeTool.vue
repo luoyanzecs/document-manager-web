@@ -10,9 +10,9 @@
 </template>
 
 <script setup>
-import Tool from "@/components/common/ZHeadMenu";
+import Tool from "@/components/head/ZHeadMenu";
 import {defineEmits} from "vue";
-import ZHeaderButton from "@/components/common/ZButton";
+import ZHeaderButton from "@/components/ZButton";
 
 const emit = defineEmits(['notice-button'])
 const click = (index) => {

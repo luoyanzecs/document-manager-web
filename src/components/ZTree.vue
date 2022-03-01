@@ -10,7 +10,7 @@
   <template v-if="catalogueList.length !== 0">
     <ul v-for="(catalogue, index) in catalogueList"
         :key="catalogue.id"
-        :class="[{'border-l' : level !== 0}, 'border-gray-300', 'pl-2']"
+        :class="[{'border-l' : level !== 0}, 'border-gray-300', 'ml-1', 'pl-1']"
     >
       <li v-if="catalogue.children.length === 0" @click.stop="fileClickHandler(catalogue)">
         <span class="catalogue-base hover:bg-blue-200 text-blue-500">{{ catalogue.title }}</span>

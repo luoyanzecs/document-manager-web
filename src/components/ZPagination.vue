@@ -1,6 +1,6 @@
 <template>
   <div v-if="currentPage !== 0" class="pos-center flex-shrink-0">
-    <p class="pagination-text mr-4">首页</p>
+    <p class="pagination-text mr-1 md:mr-4">首页</p>
     <template v-for="i of 5" :key="currentPage - i + 3">
       <p v-if="currentPage + i - 3 > 0"
          :class="['pagination-text', {'ring-1': i === 3}]"
@@ -52,6 +52,6 @@ const go = () => {
 
 <style scoped>
 .pagination-text {
-  @apply text-blue-600 cursor-pointer hover:bg-gray-300 rounded-lg py-1 px-2
+  @apply text-blue-600 cursor-pointer hover:bg-gray-300 rounded-lg py-1 px-1 md:px-2
 }
 </style>

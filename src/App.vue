@@ -3,7 +3,7 @@
     <div class="container max-w-screen-2xl overflow-hidden flex">
       <router-view/>
     </div>
-    <div class="absolute notice-right-top z-40 max-h-screen overflow-scroll">
+    <div class="absolute w-full flex flex-col items-center top-0 sm:right-4 sm:top-4 sm:w-80 z-40 max-h-screen overflow-scroll">
       <z-notifacation v-for="notice in notifications"
                       :key="notice.id"
                       :message="notice.message"
@@ -20,7 +20,7 @@
 <script setup>
 import {computed, onMounted} from "vue";
 import { useStore } from 'vuex'
-import ZNotifacation from "@/components/common/ZNotifacation";
+import ZNotifacation from "@/components/ZNotifacation";
 import {NOTICE_GLOBAL} from "@/api";
 
 const store = useStore()
@@ -44,13 +44,5 @@ const noticeCloseHandler = (id) => store.commit('removeNotice', id)
 
 :root {
   font-family: Inter var,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-}
-
-.notice-right-top {
-  @apply right-4 top-4
-}
-
-.notice-top {
-  @apply top-4 left-2/4 transform translate-x-2/4
 }
 </style>

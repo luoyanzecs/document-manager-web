@@ -18,8 +18,9 @@
   </transition>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {ref, defineProps, computed, onMounted, defineEmits, onBeforeUnmount} from "vue";
+import { sleep } from '@/tool/utils'
 
 const props = defineProps({
   id: {
@@ -64,13 +65,13 @@ const notice = ref()
 
 onMounted(() => {
   notice.value.addEventListener('animationend', dropMountClass)
-  setTimeout(() => closeHandler(), anmationDelay.value)
+  sleep(anmationDelay.value).then(closeHandler)
 })
 
 const dropMountClass =  () => mountClass.value = ''
 const closeHandler = () => {
   isVisable.value = false
-  setTimeout(() => emit('close', unique.value), 500)
+  sleep(500).then(() => emit('close', unique.value))
 }
 
 onBeforeUnmount(() => notice.value && notice.value.removeEventListener('animationend', dropMountClass))

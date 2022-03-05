@@ -7,7 +7,7 @@
   </div>
 
   <template v-if="comments.length !==0">
-    <div v-for="(comment, index) in comments" :key="comment.id" class="my-2 flex gap-3 w-full px-2 md:w-11/12">
+    <div v-for="(comment, index) in comments" :key="comment.commentId" class="my-2 flex gap-3 w-full px-2 md:w-11/12">
       <z-avatar :image="comment.avatar"/>
       <div class="flex-grow flex flex-col gap-2">
         <div>
@@ -36,11 +36,21 @@
   </template>
 </template>
 
-<script setup>
-import ZAvatar from "@/components/ZAvatar";
-import {computed, onBeforeMount, ref, defineProps} from "vue";
-import ZButton from "@/components/ZButton";
+<script setup lang="ts">
+import ZAvatar from "@/components/ZAvatar.vue";
+import {computed, onBeforeMount, ref, defineProps, PropType, Ref} from "vue";
+import ZButton from "@/components/ZButton.vue";
 import {useStore} from "vuex";
+
+interface Comment {
+  id: string,
+  commentId: string,
+  name: string,
+  comment: string,
+  avatar: string,
+  time: string,
+  reply: Comment[]
+}
 
 const props = defineProps({
   info: {
@@ -48,7 +58,8 @@ const props = defineProps({
     required: true
   },
   commentsList: {
-    type: Array,
+    type: Array as PropType<Comment[]>,
+    default: (): Array<Comment[]> => [],
     required: true
   }
 })
@@ -57,13 +68,13 @@ const store = useStore()
 
 const myInfo = computed(() => store.state.userInfo)
 const comments = computed(() => props.commentsList)
-const isRepleyShow = ref([])
+const isRepleyShow: Ref<boolean[]> = ref([])
 
-const replyButtonClick = (index) => {
+const replyButtonClick = (index: number) => {
   console.log(index)
 }
 
-const showReplyClick = (index, event) => {
+const showReplyClick = (index: number, event: any) => {
   event.target.innerHTML = isRepleyShow.value[index] ? "回复" : "收起"
   isRepleyShow.value[index] = !isRepleyShow.value[index]
 }

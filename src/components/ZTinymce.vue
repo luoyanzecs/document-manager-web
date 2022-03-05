@@ -1,5 +1,6 @@
 <template>
-  <Editor id="tinymce"
+  <Editor ref="tinymce"
+          id="tinymce"
           v-model="content"
           :init="init"
           tag-name="div"
@@ -171,6 +172,10 @@ export default {
         },
     );
     onMounted(() => {
+      setTimeout(() => {
+        tinymce.editors['tinymce'].setContent('<b>插入内容</b>')
+      }, 5000)
+
       // readonly();
     });
     return {

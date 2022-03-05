@@ -30,6 +30,7 @@ import HomeButton from "@/components/ZHomeButton";
 import ZSwitch from "@/components/ZSwitch";
 import {LOGIN} from "@/api";
 import {useStore} from "vuex";
+import {sleep} from "@/tool/utils.ts";
 
 const router = useRouter()
 const store = useStore()
@@ -49,7 +50,7 @@ const loginHandler = () => {
       type: 2,
       message: '请输入正确的账号和密码'
     })
-    setTimeout(() => isButtonShake.value = false, 700)
+    sleep(700).then(() => isButtonShake.value = false)
     return
   }
   loadVisible.value = true

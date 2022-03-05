@@ -8,21 +8,22 @@
     </div>
   </template>
   <template v-if="catalogueList.length !== 0">
-    <ul v-for="(catalogue, index) in catalogueList"
-        :key="catalogue.id"
+    <ul v-for="(item, index) in catalogueList"
+        :key="item.id"
         :class="[{'border-l' : level !== 0}, 'border-gray-300', 'ml-1', 'pl-1']"
     >
-      <li v-if="catalogue.children.length === 0" @click.stop="fileClickHandler(catalogue)">
-        <span class="catalogue-base hover:bg-blue-200 text-blue-500">{{ catalogue.title }}</span>
+      <li v-if="item.children === undefined || item.children.length === 0" @click.stop="fileClickHandler(item)">
+        <span :class="['cata-link', {'bg-blue-200': item.id === chooseId}]">{{ item.title }}</span>
       </li>
       <li v-else>
         <span class="catalogue-base text-gray-500" @click.stop="folderClickHandler(index)">
-          {{ catalogue.title }}
+          {{ item.title }}
         </span>
         <transition name="scrollin">
           <div v-show="isShow[index]">
-            <z-tree :catalogue="catalogue.children"
+            <z-tree :catalogue="item.children"
                     :level="level + 1"
+                    :choose-id = fileClicked
                     :is-show-componet="isShow[index]"
                     @select-file="fileClickHandler"/>
           </div>
@@ -32,13 +33,25 @@
   </template>
 </template>
 
-<script setup>
-import {defineProps, defineEmits, computed, onMounted, ref, watch} from "vue";
+<script setup lang="ts">
+import {defineProps, defineEmits, computed, onMounted, ref, watch, PropType, Ref} from "vue";
+
+interface Catalogue {
+  id: string,
+  title: string,
+  children: Array<Catalogue>
+}
 
 const props = defineProps({
   catalogue: {
-    type: Array,
+    type: Array as PropType<Array<Catalogue>>,
+    default: (): Array<Catalogue> => [],
     required: true
+  },
+  chooseId: {
+    type: String,
+    default: (): string => '',
+    required: false
   },
   level: {
     type: Number,
@@ -58,8 +71,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['selectFile'])
-const catalogueList = computed(() => props.catalogue)
-const isShow = ref([])
+const catalogueList: Ref<Catalogue[]> = computed(() => props.catalogue)
+const isShow: Ref<boolean[]> = ref([])
+const fileClicked: Ref<string> = ref('')
 
 onMounted(() => {
   isShow.value = new Array(catalogueList.value.length).fill(props.isShowComponet)
@@ -70,13 +84,20 @@ watch(
     () => isShow.value.fill(false)
 )
 
-const fileClickHandler = (item) => emit('selectFile', item)
-const folderClickHandler = (index) => isShow.value[index] = !isShow.value[index]
+const fileClickHandler = (item: Catalogue) => {
+  fileClicked.value = item.id
+  emit('selectFile', item)
+}
+const folderClickHandler = (index: number) => isShow.value[index] = !isShow.value[index]
 </script>
 
 <style scoped>
 .catalogue-base {
   @apply cursor-pointer px-1 py-1 rounded text-sm whitespace-nowrap
+}
+
+.cata-link {
+  @apply catalogue-base hover:underline text-blue-500
 }
 
 .scrollin-enter-active {

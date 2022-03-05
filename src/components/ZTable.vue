@@ -36,12 +36,13 @@
   </div>
 </template>
 
-<script setup>
-import {ref, defineProps, onBeforeMount, watch} from 'vue'
+<script setup lang="ts">
+import {ref, defineProps, onBeforeMount, watch, Ref, PropType} from 'vue'
 
 const props = defineProps({
   cols: {
-    type: Array,
+    type: Array as PropType<Array<number>>,
+    default: (): Array<number> => [],
     required: false
   },
   items: {
@@ -57,11 +58,11 @@ const props = defineProps({
     required: true
   }
 })
-const isSelect = ref([])
+const isSelect: Ref<boolean[]> = ref([])
 const isToggleAll = ref(false)
-const isExpand = ref([])
-const gridN = ref('')
-const colSpanList = ref([])
+const isExpand: Ref<boolean[]> = ref([])
+const gridN: Ref<string> = ref('')
+const colSpanList: Ref<string[]> = ref([])
 
 onBeforeMount(() => {
   isSelect.value = new Array(25).fill(false)
@@ -71,19 +72,19 @@ onBeforeMount(() => {
 watch(
     () => props.items,
     () => {
-      let count = 2, i = 0
-      for (let k in props.cols) {
-        count += props.cols[k]
-        colSpanList.value[i++] = `col-span-${props.cols[k]}`
+      let count = 2
+      for (let k of props.cols) {
+        count += k
+        colSpanList.value.push(`col-span-${k}`)
       }
       gridN.value = `grid-cols-${count > 24 ? 24 : count}`
     }
 )
 
-const expand = (index) => isExpand.value[index] = true
-const switchToCollapse = (index) => isExpand.value[index] = false
+const expand = (index: number) => isExpand.value[index] = true
+const switchToCollapse = (index: number) => isExpand.value[index] = false
 
-const toggle = (index) => {
+const toggle = (index: number) => {
   if (index === -1) {
     isToggleAll.value = !isToggleAll.value
     for (let i = 0; i < isSelect.value.length; i++) {

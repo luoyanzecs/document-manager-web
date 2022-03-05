@@ -17,10 +17,10 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 import {computed, onMounted} from "vue";
 import { useStore } from 'vuex'
-import ZNotifacation from "@/components/ZNotifacation";
+import ZNotifacation from "@/components/ZNotifacation.vue";
 import {NOTICE_GLOBAL} from "@/api";
 
 const store = useStore()
@@ -30,14 +30,14 @@ onMounted(() => {
   function interval() {
     NOTICE_GLOBAL({}).then(res => {
       console.log(res.data)
-      res.data.notices.forEach(notice => store.commit('unshiftNotice', notice))
+      res.data.notices.forEach((notice: any) => store.commit('unshiftNotice', notice))
     })
     return interval
   }
   setInterval(interval(), 30000)
 })
 
-const noticeCloseHandler = (id) => store.commit('removeNotice', id)
+const noticeCloseHandler = (id: string) => store.commit('removeNotice', id)
 
 </script>
 <style>

@@ -122,3 +122,11 @@ Mock.mock('http://localhost:8081/api/notice', 'get', {
     'message': '@csentence(10, 12)'
   }]
 })
+
+Mock.mock('http://localhost:8081/api/file', 'get', {
+  'fileInfo': {
+    'editor': '@First @Last',
+    'lastEditTime': '@datetime("yyyy年MM月dd日 HH:mm")'
+  },
+  'fileContent': '<p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p>'
+})

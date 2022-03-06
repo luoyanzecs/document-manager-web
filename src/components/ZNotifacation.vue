@@ -71,7 +71,7 @@ onMounted(() => {
 const dropMountClass =  () => mountClass.value = ''
 const closeHandler = () => {
   isVisable.value = false
-  sleep(500).then(() => emit('close', unique.value))
+  sleep(300).then(() => emit('close', unique.value))
 }
 
 onBeforeUnmount(() => notice.value && notice.value.removeEventListener('animationend', dropMountClass))
@@ -80,10 +80,10 @@ onBeforeUnmount(() => notice.value && notice.value.removeEventListener('animatio
 
 <style scoped>
 .mount-transition {
-  animation: slideoff ease-in-out .5s reverse;
+  animation: slideoff ease-in-out .3s reverse;
 }
 .notice-leave-active {
-  animation: slideoff ease-in-out .5s;
+  animation: slideoff ease-in-out .3s;
 }
 
 @keyframes slideoff {
@@ -95,7 +95,7 @@ onBeforeUnmount(() => notice.value && notice.value.removeEventListener('animatio
   }
 }
 .notice-base {
-  @apply overflow-hidden relative w-80 h-16 rounded-2xl bg-gray-100 flex items-center gap-1 my-2 p-2 shadow hover:shadow-lg
+  @apply overflow-hidden relative w-80 h-16 rounded-2xl bg-gray-100 flex items-center gap-1 my-2 p-2 shadow hover:shadow-lg flex-shrink-0
 }
 
 .notice-type {

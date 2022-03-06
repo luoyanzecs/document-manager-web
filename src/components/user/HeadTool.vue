@@ -6,27 +6,21 @@
       </header-button>
       <header-button type="primary">新建</header-button>
       <header-button type="primary">附件</header-button>
-      <header-button type="primary" @click="click">{{ banner }}</header-button>
+      <header-button type="primary" @click="click">{{ editorStatus }}</header-button>
     </template>
   </tool>
 </template>
 
 <script setup>
 import Tool from "@/components/head/ZHeadMenu";
-import {defineProps, defineEmits} from "vue";
+import {defineEmits, ref} from "vue";
 import HeaderButton from "@/components/ZButton";
 
-defineProps( {
-  banner: {
-    type: String,
-    required: true
-  }
-})
-
-
 const emit = defineEmits(['editor'])
+const editorStatus = ref('编辑')
 
 const click = () => {
+  editorStatus.value = editorStatus.value === '编辑' ? '更新' : '编辑'
   emit('editor')
 }
 </script>

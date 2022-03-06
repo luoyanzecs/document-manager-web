@@ -5,8 +5,24 @@
            class="flex-grow focus:border-blue-500 bg-gray-200 bg-opacity-70 rounded-xl h-10 px-2"/>
     <z-button fill="发表"/>
   </div>
+  <div v-if="isCommentLoad" class="my-2 flex gap-3 w-full px-2 md:w-11/12 animate-pulse">
+    <z-avatar/>
+    <div class="flex-grow flex flex-col gap-2">
+      <div class="flex flex-col gap-1">
+        <p class="bg-gray-300 w-4/12 h-4 rounded"/>
+        <p class="bg-gray-300 w-4/12 h-4 rounded"/>
+        <p class="bg-gray-300 w-7/12 h-4 rounded"/>
+      </div>
+      <div class="bg-gray-300 p-2.5 rounded-lg flex flex-col gap-1">
+        <p class="bg-gray-400 w-4/12 h-4 rounded"/>
+        <p class="bg-gray-400 w-4/12 h-4 rounded"/>
+        <p class="bg-gray-400 w-7/12 h-4 rounded"/>
+      </div>
+      <hr>
+    </div>
+  </div>
 
-  <template v-if="comments.length !==0">
+  <template v-if="comments.length !== 0 && !isCommentLoad">
     <div v-for="(comment, index) in comments" :key="comment.commentId" class="my-2 flex gap-3 w-full px-2 md:w-11/12">
       <z-avatar :image="comment.avatar"/>
       <div class="flex-grow flex flex-col gap-2">
@@ -60,6 +76,11 @@ const props = defineProps({
   commentsList: {
     type: Array as PropType<Comment[]>,
     default: (): Array<Comment[]> => [],
+    required: true
+  },
+  isCommentLoad: {
+    type: Boolean,
+    default: (): boolean => false,
     required: true
   }
 })

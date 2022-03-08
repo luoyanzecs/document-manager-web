@@ -10,7 +10,7 @@
       </div>
     </template>
   </z-aside>
-  <div class="h-screen flex-grow overflow-scroll">
+  <div class="h-screen flex-grow flex flex-col">
     <Header ref="head">
       <template #tools>
         <head-tool @editor="click"/>
@@ -21,10 +21,10 @@
         <!--              -->
       </template>
     </Header>
-    <div v-if="isEditorShow">
+    <div v-if="isEditorShow" class="flex flex-col items-center overflow-scroll">
       <z-tinymce v-model:model-value="content" :height="height"/>
     </div>
-    <div v-else>
+    <div v-else class="flex flex-col overflow-scroll">
       <div v-if="isCtxLoad" class="animate-pulse flex flex-col gap-2 m-4">
         <p class="h-4 bg-gray-300 w-5/12 rounded-lg"></p>
         <template v-for="i in 4" :key="i">

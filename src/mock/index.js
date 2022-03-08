@@ -59,7 +59,7 @@ Mock.mock('http://localhost:8081/api/admin/files', 'post', {
   'cols': [2, 2, 2, 8, 4],
   'currentPage|0-50': 1,
   'totalPage': 50,
-  'items|12': [{
+  'items|20': [{
     'id': /\d{8}/,
     'owner': '@FIRST LAST',
     'userId': /\d{8}/,
@@ -75,7 +75,7 @@ Mock.mock('http://localhost:8081/api/admin/users', 'post', {
   'cols': [4, 4, 4, 4],
   'currentPage|0-50': 1,
   'totalPage': 50,
-  'items|12': [{
+  'items|20': [{
     'id': /\d{8}/,
     'name': '@FIRST LAST',
     'userId': /\d{8}/,
@@ -90,7 +90,7 @@ Mock.mock('http://localhost:8081/api/admin/records', 'post', {
   'cols': [3, 3, 3, 4, 7],
   'currentPage|0-50': 1,
   'totalPage': 50,
-  'items|12': [{
+  'items|20': [{
     'id': /\d{8}/,
     'fid': /\d{8}/,
     'bu': "@pick(['开发', '人事', '产品', '运营'])",
@@ -105,7 +105,7 @@ Mock.mock('http://localhost:8081/api/admin/notices', 'post', {
   'cols': [2, 2, 2, 7, 4, 4],
   'currentPage|0-50': 1,
   'totalPage': 50,
-  'items|12': [{
+  'items|20': [{
     'id': /\d{8}/,
     'to': /\d{8}/,
     'bu': "@pick(['开发', '人事', '产品', '运营'])",

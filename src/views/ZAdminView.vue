@@ -1,36 +1,44 @@
 <template>
   <z-aside>
-      <template v-slot:context>
-        <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">管理员界面</div>
-        <div class="ml-4 mt-4 mr-2 flex flex-col gap-2 text-xl font-normal tracking-widest ">
-          <div v-for="(item, index) in menu"
-               :key="index"
-               @click="menuSelect(index)"
-               :class="{'select-menu': index === currentIndex, 'menu-base': true}"
-          >{{ item }}
-          </div>
+    <template v-slot:context>
+      <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">管理员界面</div>
+      <div class="ml-4 mt-4 mr-2 flex flex-col gap-2 text-xl font-normal tracking-widest ">
+        <div v-for="(item, index) in menu"
+             :key="index"
+             @click="menuSelect(index)"
+             :class="{'select-menu': index === currentIndex, 'menu-base': true}"
+        >{{ item }}
         </div>
-      </template>
-    </z-aside>
-  <div class="h-screen flex-grow overflow-scroll">
-      <z-header>
-        <template v-slot:tools>
-          <keep-alive>
-            <component :is="headComponent[headType]"/>
-          </keep-alive>
-        </template>
-        <template v-slot:avatar>
-          <z-avatar :image="userInfo.avatar"/>
-        </template>
-      </z-header>
-      <div class="py-4 px-8 flex flex-col justify-center items-center">
-        <router-view/>
       </div>
+    </template>
+  </z-aside>
+  <div class="h-screen flex-grow flex flex-col">
+    <z-header>
+      <template v-slot:tools>
+        <keep-alive>
+          <component :is="headComponent[headType]"/>
+        </keep-alive>
+      </template>
+      <template v-slot:avatar>
+        <z-avatar :image="userInfo.avatar"/>
+      </template>
+    </z-header>
+    <div class="flex flex-col items-center overflow-scroll" >
+      <z-table :keys="tableProp.keys"
+               :cols="tableProp.cols"
+               :fields="tableProp.fields"
+               :items="tableProp.items"/>
+      <z-pagination class="my-4"
+                    :visible="pageProp.visible"
+                    :current-page="pageProp.page"
+                    :total-page="pageProp.totalPage"
+                    @select-page="selectPageHandler"/>
     </div>
+  </div>
 </template>
 
 <script setup>
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import router from "@/router";
 import UserTool from "@/components/admin/toolbar/ZUserTool.vue"
 import RecordTool from "@/components/admin/toolbar/ZRecordTool.vue"
@@ -40,6 +48,7 @@ import ZAside from "@/components/ZAside";
 import ZHeader from "@/components/ZHeader";
 import ZAvatar from "@/components/ZAvatar";
 import {useStore} from "vuex";
+import ZTable from "@/components/ZTable";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
@@ -61,6 +70,9 @@ const menuSelect = (index) => {
   headType.value = index
   router.push(`/admin/${routes[index]}`)
 }
+
+onMounted(() => {
+})
 
 </script>
 

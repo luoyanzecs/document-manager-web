@@ -1,38 +1,38 @@
 <template>
-  <div v-if="fields.length === 0" class="flex flex-col md:min-w-75 animate-pulse">
+  <div v-if="fields.length === 0" class="flex flex-col lg:min-w-75 animate-pulse">
     <div class="field-item row-base h-10 bg-gray-400"/>
     <div v-for=" i of 10" :key="i" class="row-base collapse-item h-8"/>
   </div>
-  <div v-else class="flex flex-col md:min-w-75">
-    <div :class="['field-item', 'row-base', 'md:tracking-wide', gridN]">
-      <div :class="[isToggleAll ? 'bg-green-600' : 'bg-white', 'col-span-1', 'w-4', 'h-4', 'rounded-full']"
+  <div v-else class="flex flex-col ">
+    <div class="flex gap-2 w-full items-center px-2 border-b sticky top-0">
+      <div :class="[isToggleAll ? 'bg-green-600' : 'bg-white', 'choose-box']"
            @click.stop="toggle(-1)"/>
-      <div v-for="(value, index) in fields" :key="index" :class="['pos-center', colSpanList[index]]">
-        <span class="truncate">{{ value }}</span>
-      </div>
-    </div>
-    <template v-if="items.length !== 0">
-      <div v-for="(list, i) in items"
-           :key="list.id"
-           :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'item-hover', 'row-base']"
-      >
-        <div v-show="!isExpand[i]" @click.stop="toggle(i)"
-             :class="[isSelect[i] ? 'bg-green-600' : 'bg-white', 'col-span-1', 'h-4', 'w-4', 'rounded-full']"/>
-        <span v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-20" @click.stop="switchToCollapse(i)">关闭</span>
-        <div v-for="(key, keyIndex) in keys"
-             :key="list.id + keyIndex"
-             :class="[isExpand[i] ? 'flex' : 'pos-center',  colSpanList[keyIndex]]"
-        >
-          <span v-if="isExpand[i]" class="w-20 grid flex-shrink-0">{{ fields[keyIndex] }}</span>
-          <span :class="!isExpand[i] ? ['text-sm', 'md:text-base', 'truncate'] :''">{{ list[key] }}</span>
+      <div :class="['field-item', 'row-base',  gridN]">
+        <div v-for="(value, index) in fields" :key="index" :class="['pos-center', colSpanList[index]]">
+          <span class="truncate">{{ value }}</span>
         </div>
-        <svg v-show="!isExpand[i]" @click="expand(i)" class="text-gray-400 cursor-pointer w-5 h-5"
+      </div>
+      <div class="w-5 h-5"/>
+    </div>
+    <div v-for="(list, i) in items" :key="list.id" class="flex gap-2 w-full items-center px-2 border-b">
+      <div v-show="!isExpand[i]" @click.stop="toggle(i)" :class="[isSelect[i] ? 'bg-green-600' : 'bg-white', 'choose-box']"/>
+      <div :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'row-base']">
+          <span v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-20" @click.stop="switchToCollapse(i)">关闭</span>
+          <div v-for="(key, keyIndex) in keys"
+               :key="list.id + keyIndex"
+               :class="[isExpand[i] ? 'flex' : 'pos-center',  colSpanList[keyIndex]]"
+          >
+            <span v-if="isExpand[i]" class="w-20 grid flex-shrink-0">{{ fields[keyIndex] }}</span>
+            <span :class="!isExpand[i] ? ['text-sm', 'md:text-base', 'truncate'] :''">{{ list[key] }}</span>
+          </div>
+        </div>
+      <svg v-show="!isExpand[i]" @click="expand(i)" class="text-gray-200 cursor-pointer w-5 h-5 items-end"
              viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-042ca774="">
           <path fill="currentColor"
                 d="M104.704 338.752a64 64 0 0190.496 0l316.8 316.8 316.8-316.8a64 64 0 0190.496 90.496L557.248 791.296a64 64 0 01-90.496 0L104.704 429.248a64 64 0 010-90.496z"></path>
         </svg>
-      </div>
-    </template>
+    </div>
+
   </div>
 </template>
 
@@ -72,7 +72,7 @@ onBeforeMount(() => {
 watch(
     () => props.items,
     () => {
-      let count = 2
+      let count = 0
       for (let k of props.cols) {
         count += k
         colSpanList.value.push(`col-span-${k}`)
@@ -97,23 +97,27 @@ const toggle = (index: number) => {
 </script>
 
 <style scoped>
+.choose-box {
+  @apply w-4 h-4 rounded-full border
+}
+
 .row-base {
-  @apply grid items-center gap-2 px-4 py-1 rounded-lg max-w-5xl my-1
+  @apply grid items-center gap-2 px-4 py-1 max-w-5xl w-full
 }
 
 .field-item {
-  @apply font-bold text-gray-700 bg-gray-400 text-base md:text-xl
+  @apply font-bold text-gray-700 text-base md:text-xl
 }
 
 .collapse-item {
-  @apply items-center group text-black bg-gray-200
+  @apply items-center group text-black
 }
 
 .item-hover {
-  @apply hover:ring-2 hover:bg-indigo-300 hover:ring-indigo-300 hover:ring-offset-1
+  @apply hover:ring-1
 }
 
 .expand-item {
-  @apply bg-gray-200 max-w-5xl rounded-xl p-4 my-1
+  @apply max-w-5xl p-4 w-full bg-gray-200 my-1 rounded
 }
 </style>

@@ -25,7 +25,7 @@
       <z-tinymce v-model:model-value="content" :height="height"/>
     </div>
     <div v-else class="flex flex-col overflow-scroll">
-      <div v-if="isCtxLoad" class="animate-pulse flex flex-col gap-2 m-4">
+      <div v-if="isCtxLoad" class="animate-pulse flex flex-col gap-2 p-4 min-h-30">
         <p class="h-4 bg-gray-300 w-5/12 rounded-lg"></p>
         <template v-for="i in 4" :key="i">
           <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
@@ -34,11 +34,13 @@
           <p class="h-4 bg-gray-300 w-7/12 rounded-lg"></p>
         </template>
       </div>
-      <div v-else class="p-4">
+      <div v-else class="p-4 min-h-30">
         <z-context :ctx="content" :file-info="fileInfo"/>
       </div>
-      <hr class="my-4">
-      <z-comment :info="userInfo" :comments-list="comments" :is-comment-load="isCommentLoad"/>
+      <div v-if="isPageShow">
+        <hr class="my-4">
+        <z-comment :info="userInfo" :comments-list="comments" :is-comment-load="isCommentLoad"/>
+      </div>
     </div>
   </div>
 </template>
@@ -74,6 +76,7 @@ const height = ref(0)
 const head = ref()
 const isCtxLoad = ref(false)
 const isCommentLoad = ref(false)
+const isPageShow = ref(false)
 
 onMounted(() => {
   FILE_MENU({}).then(res => {
@@ -87,6 +90,7 @@ const selectFileHandler = (param) => {
   isEditorShow.value = false
   isCtxLoad.value = true
   isCommentLoad.value = true
+  isPageShow.value = true
   GET_FILE({}).then(res => {
     isCtxLoad.value = false
     content.value = res.data.fileContent

@@ -2,8 +2,8 @@ import {createStore} from 'vuex'
 
 let lastNoticeStartTime = 0 // ms
 let lastDelay = 0
-const noticeAliveTime = 7000 // ms
-const animationTime = 700 // ms
+const noticeAliveTime = 5000 // ms
+const animationTime = 300 // ms
 
 const getDelay = (): number => {
   const now = Date.now()
@@ -54,6 +54,7 @@ export const store = createStore<State>({
     unshiftNotice (state, notice:Notice) {
       notice.delay = getDelay()
       state.notificationQuene.unshift(notice)
+      state.notificationQuene.splice(6)
     },
     removeNotice (state, id: string) {
       state.notificationQuene = state.notificationQuene.filter(it => it.id !== id)

@@ -10,10 +10,10 @@
       </div>
     </template>
   </z-aside>
-  <div class="h-screen flex-grow overflow-scroll">
-    <Header>
+  <div class="h-screen flex-grow flex flex-col">
+    <Header ref="head">
       <template #tools>
-        <head-tool :banner="banner" @editor="click"/>
+        <head-tool @editor="click"/>
       </template>
       <template #avatar>
         <!--              TODO：头像悬浮的组件 建议抽离出来-->
@@ -21,40 +21,62 @@
         <!--              -->
       </template>
     </Header>
-    <div>
-      <z-tinymce v-model="content"/>
+    <div v-if="isEditorShow" class="flex flex-col items-center overflow-scroll">
+      <z-tinymce v-model:model-value="content" :height="height"/>
     </div>
-    <hr class="my-4">
-    <z-comment :info="myInfo" :comments-list="comments"/>
+    <div v-else class="flex flex-col overflow-scroll">
+      <div v-if="isCtxLoad" class="animate-pulse flex flex-col gap-2 p-4 min-h-30">
+        <p class="h-4 bg-gray-300 w-5/12 rounded-lg"></p>
+        <template v-for="i in 4" :key="i">
+          <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
+          <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
+          <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
+          <p class="h-4 bg-gray-300 w-7/12 rounded-lg"></p>
+        </template>
+      </div>
+      <div v-else class="p-4 min-h-30">
+        <z-context :ctx="content" :file-info="fileInfo"/>
+      </div>
+      <div v-if="isPageShow">
+        <hr class="my-4">
+        <z-comment :info="userInfo" :comments-list="comments" :is-comment-load="isCommentLoad"/>
+      </div>
+    </div>
   </div>
 </template>
-
 
 <style>
 </style>
 
 <script setup>
 import {computed, onMounted, ref} from 'vue'
-import Header from "@/components/ZHeader";
-import HeadTool from "@/components/user/HeadTool";
-import ZAside from "@/components/ZAside";
-import ZButton from "@/components/ZButton";
-import ZAvatar from "@/components/ZAvatar";
-import ZTree from "@/components/ZTree";
-import ZComment from "@/components/ZComment";
-import { FILE_MENU, COMMENT } from "@/api";
+import Header from "@/components/ZHeader.vue";
+import HeadTool from "@/components/user/HeadTool.vue";
+import ZAside from "@/components/ZAside.vue";
+import ZButton from "@/components/ZButton.vue";
+import ZAvatar from "@/components/ZAvatar.vue";
+import ZTree from "@/components/ZTree.vue";
+import ZComment from "@/components/ZComment.vue";
+import {FILE_MENU, COMMENT, GET_FILE} from "@/api";
 import {useStore} from "vuex";
-import ZTinymce from "@/components/ZTinymce";
+import ZTinymce from "@/components/ZTinymce.vue";
+import ZContext from "@/components/ZContext";
+import {refineHtml, revert} from "@/tool/utils.ts";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
 
-const content = ref("")
-const editor = ref()
-const banner = ref('编辑')
+const content = ref('')
+const fileInfo = ref(undefined)
 const items = ref([])
 const comments = ref([])
 const isMenuLoad = ref(true)
+const isEditorShow = ref(false)
+const height = ref(0)
+const head = ref()
+const isCtxLoad = ref(false)
+const isCommentLoad = ref(false)
+const isPageShow = ref(false)
 
 onMounted(() => {
   FILE_MENU({}).then(res => {
@@ -62,30 +84,30 @@ onMounted(() => {
     isMenuLoad.value = false
     res.data.items.forEach(item => items.value.push(item))
   })
-  COMMENT({}).then(res => {
-    console.log(res.data)
-    res.data.comments.forEach(comment => comments.value.push(comment))
-  })
 })
 
 const selectFileHandler = (param) => {
+  isEditorShow.value = false
+  isCtxLoad.value = true
+  isCommentLoad.value = true
+  isPageShow.value = true
+  GET_FILE({}).then(res => {
+    isCtxLoad.value = false
+    content.value = res.data.fileContent
+    fileInfo.value = res.data.fileInfo
+  })
+
+  COMMENT({}).then(res => {
+    isCommentLoad.value = false
+    console.log(res.data)
+    res.data.comments.forEach((comment) => comments.value.push(comment))
+  })
   console.log(param)
 }
 
 const click = () => {
-  if (banner.value === '编辑') {
-    banner.value = '更新'
-    editor.value.disable()
-  } else {
-    banner.value = '编辑'
-    editor.value.enable()
-  }
+  revert(isEditorShow)
+  height.value = document.body.clientHeight - 64
+  content.value = refineHtml(content.value)
 }
-
-const myInfo = ref({
-  name: 'Lana Del Rey',
-  avatar: 'https://ae01.alicdn.com/kf/Hd60a3f7c06fd47ae85624badd32ce54dv.jpg',
-  id: 19870621,
-})
-
 </script>

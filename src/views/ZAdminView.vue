@@ -28,7 +28,8 @@
                :cols="tableProp.cols"
                :fields="tableProp.fields"
                :items="tableProp.items"/>
-      <z-pagination class="my-4"
+      <z-pagination v-show="tableProp.fields.length !== 0"
+                    class="my-4"
                     :visible="pageProp.visible"
                     :current-page="pageProp.page"
                     :total-page="pageProp.totalPage"
@@ -38,8 +39,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from "vue";
-import router from "@/router";
+import {computed, onMounted, ref, watch} from "vue";
 import UserTool from "@/components/admin/toolbar/ZUserTool.vue"
 import RecordTool from "@/components/admin/toolbar/ZRecordTool.vue"
 import NoticeTool from "@/components/admin/toolbar/ZNoticeTool.vue"
@@ -47,8 +47,10 @@ import FileTool from "@/components/admin/toolbar/ZFileTool.vue"
 import ZAside from "@/components/ZAside";
 import ZHeader from "@/components/ZHeader";
 import ZAvatar from "@/components/ZAvatar";
+import ZPagination from "@/components/ZPagination"
 import {useStore} from "vuex";
 import ZTable from "@/components/ZTable";
+import {FILE_LIST, NOTICE_LIST, RECORD_LIST, USER_LIST} from "@/api";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
@@ -63,16 +65,66 @@ const headComponent = ref({
 const currentIndex = ref(0)
 
 const menu = ['用户管理', '记录管理', '文件管理', '发布通知']
-const routes = ['user', 'behavior', 'file', 'notice']
+
+const pageProp = ref({
+  page: 0,
+  visible: false,
+  totalPage: 0
+})
+
+const tableProp = ref({
+  fields: [],
+  keys: [],
+  cols: [],
+  items: []
+})
+
+const setProps = (res, selectPage) => {
+  pageProp.value.visible = false
+  console.log(res.data)
+  pageProp.value.page = selectPage
+  pageProp.value.totalPage = res.data.totalPage
+  tableProp.value = res.data
+}
+
+const selectPageHandler = (page) => {
+  const selectPage = parseInt(page)
+  pageProp.value.visible = true
+  switch (currentIndex.value) {
+    case 0:
+      USER_LIST({page: selectPage}).then(r => setProps(r, selectPage))
+      break
+    case 1:
+      RECORD_LIST({page: selectPage}).then(r => setProps(r, selectPage))
+      break
+    case 2:
+      FILE_LIST({page: selectPage}).then(r => setProps(r, selectPage))
+      break
+    case 3:
+      NOTICE_LIST({page: selectPage}).then(r => setProps(r, selectPage))
+  }
+}
+
 
 const menuSelect = (index) => {
   currentIndex.value = index
   headType.value = index
-  router.push(`/admin/${routes[index]}`)
+  selectPageHandler(1)
 }
 
 onMounted(() => {
+  selectPageHandler(1)
 })
+
+watch(
+    () => currentIndex.value,
+    () => {
+      tableProp.value.cols.splice(0, tableProp.value.cols.length)
+      tableProp.value.fields.splice(0, tableProp.value.fields.length)
+      tableProp.value.keys.splice(0, tableProp.value.keys.length)
+      tableProp.value.items.splice(0, tableProp.value.items.length)
+    }
+)
 
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="h-16 flex flex-shrink-0 justify-end items-center gap-x-4 px-4 border-b border-gray-200 ">
-      <slot name="tools"></slot>
-      <slot name="avatar"></slot>
+    <slot name="tools"></slot>
+    <slot name="avatar"></slot>
   </div>
 </template>
 

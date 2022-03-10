@@ -40,10 +40,10 @@
 
 <script setup>
 import {computed, onMounted, ref, watch} from "vue";
-import UserTool from "@/components/admin/toolbar/ZUserTool.vue"
-import RecordTool from "@/components/admin/toolbar/ZRecordTool.vue"
-import NoticeTool from "@/components/admin/toolbar/ZNoticeTool.vue"
-import FileTool from "@/components/admin/toolbar/ZFileTool.vue"
+import UserTool from "@/components/head/admin/ZUserTool.vue"
+import RecordTool from "@/components/head/admin/ZRecordTool.vue"
+import NoticeTool from "@/components/head/admin/ZNoticeTool.vue"
+import FileTool from "@/components/head/admin/ZFileTool.vue"
 import ZAside from "@/components/ZAside";
 import ZHeader from "@/components/ZHeader";
 import ZAvatar from "@/components/ZAvatar";

@@ -15,7 +15,7 @@
       </div>
       <div class="w-5 h-5"/>
     </div>
-    <div v-for="(list, i) in items" :key="list.id" class="flex gap-2 w-full items-center pl-2 pr-4 border-b hover:bg-blue-200">
+    <div v-for="(list, i) in items" :key="list.id" class="flex gap-2 w-full items-center pl-2 pr-4 border-b hover:border-blue-300">
       <div v-show="!isExpand[i]" @click.stop="toggle(i)" :class="[isSelect[i] ? 'bg-gray-400' : 'bg-white', 'choose-box']"/>
       <div :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'row-base']">
           <span v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-20" @click.stop="switchToCollapse(i)">关闭</span>

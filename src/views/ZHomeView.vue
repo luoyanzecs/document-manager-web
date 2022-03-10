@@ -1,5 +1,5 @@
 <template>
-  <div class="pos-center flex-col space-y-8 w-full">
+  <div class="pos-center flex-col gap-8  w-full">
     <div class="min-h-screen max-w-screen-xl pos-center flex-col space-y-8 ">
       <div class="rounded-full h-32 w-32 flex items-center justify-center bg-gradient-to-bl from-green-400 to-blue-500 filter blur-sm"></div>
       <div>
@@ -8,12 +8,8 @@
       <input class="input-home" type="text" v-model="account" spellcheck="false" placeholder="输入账号"/>
       <input class="input-home" type="password" v-model="password" placeholder="输入密码">
       <z-switch class="py-2 font-light" left="管理员" right="员工" v-model:value="switchValue"/>
-      <div class="pos-center flex-col space-y-2">
-        <svg :class="[loadVisible ? 'visible': 'invisible', 'animate-spin', 'h-4', 'w-4', 'text-gray-500', '-mt-2']" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <home-button :class="{ 'animate-shake' : isButtonShake }" @click="loginHandler">登录</home-button>
+      <div class="transform scale-110">
+        <z-button fill="登录" :class="{'animate-shake' : isButtonShake}" :load-visible="loadVisible" @click="loginHandler"/>
       </div>
 
     </div>
@@ -26,7 +22,7 @@
 <script setup>
 import {computed, ref} from 'vue'
 import { useRouter } from 'vue-router'
-import HomeButton from "@/components/ZHomeButton";
+import ZButton from "@/components/ZButton";
 import ZSwitch from "@/components/ZSwitch";
 import {LOGIN} from "@/api";
 import {useStore} from "vuex";

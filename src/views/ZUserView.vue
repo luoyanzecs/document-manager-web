@@ -1,7 +1,7 @@
 <template>
   <z-aside>
     <template #right>
-      <z-button type="primary">部门</z-button>
+      <z-button fill="部门" @click="selectBuHandler"/>
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
@@ -16,9 +16,7 @@
         <head-tool @editor="click"/>
       </template>
       <template #avatar>
-        <!--              TODO：头像悬浮的组件 建议抽离出来-->
         <z-avatar :image="userInfo.avatar"/>
-        <!--              -->
       </template>
     </Header>
     <div v-if="isEditorShow" class="flex flex-col overflow-scroll items-stretch">
@@ -51,7 +49,7 @@
 <script setup>
 import {computed, onMounted, ref} from 'vue'
 import Header from "@/components/ZHeader.vue";
-import HeadTool from "@/components/user/HeadTool.vue";
+import HeadTool from "@/components/head/user/HeadTool.vue";
 import ZAside from "@/components/ZAside.vue";
 import ZButton from "@/components/ZButton.vue";
 import ZAvatar from "@/components/ZAvatar.vue";
@@ -100,6 +98,7 @@ const selectFileHandler = (param) => {
   COMMENT({}).then(res => {
     isCommentLoad.value = false
     console.log(res.data)
+    comments.value.splice(0, comments.value.length)
     res.data.comments.forEach((comment) => comments.value.push(comment))
   })
   console.log(param)
@@ -109,5 +108,9 @@ const click = () => {
   revert(isEditorShow)
   height.value = document.body.clientHeight - 64
   content.value = refineHtml(content.value)
+}
+
+const selectBuHandler = () => {
+
 }
 </script>

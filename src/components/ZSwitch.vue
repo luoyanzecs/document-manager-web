@@ -34,9 +34,9 @@ defineProps({
 
 <style scoped>
 .box-base {
-  @apply w-14 h-7 bg-blue-500 flex items-center rounded-full flex-shrink-0 p-px
+  @apply w-14 h-7 bg-blue-500 flex items-center rounded-full flex-shrink-0
 }
 .dot-base {
-  @apply w-7 h-full bg-white scale-95 rounded-full shadow-lg transition-all duration-200
+  @apply w-7 h-7 rounded-full bg-white transform scale-90 duration-200
 }
 </style>

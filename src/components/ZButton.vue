@@ -1,7 +1,6 @@
 <template>
-  <button class="min-w-4 bg-blue-500 rounded-xl shadow py-2 px-4 text-sm h-9 text-white subpixel-antialiased tracking-widest font-light flex justify-center items-center">
+  <button :class="['btn-class', {'animate-pulse': loadVisible}]">
     {{ fill }}
-    <slot></slot>
   </button>
 </template>
 
@@ -9,6 +8,11 @@
 import {defineProps} from "vue";
 
 defineProps({
+  loadVisible : {
+    type: Boolean,
+    default: false,
+    required: false
+  },
   fill: {
     type:String,
     required: false
@@ -17,5 +21,7 @@ defineProps({
 </script>
 
 <style scoped>
-
+.btn-class {
+  @apply min-w-4 bg-blue-500 rounded-2xl p-2 text-sm text-white tracking-widest flex-shrink-0
+}
 </style>

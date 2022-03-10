@@ -22,8 +22,8 @@
           <p class="text-gray-500 text-xs">{{ comment.time }}</p>
           <p class="text-justify">{{ comment.comment }}</p>
         </div>
-        <ul class="bg-gray-300 px-2.5 rounded-lg" v-if="comment.reply.length !== 0">
-          <li v-for="reply in comment.reply" :key="reply.id" class="my-1 w-full flex-grow">
+        <ul class="border-l-2 px-2 ml-1 flex flex-col gap-1" v-if="comment.reply.length !== 0">
+          <li v-for="reply in comment.reply" :key="reply.id" class="w-full flex-grow">
             <p class="font-bold text-sm">{{ reply.name }}</p>
             <p class="text-gray-700 text-xs">{{ reply.time }}</p>
             <p class="text-sm">{{ reply.comment }}</p>

@@ -21,7 +21,7 @@
         <!--              -->
       </template>
     </Header>
-    <div v-if="isEditorShow" class="flex flex-col items-center overflow-scroll">
+    <div v-if="isEditorShow" class="flex flex-col overflow-scroll items-stretch">
       <z-tinymce v-model:model-value="content" :height="height"/>
     </div>
     <div v-else class="flex flex-col overflow-scroll">

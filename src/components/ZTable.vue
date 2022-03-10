@@ -5,7 +5,7 @@
       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
     </svg>
   </div>
-  <div v-else class="flex flex-col min-w-75">
+  <div v-else class="flex flex-col min-w-85 xl:min-w-75">
     <div class="flex gap-2 w-full items-center px-2 border-b sticky top-0 bg-white">
       <div @click.stop="toggle(-1)" :class="[isToggleAll ? 'bg-gray-400' : 'bg-white', 'choose-box']"/>
       <div :class="['field-item', 'row-base',  gridN]">
@@ -15,7 +15,7 @@
       </div>
       <div class="w-5 h-5"/>
     </div>
-    <div v-for="(list, i) in items" :key="list.id" class="flex gap-2 w-full items-center px-2 border-b hover:border-blue-300">
+    <div v-for="(list, i) in items" :key="list.id" class="flex gap-2 w-full items-center pl-2 pr-4 border-b hover:bg-blue-200">
       <div v-show="!isExpand[i]" @click.stop="toggle(i)" :class="[isSelect[i] ? 'bg-gray-400' : 'bg-white', 'choose-box']"/>
       <div :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'row-base']">
           <span v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-20" @click.stop="switchToCollapse(i)">关闭</span>
@@ -83,6 +83,11 @@ watch(
     }
 )
 
+watch(
+    () => props.items,
+    () => isSelect.value.fill(isToggleAll.value)
+)
+
 const expand = (index: number) => isExpand.value[index] = true
 const switchToCollapse = (index: number) => isExpand.value[index] = false
 
@@ -108,7 +113,7 @@ const toggle = (index: number) => {
 }
 
 .field-item {
-  @apply font-bold text-gray-700 text-base md:text-xl
+  @apply font-bold text-gray-700 text-base md:text-lg
 }
 
 .collapse-item {

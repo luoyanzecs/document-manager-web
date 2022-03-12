@@ -1,7 +1,7 @@
 <template>
   <div class="relative max-w-screen-2xl h-screen overflow-hidden flex">
     <router-view/>
-    <div class="absolute w-screen flex flex-col items-center top-0 sm:w-auto sm:right-4 top-4 sm:items-end z-40 max-h-screen overflow-hidden">
+    <div class="absolute w-screen flex flex-col items-center top-0 sm:w-auto sm:right-4 top-4 sm:items-end z-40 max-h-screen overflow-y-auto">
       <z-notifacation v-for="notice in notifications"
                       :key="notice.id"
                       :message="notice.message"

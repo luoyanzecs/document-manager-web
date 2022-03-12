@@ -5,7 +5,7 @@
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
-      <div class="overflow-auto flex-grow pb-16">
+      <div class="overflow-auto">
         <z-tree :catalogue="items" :is-menu-load="isMenuLoad" @select-file="selectFileHandler"/>
       </div>
     </template>
@@ -19,7 +19,7 @@
         <z-avatar :image="userInfo.avatar"/>
       </template>
     </Header>
-    <div class="overflow-auto flex-grow flex flex-col items-stretc pb-16">
+    <div class="overflow-auto flex-grow flex flex-col items-stretc pb-16" ref="son">
       <z-tinymce v-if="isEditorShow" v-model:model-value="content" :height="height"/>
       <template v-else>
         <div v-if="isCtxLoad" class="animate-pulse flex flex-col gap-2 p-4 min-h-30">
@@ -75,6 +75,7 @@ const head = ref()
 const isCtxLoad = ref(false)
 const isCommentLoad = ref(false)
 const isPageShow = ref(false)
+const son = ref()
 
 onMounted(() => {
   FILE_MENU({}).then(res => {

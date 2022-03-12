@@ -1,46 +1,44 @@
 <template>
   <z-aside>
     <template #right>
-      <z-button type="primary">部门</z-button>
+      <z-button fill="部门" @click="selectBuHandler"/>
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
-      <div class="overflow-scroll flex-grow">
+      <div class="overflow-auto flex-grow pb-16">
         <z-tree :catalogue="items" :is-menu-load="isMenuLoad" @select-file="selectFileHandler"/>
       </div>
     </template>
   </z-aside>
-  <div class="h-screen flex-grow flex flex-col">
+  <div class="h-screen flex-grow flex flex-col ">
     <Header ref="head">
       <template #tools>
         <head-tool @editor="click"/>
       </template>
       <template #avatar>
-        <!--              TODO：头像悬浮的组件 建议抽离出来-->
         <z-avatar :image="userInfo.avatar"/>
-        <!--              -->
       </template>
     </Header>
-    <div v-if="isEditorShow" class="flex flex-col items-center overflow-scroll">
-      <z-tinymce v-model:model-value="content" :height="height"/>
-    </div>
-    <div v-else class="flex flex-col overflow-scroll">
-      <div v-if="isCtxLoad" class="animate-pulse flex flex-col gap-2 p-4 min-h-30">
-        <p class="h-4 bg-gray-300 w-5/12 rounded-lg"></p>
-        <template v-for="i in 4" :key="i">
-          <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
-          <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
-          <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
-          <p class="h-4 bg-gray-300 w-7/12 rounded-lg"></p>
-        </template>
-      </div>
-      <div v-else class="p-4 min-h-30">
-        <z-context :ctx="content" :file-info="fileInfo"/>
-      </div>
-      <div v-if="isPageShow">
-        <hr class="my-4">
-        <z-comment :info="userInfo" :comments-list="comments" :is-comment-load="isCommentLoad"/>
-      </div>
+    <div class="overflow-auto flex-grow flex flex-col items-stretc pb-16">
+      <z-tinymce v-if="isEditorShow" v-model:model-value="content" :height="height"/>
+      <template v-else>
+        <div v-if="isCtxLoad" class="animate-pulse flex flex-col gap-2 p-4 min-h-30">
+          <p class="h-4 bg-gray-300 w-5/12 rounded-lg"></p>
+          <template v-for="i in 4" :key="i">
+            <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
+            <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
+            <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
+            <p class="h-4 bg-gray-300 w-7/12 rounded-lg"></p>
+          </template>
+        </div>
+        <div v-else class="p-4 min-h-30">
+          <z-context :ctx="content" :file-info="fileInfo"/>
+        </div>
+        <div v-if="isPageShow">
+          <hr class="my-4">
+          <z-comment :info="userInfo" :comments-list="comments" :is-comment-load="isCommentLoad"/>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -51,7 +49,7 @@
 <script setup>
 import {computed, onMounted, ref} from 'vue'
 import Header from "@/components/ZHeader.vue";
-import HeadTool from "@/components/user/HeadTool.vue";
+import HeadTool from "@/components/head/user/HeadTool.vue";
 import ZAside from "@/components/ZAside.vue";
 import ZButton from "@/components/ZButton.vue";
 import ZAvatar from "@/components/ZAvatar.vue";
@@ -100,6 +98,7 @@ const selectFileHandler = (param) => {
   COMMENT({}).then(res => {
     isCommentLoad.value = false
     console.log(res.data)
+    comments.value.splice(0, comments.value.length)
     res.data.comments.forEach((comment) => comments.value.push(comment))
   })
   console.log(param)
@@ -109,5 +108,9 @@ const click = () => {
   revert(isEditorShow)
   height.value = document.body.clientHeight - 64
   content.value = refineHtml(content.value)
+}
+
+const selectBuHandler = () => {
+
 }
 </script>

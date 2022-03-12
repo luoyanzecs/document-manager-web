@@ -1,20 +1,16 @@
 <template>
   <tool>
-    <template #tools>
-      <header-button>
-        <span>搜索</span>
-      </header-button>
-      <header-button type="primary">新建</header-button>
-      <header-button type="primary">附件</header-button>
-      <header-button type="primary" @click="click">{{ editorStatus }}</header-button>
-    </template>
+    <z-button fill="搜索"/>
+    <z-button fill="新建"/>
+    <z-button fill="附件"/>
+    <z-button :fill="editorStatus" @click="click"/>
   </tool>
 </template>
 
 <script setup>
 import Tool from "@/components/head/ZHeadMenu";
 import {defineEmits, ref} from "vue";
-import HeaderButton from "@/components/ZButton";
+import ZButton from "@/components/ZButton";
 
 const emit = defineEmits(['editor'])
 const editorStatus = ref('编辑')

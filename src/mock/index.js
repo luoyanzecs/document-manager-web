@@ -85,7 +85,7 @@ Mock.mock('http://localhost:8081/api/admin/users', 'post', {
 })
 
 Mock.mock('http://localhost:8081/api/admin/records', 'post', {
-  'fields': ['uid', '操作', '部门', 'fid', '时间'],
+  'fields': ['用户编号', '操作', '部门', '文件编号', '时间'],
   'keys': ['id', 'oprate', 'bu', 'fid', 'oprateTime'],
   'cols': [3, 3, 3, 4, 7],
   'currentPage|0-50': 1,

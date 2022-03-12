@@ -23,21 +23,3 @@ export const toVnode = (htmlText: string): VNode => {
 
     return h('h1', {}, 'test')
 }
-
-export const htmlToJson = (dom: any) => {
-    document.createElement('div')
-}
-
-export const domToJson = (dom: any): any => {
-    const tag: any = {}
-    tag['tagName'] = dom.tagName
-    tag['children'] = []
-    for(let i = 0; i< dom.children.length; i++){
-        tag['children'].push(domToJson(dom.children[i]))
-    }
-    for(let i = 0; i< dom.attributes.length;i++){
-        const attr =  dom.attributes[i]
-        tag['@'+attr.name] = attr.value
-    }
-    return tag
-}

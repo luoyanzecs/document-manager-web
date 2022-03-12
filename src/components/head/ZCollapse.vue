@@ -7,7 +7,7 @@
     <div v-show="show"
          class="absolute flex flex-col gap-6 pt-4 px-2 w-20 bg-white right-0 top-0 h-screen z-30">
       <z-header-button @click="switchTool">收起</z-header-button>
-      <slot name="collapse"></slot>
+      <slot></slot>
     </div>
   </transition>
 </template>

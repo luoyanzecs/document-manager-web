@@ -16,7 +16,7 @@
     <z-header>
       <template v-slot:tools>
         <keep-alive>
-          <component :is="headComponent[headType]"/>
+          <component :is="componet"/>
         </keep-alive>
       </template>
       <template v-slot:avatar>
@@ -53,14 +53,11 @@ import {FILE_LIST, NOTICE_LIST, RECORD_LIST, USER_LIST} from "@/api";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
+const componet = computed(() => headComponent[headType])
 
-const headType = ref(1)
-const headComponent = ref({
-  0: UserTool,
-  1: RecordTool,
-  2: FileTool,
-  3: NoticeTool
-})
+let headType = 1
+const headComponent = [UserTool, RecordTool, FileTool, NoticeTool]
+
 const currentIndex = ref(0)
 
 const menu = ['用户管理', '记录管理', '文件管理', '发布通知']
@@ -107,7 +104,7 @@ const selectPageHandler = (page) => {
 
 const menuSelect = (index) => {
   currentIndex.value = index
-  headType.value = index
+  headType = index
   selectPageHandler(1)
 }
 

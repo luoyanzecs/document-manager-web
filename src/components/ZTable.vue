@@ -17,7 +17,7 @@
     </div>
     <div v-for="(list, i) in items" :key="list.id" class="flex gap-2 w-full items-center pl-2 pr-4 border-b hover:border-blue-300">
       <div v-show="!isExpand[i]" @click.stop="toggle(i)" :class="[isSelect[i] ? 'bg-blue-500' : 'bg-white', 'choose-box']"/>
-      <div :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'row-base']">
+      <div :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'row-base']" :ref="tableItemRef">
           <span v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-20" @click.stop="switchToCollapse(i)">关闭</span>
           <div v-for="(key, keyIndex) in keys" :key="list.id + keyIndex" :class="[isExpand[i] ? 'flex' : 'pos-center',  colSpanList[keyIndex]]">
             <span v-if="isExpand[i]" class="w-20 grid flex-shrink-0">{{ fields[keyIndex] }}</span>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, defineProps, onBeforeMount, watch, Ref, PropType} from 'vue'
+import {ref, defineProps, onBeforeMount, watch, Ref, PropType, onBeforeUpdate, onUpdated} from 'vue'
 
 const props = defineProps({
   cols: {
@@ -59,10 +59,23 @@ const isToggleAll = ref(false)
 const isExpand: Ref<boolean[]> = ref([])
 const gridN: Ref<string> = ref('')
 const colSpanList: Ref<string[]> = ref([])
+let tableItemRefs: any = []
+
+const tableItemRef = (el: any) => {
+  if (el) tableItemRefs.push(el)
+}
 
 onBeforeMount(() => {
   isSelect.value = new Array(25).fill(false)
   isExpand.value = new Array(25).fill(false)
+})
+
+onBeforeUpdate(() => {
+  tableItemRefs = []
+})
+
+onUpdated(() => {
+  // console.log(tableItemRefs)
 })
 
 watch(
@@ -83,7 +96,9 @@ watch(
     () => isSelect.value.fill(isToggleAll.value)
 )
 
-const expand = (index: number) => isExpand.value[index] = true
+const expand = (index: number) => {
+  isExpand.value[index] = true
+}
 const switchToCollapse = (index: number) => isExpand.value[index] = false
 
 const toggle = (index: number) => {

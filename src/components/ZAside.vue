@@ -8,7 +8,7 @@
       <z-button fill="边栏" @click="toggleAside"/>
     </div>
     <transition name="aside">
-      <div class="w-52 h-screen flex flex-col pr-2"
+      <div class="w-52 h-screen flex flex-col"
            v-show="isAsideShow">
         <div class="mx-2 mb-4 h-16 flex justify-end items-center sticky top-0 flex-shrink-0">
           <slot name="right"></slot>

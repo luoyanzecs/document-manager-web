@@ -23,13 +23,12 @@
         <z-avatar :image="userInfo.avatar"/>
       </template>
     </z-header>
-    <div class="flex flex-col items-center overflow-scroll" >
+    <div class="flex flex-col items-center overflow-auto gap-4 pb-16" >
       <z-table :keys="tableProp.keys"
                :cols="tableProp.cols"
                :fields="tableProp.fields"
                :items="tableProp.items"/>
       <z-pagination v-show="tableProp.fields.length !== 0"
-                    class="my-4"
                     :visible="pageProp.visible"
                     :current-page="pageProp.page"
                     :total-page="pageProp.totalPage"

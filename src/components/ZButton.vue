@@ -1,6 +1,7 @@
 <template>
   <button :class="['btn-class', {'animate-pulse': loadVisible}]">
     {{ fill }}
+    <slot></slot>
   </button>
 </template>
 

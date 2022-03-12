@@ -1,5 +1,5 @@
 <template>
-  <div class="pos-center flex-col gap-8  w-full">
+  <div class="pos-center flex-col gap-8 w-full">
     <div class="min-h-screen max-w-screen-xl pos-center flex-col space-y-8 ">
       <div class="rounded-full h-32 w-32 flex items-center justify-center bg-gradient-to-bl from-green-400 to-blue-500 filter blur-sm"></div>
       <div>

@@ -7,7 +7,7 @@
   </div>
   <div v-else class="flex flex-col min-w-85 xl:min-w-75">
     <div class="flex gap-2 w-full items-center px-2 border-b sticky top-0 bg-white">
-      <div @click.stop="toggle(-1)" :class="[isToggleAll ? 'bg-gray-400' : 'bg-white', 'choose-box']"/>
+      <div @click.stop="toggle(-1)" :class="[isToggleAll ? 'bg-blue-500' : 'bg-white', 'choose-box']"/>
       <div :class="['field-item', 'row-base',  gridN]">
         <div v-for="(value, index) in fields" :key="index" :class="['pos-center', colSpanList[index]]">
           <span class="truncate">{{ value }}</span>
@@ -16,22 +16,17 @@
       <div class="w-5 h-5"/>
     </div>
     <div v-for="(list, i) in items" :key="list.id" class="flex gap-2 w-full items-center pl-2 pr-4 border-b hover:border-blue-300">
-      <div v-show="!isExpand[i]" @click.stop="toggle(i)" :class="[isSelect[i] ? 'bg-gray-400' : 'bg-white', 'choose-box']"/>
+      <div v-show="!isExpand[i]" @click.stop="toggle(i)" :class="[isSelect[i] ? 'bg-blue-500' : 'bg-white', 'choose-box']"/>
       <div :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'row-base']">
           <span v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-20" @click.stop="switchToCollapse(i)">关闭</span>
-          <div v-for="(key, keyIndex) in keys"
-               :key="list.id + keyIndex"
-               :class="[isExpand[i] ? 'flex' : 'pos-center',  colSpanList[keyIndex]]"
-          >
+          <div v-for="(key, keyIndex) in keys" :key="list.id + keyIndex" :class="[isExpand[i] ? 'flex' : 'pos-center',  colSpanList[keyIndex]]">
             <span v-if="isExpand[i]" class="w-20 grid flex-shrink-0">{{ fields[keyIndex] }}</span>
             <span :class="!isExpand[i] ? ['text-sm', 'md:text-base', 'truncate'] :''">{{ list[key] }}</span>
           </div>
         </div>
-      <svg v-show="!isExpand[i]" @click="expand(i)" class="text-gray-200 cursor-pointer w-5 h-5 items-end"
-             viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-042ca774="">
-          <path fill="currentColor"
-                d="M104.704 338.752a64 64 0 0190.496 0l316.8 316.8 316.8-316.8a64 64 0 0190.496 90.496L557.248 791.296a64 64 0 01-90.496 0L104.704 429.248a64 64 0 010-90.496z"></path>
-        </svg>
+      <svg v-if="!isExpand[i]" @click="expand(i)" class="text-gray-200 cursor-pointer w-5 h-5 items-end" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-042ca774="">
+        <path fill="currentColor" d="M104.704 338.752a64 64 0 0190.496 0l316.8 316.8 316.8-316.8a64 64 0 0190.496 90.496L557.248 791.296a64 64 0 01-90.496 0L104.704 429.248a64 64 0 010-90.496z"></path>
+      </svg>
     </div>
 
   </div>

@@ -3,7 +3,7 @@
     <div class="container max-w-screen-2xl overflow-hidden flex">
       <router-view/>
     </div>
-    <div class="absolute w-full flex flex-col items-center top-0 sm:right-4 sm:top-4 sm:w-80 z-40 max-h-screen overflow-scroll">
+    <div class="absolute w-full flex flex-col items-center top-0 sm:right-4 top-4 sm:items-end z-40 max-h-screen overflow-scroll">
       <z-notifacation v-for="notice in notifications"
                       :key="notice.id"
                       :message="notice.message"

@@ -5,7 +5,7 @@ let lastDelay = 0
 const noticeAliveTime = 5000 // ms
 const animationTime = 300 // ms
 
-const getDelay = (): number => {
+const getDelay = ()=> {
   const now = Date.now()
   let delay = 0
   if (lastNoticeStartTime === 0 || now - lastNoticeStartTime > animationTime) {
@@ -19,47 +19,32 @@ const getDelay = (): number => {
   return delay
 }
 
-export interface Notice {
-  message: string,
-  type: string,
-  id: string,
-  delay: number
-}
 
-export interface UserInfo {
-  name: string,
-  avatar: string,
-  id: string,
-  bu: string,
-  rank?: number
-}
-
-export interface State {
-  notificationQuene: Notice[],
-  userInfo: UserInfo
-}
-
-export const store = createStore<State>({
-  state: {
-    notificationQuene: [],
-    userInfo: {
-      name: '',
-      avatar: '',
-      id: '',
-      bu: '',
-      rank: 0
+export const store = createStore({
+  state() {
+    return {
+      notificationQuene: [],
+      token: "",
+      userInfo: {
+        name: '',
+        avatar: '',
+        id: '',
+        bu: '',
+        rank: 0,
+        role: ''
+      }
     }
   },
   mutations: {
-    unshiftNotice (state, notice:Notice) {
+    unshiftNotice (state, notice) {
       notice.delay = getDelay()
       state.notificationQuene.unshift(notice)
       state.notificationQuene.splice(6)
     },
-    removeNotice (state, id: string) {
+    removeNotice (state, id) {
       state.notificationQuene = state.notificationQuene.filter(it => it.id !== id)
     },
-    updateUserInfo (state, userInfo:UserInfo) {
+    updateUserInfo (state, userInfo) {
       state.userInfo = userInfo
     }
   }

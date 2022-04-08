@@ -15,23 +15,38 @@
   <div class="h-screen flex-grow flex flex-col">
     <z-header>
       <template v-slot:tools>
-        <keep-alive>
-          <component :is="componet"/>
-        </keep-alive>
+        <z-head-menu>
+          <template v-if="currentIndex === 0">
+            <z-button fill="部门" @click="headButtonHandler('00')"/>
+            <z-button fill="删除" @click="headButtonHandler('01')"/>
+          </template>
+          <template v-if="currentIndex === 1">
+            <z-button fill="新增" @click="headButtonHandler('10')"/>
+            <z-button fill="所有" @click="headButtonHandler('11')"/>
+            <z-button fill="筛选" @click="headButtonHandler('12')"/>
+            <z-button fill="删除" @click="headButtonHandler('13')"/>
+          </template>
+          <template v-if="currentIndex === 2">
+            <z-button fill="筛选" @click="headButtonHandler('20')"/>
+            <z-button fill="删除" @click="headButtonHandler('21')"/>
+            <z-button fill="所有" @click="headButtonHandler('22')"/>
+          </template>
+          <template v-if="currentIndex === 3">
+            <z-button fill="新增" @click="headButtonHandler('30')"/>
+            <z-button fill="删除" @click="headButtonHandler('31')"/>
+            <z-button fill="保存" @click="headButtonHandler('32')"/>
+            <z-button fill="记录" @click="headButtonHandler('33')"/>
+          </template>
+        </z-head-menu>
       </template>
       <template v-slot:avatar>
         <z-avatar :image="userInfo.avatar"/>
       </template>
     </z-header>
-    <div class="flex flex-col items-center overflow-auto gap-4 pb-16" >
-      <z-table :keys="tableProp.keys"
-               :cols="tableProp.cols"
-               :fields="tableProp.fields"
-               :items="tableProp.items"/>
+    <div class="flex flex-col items-center overflow-auto gap-4 pb-16">
+      <z-table :keys="tableProp.keys" :cols="tableProp.cols" :fields="tableProp.fields" :items="tableProp.items"/>
       <z-pagination v-show="tableProp.fields.length !== 0"
-                    :visible="pageProp.visible"
-                    :current-page="pageProp.page"
-                    :total-page="pageProp.totalPage"
+                    :visible="pageProp.visible" :current-page="pageProp.page" :total-page="pageProp.totalPage"
                     @select-page="selectPageHandler"/>
     </div>
   </div>
@@ -39,10 +54,8 @@
 
 <script setup>
 import {computed, onMounted, ref, watch} from "vue";
-import UserTool from "@/components/head/admin/ZUserTool.vue"
-import RecordTool from "@/components/head/admin/ZRecordTool.vue"
-import NoticeTool from "@/components/head/admin/ZNoticeTool.vue"
-import FileTool from "@/components/head/admin/ZFileTool.vue"
+import ZHeadMenu from "@/components/head/ZHeadMenu";
+import ZButton from "@/components/ZButton";
 import ZAside from "@/components/ZAside";
 import ZHeader from "@/components/ZHeader";
 import ZAvatar from "@/components/ZAvatar";
@@ -53,13 +66,8 @@ import {FILE_LIST, NOTICE_LIST, RECORD_LIST, USER_LIST} from "@/api";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
-const componet = computed(() => headComponent[headType])
-
-let headType = 1
-const headComponent = [UserTool, RecordTool, FileTool, NoticeTool]
 
 const currentIndex = ref(0)
-
 const menu = ['用户管理', '记录管理', '文件管理', '发布通知']
 
 const pageProp = ref({
@@ -77,40 +85,31 @@ const tableProp = ref({
 
 const setProps = (res, selectPage) => {
   pageProp.value.visible = false
-  console.log(res.data)
   pageProp.value.page = selectPage
-  pageProp.value.totalPage = res.data.totalPage
-  tableProp.value = res.data
+  pageProp.value.totalPage = res.totalPage
+  tableProp.value = res
 }
-
+const APIS = [USER_LIST, RECORD_LIST, FILE_LIST, NOTICE_LIST]
 const selectPageHandler = (page) => {
   const selectPage = parseInt(page)
   pageProp.value.visible = true
-  switch (currentIndex.value) {
-    case 0:
-      USER_LIST({page: selectPage}).then(r => setProps(r, selectPage))
-      break
-    case 1:
-      RECORD_LIST({page: selectPage}).then(r => setProps(r, selectPage))
-      break
-    case 2:
-      FILE_LIST({page: selectPage}).then(r => setProps(r, selectPage))
-      break
-    case 3:
-      NOTICE_LIST({page: selectPage}).then(r => setProps(r, selectPage))
-  }
+  APIS[currentIndex.value]({page: selectPage, size: 20})
+      .then(it => setProps(it, selectPage))
+      .catch(() => pageProp.value.visible = false)
 }
-
 
 const menuSelect = (index) => {
   currentIndex.value = index
-  headType = index
-  selectPageHandler(1)
+  selectPageHandler(0)
 }
 
 onMounted(() => {
-  selectPageHandler(1)
+  selectPageHandler(0)
 })
+
+const headButtonHandler = index => {
+  console.log(index)
+}
 
 watch(
     () => currentIndex.value,

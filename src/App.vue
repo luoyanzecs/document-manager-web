@@ -26,9 +26,9 @@ const store = useStore()
 const notifications = computed(() => store.state.notificationQuene)
 
 onMounted(() => {
-  const noticeInquiry = (params: any) =>  NOTICE_GLOBAL(params).then(res => {
-    console.log(res.data)
-    res.data.notices.forEach((notice: any) => store.commit('unshiftNotice', notice))
+  const noticeInquiry = (params: any) =>  NOTICE_GLOBAL(params).then(it => {
+    console.log(it)
+    it.notices.forEach((notice: any) => store.commit('unshiftNotice', notice))
     sleep(30000).then(() => noticeInquiry(params))
   })
 

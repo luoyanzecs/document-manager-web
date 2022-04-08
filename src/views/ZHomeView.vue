@@ -51,12 +51,12 @@ const loginHandler = () => {
   }
   loadVisible.value = true
   LOGIN({
-    acount: account.value,
+    username: account.value,
     password: password.value
-  }).then(res => {
-    console.log(res.data)
+  }).then(it => {
+    console.log(it)
     loadVisible.value = false
-    store.commit('updateUserInfo', res.data.userInfo)
+    store.commit('updateUserInfo', it.userInfo)
     router.push(switchValue.value ? '/user' : '/admin')
   })
 }

@@ -3,6 +3,7 @@ import axios from 'axios'
 axios.defaults.timeout = 10000
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
+axios.defaults.timeout = 10 * 1000
 
 // get请求
 export function get (url, data) {

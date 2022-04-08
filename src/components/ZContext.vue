@@ -31,7 +31,6 @@ watch(
     (newValue) => {
       rootCtx.value.innerHTML = newValue
       let el = rootCtx.value.getElementsByTagName('table');
-      console.log('---------------')
       console.log(el);
     }
 )

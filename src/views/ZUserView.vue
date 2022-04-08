@@ -13,7 +13,12 @@
   <div class="h-screen flex-grow flex flex-col ">
     <Header ref="head">
       <template #tools>
-        <head-tool @editor="click"/>
+        <z-head-menu>
+          <z-button fill="搜索"/>
+          <z-button fill="新建"/>
+          <z-button fill="附件"/>
+          <z-button :fill="editorStatus" @click="click"/>
+        </z-head-menu>
       </template>
       <template #avatar>
         <z-avatar :image="userInfo.avatar"/>
@@ -49,9 +54,9 @@
 <script setup>
 import {computed, onMounted, ref} from 'vue'
 import Header from "@/components/ZHeader.vue";
-import HeadTool from "@/components/head/user/HeadTool.vue";
+import ZHeadMenu from "@/components/head/ZHeadMenu";
+import ZButton from "@/components/ZButton";
 import ZAside from "@/components/ZAside.vue";
-import ZButton from "@/components/ZButton.vue";
 import ZAvatar from "@/components/ZAvatar.vue";
 import ZTree from "@/components/ZTree.vue";
 import ZComment from "@/components/ZComment.vue";
@@ -76,39 +81,41 @@ const isCtxLoad = ref(false)
 const isCommentLoad = ref(false)
 const isPageShow = ref(false)
 const son = ref()
+const editorStatus = ref('编辑')
 
 onMounted(() => {
-  FILE_MENU({}).then(res => {
-    console.log(res.data);
+  FILE_MENU({bu: store.state.userInfo.bu}).then(it => {
+    console.log(it);
     isMenuLoad.value = false
-    res.data.items.forEach(item => items.value.push(item))
+    it.items.forEach(item => items.value.push(item))
   })
 })
+
+const click = () => {
+  editorStatus.value = editorStatus.value === '编辑' ? '更新' : '编辑'
+  revert(isEditorShow)
+  height.value = document.body.clientHeight - 64
+  content.value = refineHtml(content.value)
+}
 
 const selectFileHandler = (param) => {
   isEditorShow.value = false
   isCtxLoad.value = true
   isCommentLoad.value = true
   isPageShow.value = true
-  GET_FILE({}).then(res => {
-    isCtxLoad.value = false
-    content.value = res.data.fileContent
-    fileInfo.value = res.data.fileInfo
-  })
+  GET_FILE({id: param.id})
+      .then(it => {
+        isCtxLoad.value = false
+        fileInfo.value = it.fileInfo
+        content.value = fileInfo.value.fileContent
+      }).catch(() => isCtxLoad.value = false)
 
-  COMMENT({}).then(res => {
-    isCommentLoad.value = false
-    console.log(res.data)
-    comments.value.splice(0, comments.value.length)
-    res.data.comments.forEach((comment) => comments.value.push(comment))
-  })
-  console.log(param)
-}
-
-const click = () => {
-  revert(isEditorShow)
-  height.value = document.body.clientHeight - 64
-  content.value = refineHtml(content.value)
+  COMMENT({id: param.id})
+      .then(it => {
+        isCommentLoad.value = false
+        comments.value.splice(0, comments.value.length)
+        it.comments.forEach((comment) => comments.value.push(comment))
+      }).catch(() => isCommentLoad.value = false)
 }
 
 const selectBuHandler = () => {

@@ -45,15 +45,14 @@
     </z-header>
     <div class="flex flex-col items-center overflow-auto gap-4 pb-16">
       <z-table :keys="tableProp.keys" :cols="tableProp.cols" :fields="tableProp.fields" :items="tableProp.items"/>
-      <z-pagination v-show="tableProp.fields.length !== 0"
-                    :visible="pageProp.visible" :current-page="pageProp.page" :total-page="pageProp.totalPage"
+      <z-pagination :visible="pageProp.visible" :current-page="pageProp.page" :total-page="pageProp.totalPage"
                     @select-page="selectPageHandler"/>
     </div>
   </div>
 </template>
 
 <script setup>
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 import ZHeadMenu from "@/components/head/ZHeadMenu";
 import ZButton from "@/components/ZButton";
 import ZAside from "@/components/ZAside";
@@ -70,13 +69,13 @@ const userInfo = computed(() => store.state.userInfo)
 const currentIndex = ref(0)
 const menu = ['用户管理', '记录管理', '文件管理', '发布通知']
 
-const pageProp = ref({
+const pageProp = reactive({
   page: 0,
   visible: false,
   totalPage: 0
 })
 
-const tableProp = ref({
+const tableProp = reactive({
   fields: [],
   keys: [],
   cols: [],
@@ -84,27 +83,27 @@ const tableProp = ref({
 })
 
 const setProps = (res, selectPage) => {
-  pageProp.value.visible = false
-  pageProp.value.page = selectPage
-  pageProp.value.totalPage = res.totalPage
-  tableProp.value = res
+  pageProp.visible = false
+  pageProp.page = selectPage
+  pageProp.totalPage = res.totalPage
+  Object.assign(tableProp, res)
 }
 const APIS = [USER_LIST, RECORD_LIST, FILE_LIST, NOTICE_LIST]
 const selectPageHandler = (page) => {
   const selectPage = parseInt(page)
-  pageProp.value.visible = true
+  pageProp.visible = true
   APIS[currentIndex.value]({page: selectPage, size: 20})
       .then(it => setProps(it, selectPage))
-      .catch(() => pageProp.value.visible = false)
+      .catch(() => pageProp.visible = false)
 }
 
 const menuSelect = (index) => {
   currentIndex.value = index
-  selectPageHandler(0)
+  selectPageHandler(1)
 }
 
 onMounted(() => {
-  selectPageHandler(0)
+  selectPageHandler(1)
 })
 
 const headButtonHandler = index => {
@@ -114,10 +113,10 @@ const headButtonHandler = index => {
 watch(
     () => currentIndex.value,
     () => {
-      tableProp.value.cols.splice(0, tableProp.value.cols.length)
-      tableProp.value.fields.splice(0, tableProp.value.fields.length)
-      tableProp.value.keys.splice(0, tableProp.value.keys.length)
-      tableProp.value.items.splice(0, tableProp.value.items.length)
+      tableProp.cols.splice(0, tableProp.cols.length)
+      tableProp.fields.splice(0, tableProp.fields.length)
+      tableProp.keys.splice(0, tableProp.keys.length)
+      tableProp.items.splice(0, tableProp.items.length)
     }
 )
 

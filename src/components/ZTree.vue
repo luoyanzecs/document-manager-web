@@ -16,7 +16,7 @@
         <span class="catalogue-base text-gray-500" @click.stop="folderClickHandler(index)">{{ item.title }}</span>
         <transition name="scrollin">
           <div v-show="isShow[index]" class="overflow-hidden" style="height: 0; transition: all .3s ease-in-out;">
-            <z-tree :catalogue="item.children" :level="level + 1" v-model:choose-id=fileClicked :is-show-componet="isShow[index]" @select-file="fileClickHandler"/>
+            <z-tree :catalogue="item.children" :level="level + 1" :choose-id=chooseId :is-show-componet="isShow[index]" @select-file="fileClickHandler"/>
           </div>
         </transition>
       </li>
@@ -57,7 +57,6 @@ const props = defineProps({
 
 const emit = defineEmits(['selectFile', 'update:chooseId'])
 const isShow = ref([])
-const fileClicked = ref('')
 
 let treeItemRefs = []
 
@@ -81,7 +80,6 @@ watch(
 
 const fileClickHandler = (item) => {
   if (props.chooseId === item.id) return
-  emit('update:chooseId', item.id)
   emit('selectFile', item)
 }
 let lastClickFolderTime = 0

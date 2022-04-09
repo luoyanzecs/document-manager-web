@@ -39,8 +39,15 @@ watch(
     }
 )
 
-const toolbarConfig = {}
+const toolbarConfig = {
+  insertKeys: {
+    index: 20,
+    keys: ['uploadImage']
+  },
+  excludeKeys: ['insertVideo', 'emoji', 'todo', 'fullScreen', 'group-image']
+}
 const editorConfig = { placeholder: '请输入内容...' }
+
 
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
@@ -56,5 +63,18 @@ const handleCreated = (editor) => {
 </script>
 
 <style scoped>
+/deep/ ul {
+  list-style-type: disc !important;
+}
+/deep/ ul li {
+  list-style: disc !important;
+}
 
+/deep/ ol {
+  list-style-type: decimal !important;
+}
+
+/deep/ ol li {
+  list-style: decimal !important;
+}
 </style>

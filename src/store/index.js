@@ -24,7 +24,6 @@ export const store = createStore({
   state() {
     return {
       notificationQuene: [],
-      token: "",
       userInfo: {
         name: '',
         avatar: '',

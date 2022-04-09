@@ -5,7 +5,7 @@ Mock.setup({
 })
 
 Mock.mock('http://localhost:9999/api/login', 'post', {
-  'status': Boolean,
+  'token': '123213123',
   'userInfo': {
     'name': '@FIRST @LAST',
     'avatar': '@image',

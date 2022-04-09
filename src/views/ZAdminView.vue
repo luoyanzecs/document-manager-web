@@ -44,16 +44,15 @@
       </template>
     </z-header>
     <div class="flex flex-col items-center overflow-auto gap-4 pb-16">
-      <z-table :keys="tableProp.keys" :cols="tableProp.cols" :fields="tableProp.fields" :items="tableProp.items"/>
-      <z-pagination :visible="pageProp.visible" :current-page="pageProp.page" :total-page="pageProp.totalPage"
-                    @select-page="selectPageHandler"/>
+      <z-table v-bind="tableProp"/>
+      <z-pagination v-show="tableProp.fields.length !== 0" v-bind="pageProp" @select-page="selectPageHandler"/>
     </div>
   </div>
 </template>
 
 <script setup>
 import {computed, onMounted, reactive, ref, watch} from "vue";
-import ZHeadMenu from "@/components/head/ZHeadMenu";
+import ZHeadMenu from "@/components/ZHeadMenu";
 import ZButton from "@/components/ZButton";
 import ZAside from "@/components/ZAside";
 import ZHeader from "@/components/ZHeader";
@@ -70,7 +69,7 @@ const currentIndex = ref(0)
 const menu = ['用户管理', '记录管理', '文件管理', '发布通知']
 
 const pageProp = reactive({
-  page: 0,
+  currentPage: 0,
   visible: false,
   totalPage: 0
 })
@@ -84,7 +83,7 @@ const tableProp = reactive({
 
 const setProps = (res, selectPage) => {
   pageProp.visible = false
-  pageProp.page = selectPage
+  pageProp.currentPage = selectPage
   pageProp.totalPage = res.totalPage
   Object.assign(tableProp, res)
 }
@@ -107,6 +106,20 @@ onMounted(() => {
 })
 
 const headButtonHandler = index => {
+  switch (index) {
+    case '00':
+    case '01':
+    case '10':
+    case '12':
+    case '13':
+    case '20':
+    case '21':
+    case '22':
+    case '30':
+    case '31':
+    case '32':
+    case '33':
+  }
   console.log(index)
 }
 

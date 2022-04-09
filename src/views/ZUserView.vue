@@ -54,7 +54,7 @@
 <script setup>
 import {computed, onMounted, ref} from 'vue'
 import Header from "@/components/ZHeader.vue";
-import ZHeadMenu from "@/components/head/ZHeadMenu";
+import ZHeadMenu from "@/components/ZHeadMenu";
 import ZButton from "@/components/ZButton";
 import ZAside from "@/components/ZAside.vue";
 import ZAvatar from "@/components/ZAvatar.vue";
@@ -64,7 +64,7 @@ import {FILE_MENU, COMMENT, GET_FILE} from "@/api";
 import {useStore} from "vuex";
 import ZTinymce from "@/components/ZTinymce.vue";
 import ZContext from "@/components/ZContext";
-import {refineHtml, revert} from "@/tool/utils.ts";
+import {revert} from "@/tool/utils.ts";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
@@ -95,7 +95,7 @@ const click = () => {
   editorStatus.value = editorStatus.value === '编辑' ? '更新' : '编辑'
   revert(isEditorShow)
   height.value = document.body.clientHeight - 64
-  content.value = refineHtml(content.value)
+  // content.value = refineHtml(content.value)
 }
 
 const selectFileHandler = (param) => {

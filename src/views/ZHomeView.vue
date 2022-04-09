@@ -1,7 +1,8 @@
 <template>
   <div class="pos-center flex-col gap-8 w-full">
     <div class="min-h-screen max-w-screen-xl pos-center flex-col space-y-8 ">
-      <div class="rounded-full h-32 w-32 flex items-center justify-center bg-gradient-to-bl from-green-400 to-blue-500 filter blur-sm"></div>
+      <div
+          class="rounded-full h-32 w-32 flex items-center justify-center bg-gradient-to-bl from-green-400 to-blue-500 filter blur-sm"></div>
       <div>
         <span class="text-xl font-bold tracking-widest">登录</span>
       </div>
@@ -9,19 +10,20 @@
       <input class="input-home" type="password" v-model="password" placeholder="输入密码">
       <z-switch class="py-2 font-light" left="管理员" right="员工" v-model:value="switchValue"/>
       <div class="transform scale-110">
-        <z-button fill="登录" :class="{'animate-shake' : isButtonShake}" :load-visible="loadVisible" @click="loginHandler"/>
+        <z-button fill="登录" :class="{'animate-shake' : isButtonShake}" :load-visible="loadVisible"
+                  @click="loginHandler"/>
       </div>
 
     </div>
     <div class="justify-center text-gray-400 py-8 ">
-        <p>Copyright © 2021-2022 Yanze Luo</p>
+      <p>Copyright © 2021-2022 Yanze Luo</p>
     </div>
   </div>
 </template>
 
 <script setup>
 import {computed, ref} from 'vue'
-import { useRouter } from 'vue-router'
+import {useRouter} from 'vue-router'
 import ZButton from "@/components/ZButton";
 import ZSwitch from "@/components/ZSwitch";
 import {LOGIN} from "@/api";
@@ -50,15 +52,14 @@ const loginHandler = () => {
     return
   }
   loadVisible.value = true
-  LOGIN({
-    username: account.value,
-    password: password.value
-  }).then(it => {
-    console.log(it)
-    loadVisible.value = false
-    store.commit('updateUserInfo', it.userInfo)
-    router.push(switchValue.value ? '/user' : '/admin')
-  })
+  LOGIN({username: account.value, password: password.value})
+      .then(it => {
+        localStorage.setItem('token', it.token)
+        localStorage.setItem('name', JSON.stringify(it.userInfo))
+        loadVisible.value = false
+        store.commit('updateUserInfo', it.userInfo)
+        router.push(switchValue.value ? '/user' : '/admin')
+      })
 }
 </script>
 

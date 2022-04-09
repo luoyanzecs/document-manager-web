@@ -4,8 +4,8 @@ import {store} from "@/store";
 const generateHead = () => {
   return {
     timestamp: Date.now() + "",
-    username: store.state.userInfo.name,
-    token: store.state.token,
+    username: store.state.userInfo.name || localStorage.getItem('name'),
+    token: localStorage.getItem('token'),
     role: store.state.userInfo.role
   }
 }
@@ -27,7 +27,7 @@ const sendHttp = (url, params, callback) => {
   return callback(url, params)
     .then(validateResponseHead)
     .catch(error => {
-      // console.log(error.toJSON())
+      console.log(error)
       // 错误处理
       if (error.response) {
         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围

@@ -43,10 +43,7 @@ defineProps({
   }
 })
 const input = ref();
-const go = () => {
-  console.log(input.value.value);
-  emit('selectPage', input.value.value)
-}
+const go = () => emit('selectPage', input.value.value)
 
 </script>
 

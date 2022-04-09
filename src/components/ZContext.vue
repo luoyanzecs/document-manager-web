@@ -2,36 +2,23 @@
   <template v-if="fileInfo">
     <p class="mb-1.5 text-gray-400">上次编辑于 {{ fileInfo.lastEditTime }} by {{ fileInfo.editor }}</p>
   </template>
-  <div ref="rootCtx"></div>
+  <div v-html="ctx"></div>
 </template>
 
-<script setup lang="ts">
-import {computed, defineProps, onMounted, ref, watch} from "vue";
+<script setup>
+import {computed, defineProps, watch} from "vue";
 
 const props = defineProps({
-  ctx: {
-    type: String,
-    default: (): string => '',
-    required: true
-  },
-  fileInfo: {
-    type: Object,
-    required: true
-  }
+  ctx: { type: String, default: '', required: true },
+  fileInfo: { type: Object, required: true }
 })
 
-const rootCtx = ref()
 const ctx = computed(() => props.ctx)
-onMounted(() => {
-  rootCtx.value.innerHTML = props.ctx
-})
 
 watch(
     () => ctx,
     (newValue) => {
-      rootCtx.value.innerHTML = newValue
-      let el = rootCtx.value.getElementsByTagName('table');
-      console.log(el);
+      console.log(newValue);
     }
 )
 </script>

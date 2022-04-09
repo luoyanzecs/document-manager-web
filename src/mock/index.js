@@ -4,6 +4,24 @@ Mock.setup({
   timeout: '600-2000'
 })
 
+Mock.mock('http://localhost:9999/api/user/createFile', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/user/updateFile', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
 Mock.mock('http://localhost:9999/api/login', 'post', {
   'token': '123213123',
   'userInfo': {
@@ -19,15 +37,19 @@ Mock.mock('http://localhost:9999/api/user/menu', 'post', {
   'items|5-10': [{
     'id': /\d{8}/,
     'title': '@ctitle(10, 20)',
+    'isDir': '@boolean',
     'children|2-10': [{
       'id': /\d{8}/,
       'title': '@ctitle(10, 20)',
+      'isDir': '@boolean',
       'children|2-5': [{
         'id': /\d{8}/,
         'title': '@ctitle(10, 20)',
+        'isDir': '@boolean',
         'children|0-5': [{
           'id': /\d{8}/,
           'title': '@ctitle(10, 20)',
+          'isDir': '@boolean',
           'children|0': []
         }]
       }]

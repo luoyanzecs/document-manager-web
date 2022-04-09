@@ -32,18 +32,20 @@ const sendHttp = (url, params, callback) => {
       if (error.response) {
         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
         let head = error.response.data.head;
-        store.commit('unshiftNotice', {message: head.message, type: 2, id: Date.now() + ""})
+        store.commit('unshiftNotice', {message: head.message, type: 2})
       } else if (error.request) {
         // 请求已经成功发起，但没有收到响应
-        store.commit('unshiftNotice', {message: '请求超时', type: 2, id: Date.now() + ""})
+        store.commit('unshiftNotice', {message: '请求超时', type: 2})
       } else {
         // 发送请求时出了点问题
-        store.commit('unshiftNotice', {message: "客户端异常", type: 2, id: Date.now() + ""})
+        store.commit('unshiftNotice', {message: "客户端异常", type: 2})
       }
     })
 
 }
 
+export const CREATE_FILE = params => sendHttp('user/createFile', params, post)
+export const UPDATE_FILE = params => sendHttp('user/updateFile', params, post)
 export const LOGIN = params => sendHttp('login', params, post)
 export const FILE_MENU = params => sendHttp('user/menu', params, post)
 export const COMMENT = params => sendHttp('user/comment', params, post)

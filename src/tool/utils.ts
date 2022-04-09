@@ -7,3 +7,7 @@ export const sleep = (time: number) => {
 export const revert = (bool:Ref<boolean>) => {
   bool.value = !bool.value
 }
+
+export const revertArray= (...values:Ref<boolean>[]) => {
+  values.forEach(revert)
+}

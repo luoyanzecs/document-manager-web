@@ -37,6 +37,7 @@ export const store = createStore({
   mutations: {
     unshiftNotice (state, notice) {
       notice.delay = getDelay()
+      notice.id = notice.id || Date.now() + ''
       state.notificationQuene.unshift(notice)
       state.notificationQuene.splice(6)
     },

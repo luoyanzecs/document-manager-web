@@ -9,13 +9,13 @@
   </template>
   <template v-if="catalogue.length !== 0">
     <ul v-for="(item, index) in catalogue" :key="item.id" :class="[{'border-l' : level !== 0}, 'border-gray-300', 'ml-1', 'pl-1']">
-      <li :ref="treeItemRef" v-if="item.children === undefined || item.children.length === 0" @click.stop="fileClickHandler(item)">
+      <li :ref="treeItemRef" v-if="!item.isDir" @click.stop="fileClickHandler(item)">
         <span :class="['cata-link', {'bg-blue-200': item.id === chooseId}]">{{ item.title }}</span>
       </li>
       <li v-else :ref="treeItemRef" >
         <span class="catalogue-base text-gray-500" @click.stop="folderClickHandler(index)">{{ item.title }}</span>
         <transition name="scrollin">
-          <div v-show="isShow[index]" class="overflow-hidden" style="height: 0; transition: all .3s ease-in-out;">
+          <div v-show="isShow[index]"  style="height: 0; transition: all .3s ease-in-out;">
             <z-tree :catalogue="item.children" :level="level + 1" :choose-id=chooseId :is-show-componet="isShow[index]" @select-file="fileClickHandler"/>
           </div>
         </transition>
@@ -45,7 +45,6 @@ const treeItemRef = el => el && treeItemRefs.push(el)
 
 onBeforeUpdate(() => treeItemRefs = [])
 
-
 onMounted(() => {
 })
 
@@ -64,14 +63,14 @@ const folderClickHandler = (index) => {
   if (Date.now() - lastClickFolderTime > 350 && treeItemRefs[index].childNodes[1]) {
     let subCtx = treeItemRefs[index].childNodes[1];
     if (isShow.value[index]) {
-      subCtx.style = `height: ${treeItemRefs[index].childNodes[1].clientHeight}px; transition: all .3s ease-in-out;`
+      subCtx.style = `height: ${treeItemRefs[index].childNodes[1].clientHeight}px; transition: all .2s ease-in-out;`
       sleep(10).then(() => {
-        subCtx.style = `height: 0; transition: all .3s ease-in-out;`
+        subCtx.style = `height: 0; transition: all .2s ease-in-out;`
         isShow.value[index] = false
       })
     } else {
-      subCtx.style = `height: 0; transition: all .3s ease-in-out;`
-      subCtx.style = `height: ${treeItemRefs[index].clientHeight * (subCtx.childElementCount)}px; transition: all .3s ease-in-out;`
+      subCtx.style = `height: 0; transition: all .2s ease-in-out;`
+      subCtx.style = `height: ${treeItemRefs[index].clientHeight * (subCtx.childElementCount)}px; transition: all .2s ease-in-out;`
       isShow.value[index] = true
       sleep(300).then(() => subCtx.style = '')
     }
@@ -90,11 +89,11 @@ const folderClickHandler = (index) => {
 }
 
 .scrollin-enter-active {
-  animation: scrollin ease-in-out .3s;
+  animation: scrollin ease-in-out .2s;
 }
 
 .scrollin-leave-active {
-  animation: scrollin ease-in-out .3s reverse;
+  animation: scrollin ease-in-out .2s reverse;
 }
 
 @keyframes scrollin {

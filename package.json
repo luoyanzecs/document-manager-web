@@ -11,8 +11,8 @@
     "build-mock": "vue-cli-service build --mode mock"
   },
   "dependencies": {
-    "@tinymce/tinymce-vue": "^4.0.6",
     "@vueuse/core": "^7.5.5",
+    "@wangeditor/editor-for-vue": "^5.1.9",
     "autoprefixer": "^9.8.8",
     "axios": "^0.26.0",
     "core-js": "^3.6.5",

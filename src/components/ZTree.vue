@@ -25,34 +25,15 @@
 </template>
 
 <script setup>
-import {defineProps, defineEmits, onMounted, ref, watch, onBeforeUpdate, onUpdated} from "vue";
+import {defineProps, defineEmits, onMounted, ref, watch, onBeforeUpdate} from "vue";
 import {sleep} from "@/tool/utils";
 
-
 const props = defineProps({
-  catalogue: {
-    type: Array,
-    required: true
-  },
-  chooseId: {
-    type: String,
-    required: false
-  },
-  level: {
-    type: Number,
-    default: 0,
-    required: false
-  },
-  isShowComponet: {
-    type: Boolean,
-    default: false,
-    required: false
-  },
-  isMenuLoad: {
-    type: Boolean,
-    default: false,
-    required: false
-  }
+  catalogue: {type: Array, required: true},
+  chooseId: {type: String, required: false},
+  level: {type: Number, default: 0, required: false},
+  isShowComponet: {type: Boolean, default: false, required: false},
+  isMenuLoad: {type: Boolean, default: false, required: false}
 })
 
 const emit = defineEmits(['selectFile', 'update:chooseId'])
@@ -64,24 +45,20 @@ const treeItemRef = el => el && treeItemRefs.push(el)
 
 onBeforeUpdate(() => treeItemRefs = [])
 
-onUpdated(() => {
-  // console.log(treeItemRefs)
-})
 
 onMounted(() => {
 })
 
 watch(
     () => props.isShowComponet,
-    () => {
-      isShow.value.fill(false)
-    }
+    () => isShow.value.fill(false)
 )
 
 const fileClickHandler = (item) => {
   if (props.chooseId === item.id) return
   emit('selectFile', item)
 }
+
 let lastClickFolderTime = 0
 const folderClickHandler = (index) => {
   if (Date.now() - lastClickFolderTime > 350 && treeItemRefs[index].childNodes[1]) {

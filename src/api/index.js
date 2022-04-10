@@ -45,6 +45,7 @@ const sendHttp = (url, params, callback) => {
     .catch(errorHandler)
 }
 
+export const GET_BU = params => sendHttp('getbu', params, post)
 export const LEAVE_MESSAGE = params => sendHttp('user/leaveMessage', params, post)
 export const UPLOAD_ATTACH = file => uploader('attach', file)
 export const SEARCH = params => sendHttp('search', params, post)

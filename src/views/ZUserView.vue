@@ -1,7 +1,9 @@
 <template>
   <z-aside>
     <template #right>
-      <z-button :fill="bu" @click="buttonClickHandler('selectBu')"/>
+      <select v-model="bu" style="height: 2.25rem" class="min-w-4 focus:outline-none bg-blue-500 rounded-2xl py-2 pl-1.5 text-center text-sm text-white tracking-widest flex-shrink-0 select-none">
+        <option v-for="bu in buList" :value="bu" :key="bu"> {{ bu }}</option>
+      </select>
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
@@ -10,7 +12,7 @@
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        <z-tree v-else :catalogue="APIRES.menuItems" :choose-id="chooseFileId" @select-file="selectFileHandler"/>
+        <z-tree v-else class="pb-8" :catalogue="APIRES.menuItems" :choose-id="chooseFileId" @select-file="selectFileHandler"/>
       </div>
     </template>
   </z-aside>
@@ -29,11 +31,12 @@
       </template>
     </Header>
     <div class="overflow-auto flex-grow flex flex-col items-stretch">
-      <template v-if="LOADER.isEditorShow">
-        <z-editor v-if="APIRES.fileInfo" v-model:content="APIRES.fileInfo.fileContent"/>
+      <template v-if="APIRES.fileInfo && LOADER.isEditorShow">
+        <z-editor v-model:content="APIRES.fileInfo.fileContent"/>
         <div class="flex p-4 items-center gap-2">
-          <div class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center">
-            <span class="text-sm text-gray-500 cursor-pointer">附件1</span>
+          <div v-for="attach in APIRES.fileInfo.attaches" :key="attach.link" @click="downloadAttach(attach.link)"
+               class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center p-2">
+            <span class="text-sm text-gray-500 cursor-pointer text-center">{{ attach.name }}</span>
           </div>
         </div>
       </template>
@@ -51,8 +54,9 @@
           <p class="mb-1.5 text-gray-400 text-sm">上次编辑于 {{ APIRES.fileInfo.lastEditTime }} by {{APIRES.fileInfo.editor }}</p>
           <div v-html="APIRES.fileInfo.fileContent"></div>
           <div class="flex py-8 items-center gap-2">
-            <div class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center">
-              <span class="text-sm text-gray-500 cursor-pointer">附件1</span>
+            <div v-for="attach in APIRES.fileInfo.attaches" :key="attach.link" @click="downloadAttach(attach.link)"
+                 class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center p-2">
+              <span class="text-sm text-gray-500 cursor-pointer text-center">{{ attach.name }}</span>
             </div>
           </div>
         </div>
@@ -81,7 +85,7 @@
         <div class="space-x-4 flex items-center text-gray-500">
           <label class="w-24 border-r-2 px-2" for="createFileName">文件名</label>
           <input type="text" v-model="newFile.name" class="border rounded-lg px-2 py-1 w-72 focus:outline-none" id="createFileName"
-                 placeholder="输入文件名" spellcheck="false">
+                 placeholder="输入文件名" spellcheck="false" autocomplete="off">
         </div>
         <div class="space-x-4 flex items-center text-gray-500">
           <p class="w-24 border-r-2 px-2">文件夹？</p>
@@ -126,7 +130,7 @@ import ZAside from "@/components/ZAside.vue";
 import ZAvatar from "@/components/ZAvatar.vue";
 import ZTree from "@/components/ZTree.vue";
 import ZComment from "@/components/ZComment.vue";
-import {FILE_MENU, COMMENT, GET_FILE, UPDATE_FILE, CREATE_FILE, SEARCH} from "@/api";
+import {FILE_MENU, COMMENT, GET_FILE, UPDATE_FILE, CREATE_FILE, SEARCH, GET_BU} from "@/api";
 import {useStore} from "vuex";
 import ZEditor from "@/components/ZEditor";
 import { html2json } from "html2json"
@@ -135,6 +139,7 @@ import {transformTime} from "@/tool/utils";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
+const buList = ref([])
 const bu = ref(userInfo.value.bu.length === 0 ? '部门' : userInfo.value.bu)
 const APIRES = reactive({
   fileInfo: undefined,
@@ -170,6 +175,9 @@ onMounted(() => {
     LOADER.isMenuLoad = false
     it.items.forEach(item => APIRES.menuItems.push(item))
   })
+  GET_BU({}).then(it => {
+    buList.value = it.buList
+  })
 })
 
 function searchDelay(callback, delay=100) {
@@ -181,7 +189,17 @@ function searchDelay(callback, delay=100) {
     }, delay);
   };
 }
-
+watch(
+    () => bu.value,
+    (nv) => {
+      LOADER.isMenuLoad = true
+      FILE_MENU({bu: nv}).then(it => {
+        LOADER.isMenuLoad = false
+        APIRES.menuItems = new Array(0)
+        it.items.forEach(item => APIRES.menuItems.push(item))
+      })
+    }
+)
 watch(
     () => search.input,
     searchDelay(value => {
@@ -206,7 +224,7 @@ const buttonClickHandler = (index) => {
     case 'newFile':
       LOADER.isShowCreateBtnDailog = true
       break
-    case 'attach':
+    case 'uploadAttach':
       break
     case 'edit': {
       if (APIRES.fileInfo === undefined) {
@@ -236,6 +254,10 @@ const buttonClickHandler = (index) => {
       break
     }
     case 'newFileConfirm':{
+      if (newFile.name === '') {
+        store.commit('unshiftNotice', {type: 2, message: '文件名不能为空'})
+        break
+      }
       LOADER.isCreateFileLoad = true
       const params = {
         title: newFile.name,
@@ -261,13 +283,16 @@ const buttonClickHandler = (index) => {
       })
       break
     }
-    case 'selectBu':
-      break
   }
+}
+
+function downloadAttach(link) {
+  console.log(link)
 }
 
 const searchDirectHander = (item) => {
   LOADER.isShowSearchBtnDailog = !LOADER.isShowSearchBtnDailog
+  chooseFileId.value = item.id
   selectFileHandler({id: item.id})
   console.log(item)
 }

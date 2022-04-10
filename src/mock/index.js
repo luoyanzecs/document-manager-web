@@ -4,6 +4,29 @@ Mock.setup({
   timeout: '600-2000'
 })
 
+Mock.mock('http://localhost:9999/api/user/leaveMessage', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/search', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  },
+  'searchResults|3-6': [{
+    'id': /\d{8}/,
+    'title': '@ctitle(6, 9)',
+    'ctx': '@csentence(10, 12)'
+  }]
+})
+
 Mock.mock('http://localhost:9999/api/user/createFile', 'post', {
   'head': {
     'status': 'success',

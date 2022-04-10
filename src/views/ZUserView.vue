@@ -5,7 +5,7 @@
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
-      <div class="overflow-auto">
+      <div class="overflow-auto flex-1">
         <z-tree :catalogue="APIRES.menuItems" :choose-id="chooseFileId" :is-menu-load="LOADER.isMenuLoad"
                 @select-file="selectFileHandler"/>
       </div>
@@ -16,8 +16,8 @@
       <template #tools>
         <z-head-menu>
           <z-button fill="搜索" @click="buttonClickHandler('search')"/>
-          <z-button fill="新建" @click="buttonClickHandler('newFile')"/>
-          <z-button v-show="LOADER.isEditorShow" fill="附件" @click="buttonClickHandler('attach')"/>
+          <z-button fill="新建" v-show="!LOADER.isEditorShow" @click="buttonClickHandler('newFile')"/>
+          <z-button fill="附件" v-show="LOADER.isEditorShow" @click="buttonClickHandler('attach')"/>
           <z-button :fill="editorStatus" @click="buttonClickHandler('edit')" :load-visible="LOADER.isUpdateFileLoad"/>
         </z-head-menu>
       </template>
@@ -55,15 +55,15 @@
         </div>
         <div v-if="APIRES.fileInfo" class="pb-16">
           <hr class="my-4">
-          <z-comment :info="userInfo" :comments-list="APIRES.comments" :is-comment-load="LOADER.isCommentLoad"/>
+          <z-comment :info="userInfo" :comments-list="APIRES.comments" :file-id=chooseFileId :is-comment-load="LOADER.isCommentLoad"/>
         </div>
       </template>
     </div>
   </div>
   <transition-group name="fade">
     <div v-show="LOADER.isShowCreateBtnDailog" :key="1"
-         class="absolute z-30 left-0 top-0 w-screen h-screen pos-center bg-black bg-opacity-50" @click.stop>
-      <div class="w-7/12 bg-white rounded-xl p-4 flex flex-col gap-4">
+         class="absolute z-30 left-0 top-0 w-screen h-screen bg-black bg-opacity-25" @click.stop>
+      <div class="w-35 bg-white rounded-xl p-4 flex flex-col gap-4 mt-24 mx-auto">
         <p class="text-2xl text-gray-700">请确认您的信息</p>
         <hr>
         <div class="space-x-4 flex items-center text-gray-500">
@@ -85,8 +85,29 @@
           <p class="cursor-pointer text-blue-500" @click="newFile.isDir = !newFile.isDir">{{ newFile.isDir ? '是' : '否' }}</p>
         </div>
         <div class="space-x-4 py-2">
-          <z-button @click="buttonClickHandler('newFileConfirm')" :load-visible="LOADER.isCreateFileLoad">确认</z-button>
-          <z-button @click="LOADER.isShowCreateBtnDailog = !LOADER.isShowCreateBtnDailog">取消</z-button>
+          <z-button fill="确认" @click="buttonClickHandler('newFileConfirm')" :load-visible="LOADER.isCreateFileLoad"/>
+          <z-button fill="取消" @click="LOADER.isShowCreateBtnDailog = !LOADER.isShowCreateBtnDailog"/>
+        </div>
+      </div>
+    </div>
+    <div v-show="LOADER.isShowSearchBtnDailog" class="absolute z-30 left-0 top-0 w-screen h-screen bg-black bg-opacity-25"
+         @click.stop="LOADER.isShowSearchBtnDailog = !LOADER.isShowSearchBtnDailog"
+         :key="2">
+      <div class="w-35 bg-white rounded-xl p-4 flex flex-col gap-4 mt-24 mx-auto min-h-15" @click.stop>
+        <input type="text" v-model="search.input"
+               class="border rounded-md text-gray-500 p-2 w-full text-2xl focus:outline-none focus:ring-blue-500 focus:ring-2"
+               placeholder="查询内容" spellcheck="false">
+        <svg v-if="search.ctxLoad"
+             class="text-gray-500 w-10 h-10 animate-spin mx-auto mt-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <div v-else class="flex flex-col gap-2">
+          <div v-for="item in search.res" :key="item.id" @click="searchDirectHander(item)"
+               class="px-4 py-2 hover:bg-blue-400 rounded-md shadow cursor-pointer" >
+            <p>{{ item.title }}</p>
+            <p>{{ item.ctx }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -94,7 +115,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, reactive, ref} from 'vue'
+import {computed, onMounted, reactive, ref, watch} from 'vue'
 import Header from "@/components/ZHeader.vue";
 import ZHeadMenu from "@/components/ZHeadMenu";
 import ZButton from "@/components/ZButton";
@@ -102,7 +123,7 @@ import ZAside from "@/components/ZAside.vue";
 import ZAvatar from "@/components/ZAvatar.vue";
 import ZTree from "@/components/ZTree.vue";
 import ZComment from "@/components/ZComment.vue";
-import {FILE_MENU, COMMENT, GET_FILE, UPDATE_FILE, CREATE_FILE} from "@/api";
+import {FILE_MENU, COMMENT, GET_FILE, UPDATE_FILE, CREATE_FILE, SEARCH} from "@/api";
 import {useStore} from "vuex";
 import ZEditor from "@/components/ZEditor";
 import { html2json } from "html2json"
@@ -124,7 +145,8 @@ const LOADER = reactive({
   isCommentLoad: false,
   isShowCreateBtnDailog: false,
   isUpdateFileLoad: false,
-  isCreateFileLoad: false
+  isCreateFileLoad: false,
+  isShowSearchBtnDailog: false
 })
 const chooseFileId = ref('')
 const editorStatus = computed(() => LOADER.isEditorShow ? '更新' : '编辑')
@@ -134,6 +156,12 @@ const newFile = reactive({
   parentDirId: ''
 })
 
+const search = reactive({
+  input: '',
+  res: [],
+  ctxLoad: false
+})
+
 onMounted(() => {
   FILE_MENU({bu: store.state.userInfo.bu}).then(it => {
     LOADER.isMenuLoad = false
@@ -141,9 +169,36 @@ onMounted(() => {
   })
 })
 
+function searchDelay(callback, delay=100) {
+  let timer = ''
+  return nv => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      callback(nv);
+    }, delay);
+  };
+}
+
+watch(
+    () => search.input,
+    searchDelay(value => {
+      const param = {
+        input: value
+      }
+      search.ctxLoad = true
+      SEARCH(param).then(it => {
+        if (param.input === search.input) {
+          search.ctxLoad = false
+          search.res = it.searchResults
+        }
+      })
+    })
+)
+
 const buttonClickHandler = (index) => {
   switch (index) {
     case 'search':
+      LOADER.isShowSearchBtnDailog = !LOADER.isShowSearchBtnDailog
       break
     case 'newFile':
       LOADER.isShowCreateBtnDailog = true
@@ -199,6 +254,12 @@ const buttonClickHandler = (index) => {
     case 'selectBu':
       break
   }
+}
+
+const searchDirectHander = (item) => {
+  LOADER.isShowSearchBtnDailog = !LOADER.isShowSearchBtnDailog
+  selectFileHandler({id: item.id})
+  console.log(item)
 }
 
 const selectFileHandler = (param) => {

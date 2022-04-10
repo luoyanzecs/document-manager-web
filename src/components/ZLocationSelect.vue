@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-1 flex-grow ml-2">
     <div class="flex">
       <div v-if="!isTop" class="w-4 h-4 border-l-2 border-b-2 rounded-bl-lg border-blue-300"></div>
-      <select class="focus:outline-none border rounded flex-1" v-model="dirId">
+      <select class="focus:outline-none border rounded-lg p-0.5 flex-1" v-model="dirId">
         <option v-for="dir in dirs" :key="dir.id" :value="dir.id"> {{ dir.title }}</option>
       </select>
     </div>

@@ -1,4 +1,4 @@
-import {post} from './http'
+import {post, uploader} from './http'
 import {store} from "@/store";
 
 const generateHead = () => {
@@ -22,28 +22,32 @@ const validateResponseHead = res => {
   return res.data
 }
 
+const errorHandler = (error) => {
+  console.log(error)
+  // 错误处理
+  if (error.response) {
+    // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+    let head = error.response.data.head;
+    store.commit('unshiftNotice', {message: head.message, type: 2})
+  } else if (error.request) {
+    // 请求已经成功发起，但没有收到响应
+    store.commit('unshiftNotice', {message: '请求超时', type: 2})
+  } else {
+    // 发送请求时出了点问题
+    store.commit('unshiftNotice', {message: "客户端异常", type: 2})
+  }
+}
+
 const sendHttp = (url, params, callback) => {
   params["head"] = generateHead()
   return callback(url, params)
     .then(validateResponseHead)
-    .catch(error => {
-      console.log(error)
-      // 错误处理
-      if (error.response) {
-        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-        let head = error.response.data.head;
-        store.commit('unshiftNotice', {message: head.message, type: 2})
-      } else if (error.request) {
-        // 请求已经成功发起，但没有收到响应
-        store.commit('unshiftNotice', {message: '请求超时', type: 2})
-      } else {
-        // 发送请求时出了点问题
-        store.commit('unshiftNotice', {message: "客户端异常", type: 2})
-      }
-    })
-
+    .catch(errorHandler)
 }
 
+export const LEAVE_MESSAGE = params => sendHttp('user/leaveMessage', params, post)
+export const UPLOAD_ATTACH = file => uploader('attach', file)
+export const SEARCH = params => sendHttp('search', params, post)
 export const CREATE_FILE = params => sendHttp('user/createFile', params, post)
 export const UPDATE_FILE = params => sendHttp('user/updateFile', params, post)
 export const LOGIN = params => sendHttp('login', params, post)

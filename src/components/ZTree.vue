@@ -1,94 +1,63 @@
-<template>
-  <template v-if="level === 0 && isMenuLoad">
-    <div v-for="i of 3" :key="i" class="animate-pulse flex flex-col space-y-1 m-2">
-      <div class="bg-gray-300 h-4 rounded"/>
-      <div class="bg-gray-300 h-4 rounded ml-4"/>
-      <div class="bg-gray-300 h-4 rounded ml-4"/>
-      <div class="bg-gray-300 h-4 rounded ml-4"/>
-    </div>
-  </template>
-  <template v-if="catalogueList.length !== 0">
-    <ul v-for="(item, index) in catalogueList"
-        :key="item.id"
-        :class="[{'border-l' : level !== 0}, 'border-gray-300', 'ml-1', 'pl-1']"
-    >
-      <li v-if="item.children === undefined || item.children.length === 0" @click.stop="fileClickHandler(item)">
-        <span :class="['cata-link', {'bg-blue-200': item.id === chooseId}]">{{ item.title }}</span>
-      </li>
-      <li v-else>
-        <span class="catalogue-base text-gray-500" @click.stop="folderClickHandler(index)">
-          {{ item.title }}
-        </span>
-        <transition name="scrollin">
-          <div v-show="isShow[index]">
-            <z-tree :catalogue="item.children"
-                    :level="level + 1"
-                    :choose-id = fileClicked
-                    :is-show-componet="isShow[index]"
-                    @select-file="fileClickHandler"/>
-          </div>
-        </transition>
-      </li>
-    </ul>
-  </template>
+<template v-if="catalogue.length !== 0">
+  <ul class="overflow-x-visible select-none">
+    <li v-for="(item, index) in catalogue" :key="item.id" :ref="treeItemRef" :class="[{'border-l' : level !== 0}, 'border-gray-300', 'ml-1', 'pl-1']">
+      <div v-if="!item.isDir" @click.stop="fileClickHandler(item)" :class="['cata-link', {'bg-blue-200': item.id === chooseId}]">{{ item.title }}</div>
+      <div v-else @click.stop="folderClickHandler(index)" class="catalogue-base text-gray-500">{{ item.title }}</div>
+      <transition name="scrollin" v-if="item.isDir">
+        <z-tree v-show="isShow[index]" @select-file="fileClickHandler"
+                :catalogue="item.children" :level="level + 1" :choose-id="chooseId" :is-show-componet="isShow[index]" />
+      </transition>
+    </li>
+  </ul>
 </template>
 
-<script setup lang="ts">
-import {defineProps, defineEmits, computed, onMounted, ref, watch, PropType, Ref} from "vue";
-
-interface Catalogue {
-  id: string,
-  title: string,
-  children: Array<Catalogue>
-}
+<script setup>
+import {defineProps, defineEmits, ref, watch, onBeforeUpdate} from "vue";
+import {sleep} from "@/tool/utils";
 
 const props = defineProps({
-  catalogue: {
-    type: Array as PropType<Array<Catalogue>>,
-    default: (): Array<Catalogue> => [],
-    required: true
-  },
-  chooseId: {
-    type: String,
-    default: (): string => '',
-    required: false
-  },
-  level: {
-    type: Number,
-    default: 0,
-    required: false
-  },
-  isShowComponet: {
-    type: Boolean,
-    default: false,
-    required: false
-  },
-  isMenuLoad: {
-    type: Boolean,
-    default: false,
-    required: false
-  }
+  catalogue: {type: Array, required: true},
+  chooseId: {type: String, required: false},
+  level: {type: Number, default: 0, required: false},
+  isShowComponet: {type: Boolean, default: false, required: false},
 })
 
 const emit = defineEmits(['selectFile'])
-const catalogueList: Ref<Catalogue[]> = computed(() => props.catalogue)
-const isShow: Ref<boolean[]> = ref([])
-const fileClicked: Ref<string> = ref('')
+const isShow = ref([])
 
-onMounted(() => {
-  isShow.value = new Array(catalogueList.value.length).fill(props.isShowComponet)
-})
+let treeItemRefs = []
+const treeItemRef = el => el && treeItemRefs.push(el)
+onBeforeUpdate(() => treeItemRefs = [])
 
 watch(
     () => props.isShowComponet,
     () => isShow.value.fill(false)
 )
 
-const fileClickHandler = (item: Catalogue) => {
-  fileClicked.value = item.id
+const fileClickHandler = (item) => {
+  if (props.chooseId === item.id) return
   emit('selectFile', item)
 }
-const folderClickHandler = (index: number) => isShow.value[index] = !isShow.value[index]
+
+let lastClickFolderTime = 0
+const folderClickHandler = (index) => {
+  if (Date.now() - lastClickFolderTime > 350 && treeItemRefs[index].childNodes[1]) {
+    let subCtx = treeItemRefs[index].childNodes[1];
+    if (isShow.value[index]) {
+      subCtx.style = `height: ${treeItemRefs[index].childNodes[1].clientHeight}px; transition: all .2s ease-in-out;`
+      sleep(10).then(() => {
+        subCtx.style = `height: 0; transition: all .2s ease-in-out;`
+        isShow.value[index] = false
+      })
+    } else {
+      subCtx.style = `height: 0; transition: all .2s ease-in-out overflow: hidden;`
+      subCtx.style = `height: ${treeItemRefs[index].clientHeight * (subCtx.childElementCount)}px; transition: all .2s ease-in-out; overflow: hidden;`
+      isShow.value[index] = true
+      sleep(300).then(() => subCtx.style = '')
+    }
+    lastClickFolderTime = Date.now()
+  }
+}
 </script>
 
 <style scoped>
@@ -101,22 +70,19 @@ const folderClickHandler = (index: number) => isShow.value[index] = !isShow.valu
 }
 
 .scrollin-enter-active {
-  animation: scrollin ease-in-out .4s;
+  animation: scrollin ease-in-out .2s;
 }
 
 .scrollin-leave-active {
-  animation: scrollin ease-in-out .4s reverse;
+  animation: scrollin ease-in-out .2s reverse;
 }
 
 @keyframes scrollin {
   from {
-    @apply max-h-0 opacity-0
-  }
-  80% {
-    @apply max-h-screen opacity-0
+    @apply opacity-0
   }
   to {
-    @apply max-h-screen opacity-100
+    @apply opacity-100
   }
 }
 

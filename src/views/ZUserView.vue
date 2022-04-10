@@ -356,29 +356,29 @@ const selectFileHandler = (param) => {
   }
 }
 
-/deep/ .wrap ul {
+:deep(.wrap ul){
   list-style-type: disc !important;
   margin-left: 1rem;
 }
 
-/deep/ .wrap ul li {
+:deep(.wrap ul li){
   list-style: disc !important;
 }
 
-/deep/ .wrap ol {
+:deep(.wrap ol) {
   list-style-type: decimal !important;
   margin-left: 1rem;
 }
 
-/deep/ .wrap ol li {
+:deep(.wrap ol li) {
   list-style: decimal !important;
 }
 
-/deep/ .wrap th {
+:deep(.wrap th){
   @apply border border-gray-300 px-2 py-1 bg-gray-100
 }
 
-/deep/ .wrap td {
+:deep(.wrap td){
   @apply border border-gray-300 px-4 py-1
 }
 </style>

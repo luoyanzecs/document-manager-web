@@ -1,5 +1,10 @@
 module.exports = {
   content: ['./index.js.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  purge: [
+    './src/**/*.html',
+    './src/**/*.vue',
+    './src/**/*.jsx',
+  ],
   darkMode: 'class',
   theme: {
     gridTemplateColumns: {

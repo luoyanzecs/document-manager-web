@@ -1,9 +1,8 @@
 <template>
   <div class="flex gap-3 items-center px-2 md:w-11/12">
     <z-avatar :image="myInfo.avatar"/>
-    <input spellcheck="false"
-           class="flex-grow focus:border-blue-500 bg-gray-200 bg-opacity-70 rounded-xl h-10 px-2"/>
-    <z-button fill="发表"/>
+    <input spellcheck="false" v-model="msgInput.aboveCtx" class="flex-grow bg-gray-200 bg-opacity-70 rounded-xl h-10 px-2 focus:outline-none "/>
+    <z-button fill="发表" :load-visible="msgInput.inputLoadAboue" @click="buttonClickHandler('fileComment', fileId)"/>
   </div>
 
   <div v-if="isCommentLoad" class="pos-center mt-10">
@@ -32,9 +31,8 @@
         <p class="text-blue-500 cursor-pointer text-sm" @click="showReplyClick(index, $event)">回复</p>
         <transition name="reply">
           <div class="flex gap-3 items-center overflow-y-hidden" v-show="isRepleyShow[index]">
-            <input spellcheck="false"
-                   class="flex-grow focus:border-blue-500 bg-gray-200 rounded-xl h-10 px-2"/>
-            <z-button fill="发表" @click="replyButtonClick(index)"/>
+            <input spellcheck="false" v-model="msgInput.singleCtx" class="flex-grow bg-gray-200 rounded-xl h-10 px-2 focus:outline-none "/>
+            <z-button fill="发表" :load-visible="msgInput.inputLoadSingle[index]" @click="buttonClickHandler('reply', {id: comment.id, index: index})"/>
           </div>
         </transition>
         <hr>
@@ -45,15 +43,17 @@
 
 <script setup lang="ts">
 import ZAvatar from "@/components/ZAvatar.vue";
-import {computed, onBeforeMount, ref, defineProps, PropType, Ref} from "vue";
+import {computed, onBeforeMount, ref, defineProps, PropType, Ref, reactive} from "vue";
 import ZButton from "@/components/ZButton.vue";
 import {useStore} from "vuex";
+import {LEAVE_MESSAGE} from "@/api";
+import {transformTime} from "@/tool/utils";
 
 interface Comment {
   id: string,
   commentId: string,
   name: string,
-  comment: string,
+  comment?: string,
   avatar: string,
   time: string,
   reply: Comment[]
@@ -73,27 +73,89 @@ const props = defineProps({
     type: Boolean,
     default: (): boolean => false,
     required: true
+  },
+  fileId: {
+    type: String,
+    required: true
   }
 })
 
 const store = useStore()
 
 const myInfo = computed(() => store.state.userInfo)
-const comments = computed(() => props.commentsList)
+const comments = ref(props.commentsList)
 const isRepleyShow: Ref<boolean[]> = ref([])
 
-const replyButtonClick = (index: number) => {
-  console.log(index)
-}
+const msgInput = reactive({
+  aboveCtx: '',
+  singleCtx: '',
+  inputLoadAboue: false,
+  inputLoadSingle: new Array(comments.value.length).fill(false)
+})
+
 
 const showReplyClick = (index: number, event: any) => {
   event.target.innerHTML = isRepleyShow.value[index] ? "回复" : "收起"
-  isRepleyShow.value[index] = !isRepleyShow.value[index]
+  if (isRepleyShow.value[index]) {
+    isRepleyShow.value[index] = false
+  } else {
+    isRepleyShow.value.fill(false)
+    isRepleyShow.value[index] = true
+  }
+  msgInput.singleCtx = ''
 }
 
 onBeforeMount(() => {
   isRepleyShow.value = new Array(props.commentsList.length).fill(false)
 })
+
+function buttonClickHandler(fun: String, param?: any) {
+  const commentWrapper: Comment = {
+    id: myInfo.value.id,
+    commentId: transformTime(),
+    name: myInfo.value.name,
+    avatar: myInfo.value.avatar,
+    time: transformTime(),
+    reply: new Array(0)
+  }
+  switch (fun) {
+    case 'fileComment': {
+      if (msgInput.aboveCtx === '') {
+        return
+      }
+      msgInput.inputLoadAboue = !msgInput.inputLoadAboue
+      const params = {
+        userid: myInfo.value.id,
+        fileId: param,
+        ctx: msgInput.aboveCtx
+      }
+      LEAVE_MESSAGE(params).then(() => {
+        msgInput.inputLoadAboue = !msgInput.inputLoadAboue
+        commentWrapper.comment = msgInput.aboveCtx
+        msgInput.inputLoadSingle.unshift(false)
+        comments.value.unshift(commentWrapper)
+      }).catch(() => msgInput.inputLoadAboue = !msgInput.inputLoadAboue)
+      break
+    }
+    case 'reply': {
+      if (msgInput.singleCtx === '') {
+        return
+      }
+      msgInput.inputLoadSingle[param.index] = true
+      const params = {
+        userid: myInfo.value.id,
+        parentCommentId: param.id,
+        ctx: msgInput.aboveCtx
+      }
+      LEAVE_MESSAGE(params).then(() => {
+        msgInput.inputLoadSingle[param.index] = false
+        commentWrapper.comment = msgInput.singleCtx
+        comments.value.find(it => it.id === param.id)?.reply.unshift(commentWrapper)
+      }).catch(() => msgInput.inputLoadSingle[param.index] = false)
+      break
+    }
+  }
+}
 
 </script>
 

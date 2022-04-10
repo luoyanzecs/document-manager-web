@@ -4,6 +4,48 @@ Mock.setup({
   timeout: '600-2000'
 })
 
+Mock.mock('http://localhost:9999/api/user/leaveMessage', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/search', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  },
+  'searchResults|3-6': [{
+    'id': /\d{8}/,
+    'title': '@ctitle(6, 9)',
+    'ctx': '@csentence(10, 12)'
+  }]
+})
+
+Mock.mock('http://localhost:9999/api/user/createFile', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  },
+  'fileId': /\d{8}/
+})
+
+Mock.mock('http://localhost:9999/api/user/updateFile', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
 Mock.mock('http://localhost:9999/api/login', 'post', {
   'token': '123213123',
   'userInfo': {
@@ -15,19 +57,27 @@ Mock.mock('http://localhost:9999/api/login', 'post', {
   }
 })
 
+Mock.mock('http://localhost:9999/api/getbu', 'post', {
+  'buList': ['开发', '人事', '产品', '运营']
+})
+
 Mock.mock('http://localhost:9999/api/user/menu', 'post', {
   'items|5-10': [{
     'id': /\d{8}/,
     'title': '@ctitle(10, 20)',
+    'isDir': '@boolean',
     'children|2-10': [{
       'id': /\d{8}/,
       'title': '@ctitle(10, 20)',
+      'isDir': '@boolean',
       'children|2-5': [{
         'id': /\d{8}/,
         'title': '@ctitle(10, 20)',
+        'isDir': '@boolean',
         'children|0-5': [{
           'id': /\d{8}/,
           'title': '@ctitle(10, 20)',
+          'isDir': '@boolean',
           'children|0': []
         }]
       }]
@@ -127,6 +177,15 @@ Mock.mock('http://localhost:9999/api/user/file', 'post', {
   'fileInfo': {
     'editor': '@First @Last',
     'lastEditTime': '@datetime("yyyy年MM月dd日 HH:mm")',
-    'fileContent': '<p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p>'
+    'fileContent': '<p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p>',
+    'attaches|0-3': [{
+      'name': '@ctitle(4, 7)',
+      'link': '@url("http")'
+    }]
   }
+})
+
+Mock.mock('http://localhost:9999/api/attach', 'post', {
+  'name': '@ctitle(4, 7)',
+  'link': '@url("http")'
 })

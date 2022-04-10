@@ -1,12 +1,18 @@
 <template>
   <z-aside>
     <template #right>
-      <z-button fill="部门" @click="selectBuHandler"/>
+      <select v-model="bu" style="height: 2.25rem" class="min-w-4 focus:outline-none bg-blue-500 rounded-2xl py-2 pl-1.5 text-center text-sm text-white tracking-widest flex-shrink-0 select-none">
+        <option v-for="bu in buList" :value="bu" :key="bu"> {{ bu }}</option>
+      </select>
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
-      <div class="overflow-auto">
-        <z-tree :catalogue="APIRES.menuItems" :choose-id="chooseFileId" :is-menu-load="LOADER.isMenuLoad" @select-file="selectFileHandler"/>
+      <div class="overflow-auto flex-1">
+        <svg v-if="LOADER.isMenuLoad" class="text-gray-500 w-8 h-8 animate-spin mx-auto mt-16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <z-tree v-else class="pb-8" :catalogue="APIRES.menuItems" :choose-id="chooseFileId" @select-file="selectFileHandler"/>
       </div>
     </template>
   </z-aside>
@@ -14,10 +20,11 @@
     <Header>
       <template #tools>
         <z-head-menu>
-          <z-button fill="搜索"/>
-          <z-button fill="新建"/>
-          <z-button fill="附件"/>
-          <z-button :fill="editorStatus" @click="buttonStatusClickHandler"/>
+          <z-button fill="搜索" @click="buttonClickHandler('search')"/>
+          <z-button fill="新建" v-show="!LOADER.isEditorShow" @click="buttonClickHandler('newFile')"/>
+          <z-button fill="附件" v-show="LOADER.isEditorShow" @click="buttonClickHandler('uploadAttach')"/>
+          <input type="file" ref="selectAttachInput" style="display: none" @change="attachSelectHandler">
+          <z-button :fill="editorStatus" @click="buttonClickHandler('edit')" :load-visible="LOADER.isUpdateFileLoad"/>
         </z-head-menu>
       </template>
       <template #avatar>
@@ -25,11 +32,12 @@
       </template>
     </Header>
     <div class="overflow-auto flex-grow flex flex-col items-stretch">
-      <template v-if="LOADER.isEditorShow">
-        <z-editor ref="editor" v-model:content="content"/>
+      <template v-if="APIRES.fileInfo && LOADER.isEditorShow">
+        <z-editor v-model:content="APIRES.fileInfo.fileContent"/>
         <div class="flex p-4 items-center gap-2">
-          <div class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center">
-            <span class="text-sm text-gray-500 cursor-pointer">附件1</span>
+          <div v-for="attach in APIRES.fileInfo.attaches" :key="attach.link" @click="deleteAttach(attach.name)"
+               class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center p-2">
+            <span class="text-sm text-gray-500 cursor-pointer text-center">{{ attach.name }}</span>
           </div>
         </div>
       </template>
@@ -45,24 +53,77 @@
         </div>
         <div v-if="APIRES.fileInfo && !LOADER.isCtxLoad" class="p-4 min-h-30 wrap">
           <p class="mb-1.5 text-gray-400 text-sm">上次编辑于 {{ APIRES.fileInfo.lastEditTime }} by {{APIRES.fileInfo.editor }}</p>
-          <div v-html="content"></div>
+          <div v-html="APIRES.fileInfo.fileContent"></div>
           <div class="flex py-8 items-center gap-2">
-            <div class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center">
-              <span class="text-sm text-gray-500 cursor-pointer">附件1</span>
+            <div v-for="attach in APIRES.fileInfo.attaches" :key="attach.link" @click="downloadAttach(attach.link)"
+                 class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center p-2">
+              <span class="text-sm text-gray-500 cursor-pointer text-center">{{ attach.name }}</span>
             </div>
           </div>
         </div>
         <div v-if="APIRES.fileInfo" class="pb-16">
           <hr class="my-4">
-          <z-comment :info="userInfo" :comments-list="APIRES.comments" :is-comment-load="LOADER.isCommentLoad"/>
+          <z-comment :info="userInfo" :comments-list="APIRES.comments" :file-id=chooseFileId :is-comment-load="LOADER.isCommentLoad"/>
         </div>
       </template>
     </div>
   </div>
+  <transition-group name="fade">
+    <div v-show="LOADER.isShowCreateBtnDailog" :key="1"
+         class="absolute z-30 left-0 top-0 w-screen h-screen bg-black bg-opacity-25" @click.stop>
+      <div class="w-35 bg-white rounded-xl p-4 flex flex-col gap-4 mt-24 mx-auto">
+        <p class="text-2xl text-gray-700">请确认您的信息</p>
+        <hr>
+        <div class="space-x-4 flex items-center text-gray-500">
+          <p class="w-24 border-r-2 px-2">当前部门</p>
+          <p>{{ bu }}</p>
+        </div>
+        <div class="space-x-4 flex items-center text-gray-500">
+          <p class="w-24 border-r-2 px-2 flex-shrink-0">文件位置</p>
+
+          <z-location-select :items="APIRES.menuItems"/>
+        </div>
+        <div class="space-x-4 flex items-center text-gray-500">
+          <label class="w-24 border-r-2 px-2" for="createFileName">文件名</label>
+          <input type="text" v-model="newFile.name" class="border rounded-lg px-2 py-1 w-72 focus:outline-none" id="createFileName"
+                 placeholder="输入文件名" spellcheck="false" autocomplete="off">
+        </div>
+        <div class="space-x-4 flex items-center text-gray-500">
+          <p class="w-24 border-r-2 px-2">文件夹？</p>
+          <p class="cursor-pointer text-blue-500" @click="newFile.isDir = !newFile.isDir">{{ newFile.isDir ? '是' : '否' }}</p>
+        </div>
+        <div class="space-x-4 py-2">
+          <z-button fill="确认" @click="buttonClickHandler('newFileConfirm')" :load-visible="LOADER.isCreateFileLoad"/>
+          <z-button fill="取消" @click="LOADER.isShowCreateBtnDailog = !LOADER.isShowCreateBtnDailog"/>
+        </div>
+      </div>
+    </div>
+    <div v-show="LOADER.isShowSearchBtnDailog" class="absolute z-30 left-0 top-0 w-screen h-screen bg-black bg-opacity-25"
+         @click.stop="LOADER.isShowSearchBtnDailog = !LOADER.isShowSearchBtnDailog"
+         :key="2">
+      <div class="w-35 bg-white rounded-xl p-4 flex flex-col gap-4 mt-24 mx-auto min-h-15" @click.stop>
+        <input type="text" v-model="search.input"
+               class="border rounded-md text-gray-500 p-2 w-full text-2xl focus:outline-none focus:ring-blue-500 focus:ring-2"
+               placeholder="查询内容" spellcheck="false">
+        <svg v-if="search.ctxLoad"
+             class="text-gray-500 w-10 h-10 animate-spin mx-auto mt-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <div v-else class="flex flex-col gap-2">
+          <div v-for="item in search.res" :key="item.id" @click="searchDirectHander(item)"
+               class="px-4 py-2 hover:bg-blue-400 rounded-md shadow cursor-pointer" >
+            <p>{{ item.title }}</p>
+            <p>{{ item.ctx }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition-group>
 </template>
 
 <script setup>
-import {computed, onMounted, reactive, ref} from 'vue'
+import {computed, onMounted, reactive, ref, watch} from 'vue'
 import Header from "@/components/ZHeader.vue";
 import ZHeadMenu from "@/components/ZHeadMenu";
 import ZButton from "@/components/ZButton";
@@ -70,15 +131,17 @@ import ZAside from "@/components/ZAside.vue";
 import ZAvatar from "@/components/ZAvatar.vue";
 import ZTree from "@/components/ZTree.vue";
 import ZComment from "@/components/ZComment.vue";
-import {FILE_MENU, COMMENT, GET_FILE} from "@/api";
+import {FILE_MENU, COMMENT, GET_FILE, UPDATE_FILE, CREATE_FILE, SEARCH, GET_BU, UPLOAD_ATTACH} from "@/api";
 import {useStore} from "vuex";
 import ZEditor from "@/components/ZEditor";
+import { html2json } from "html2json"
+import ZLocationSelect from "@/components/ZLocationSelect";
+import {transformTime} from "@/tool/utils";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
-const editor = ref()
-
-const content = ref('')
+const buList = ref([])
+const bu = ref(userInfo.value.bu.length === 0 ? '部门' : userInfo.value.bu)
 const APIRES = reactive({
   fileInfo: undefined,
   menuItems: [],
@@ -88,21 +151,172 @@ const LOADER = reactive({
   isMenuLoad: true,
   isEditorShow: false,
   isCtxLoad: false,
-  isCommentLoad: false
+  isCommentLoad: false,
+  isShowCreateBtnDailog: false,
+  isUpdateFileLoad: false,
+  isCreateFileLoad: false,
+  isShowSearchBtnDailog: false
 })
 const chooseFileId = ref('')
-const editorStatus = ref('编辑')
+const editorStatus = computed(() => LOADER.isEditorShow ? '更新' : '编辑')
+const newFile = reactive({
+  isDir: false,
+  name: '',
+  parentDirId: ''
+})
+const search = reactive({
+  input: '',
+  res: [],
+  ctxLoad: false
+})
+const selectAttachInput = ref()
+
+function attachSelectHandler(event) {
+  const file = event.target.files[0]
+  UPLOAD_ATTACH(file).then(it => {
+    const attach = {
+      name: it.name,
+      link: it.link
+    }
+    APIRES.fileInfo.attaches.unshift(attach)
+    store.commit('unshiftNotice', {type: 1, message: '附件上传成功'})
+  }).catch(() => {
+    store.commit('unshiftNotice', {type: 2, message: '附件上传失败'})
+  })
+}
 
 onMounted(() => {
   FILE_MENU({bu: store.state.userInfo.bu}).then(it => {
     LOADER.isMenuLoad = false
     it.items.forEach(item => APIRES.menuItems.push(item))
   })
+  GET_BU({}).then(it => {
+    buList.value = it.buList
+  })
 })
 
-const buttonStatusClickHandler = () => {
-  editorStatus.value = editorStatus.value === '编辑' ? '更新' : '编辑'
-  LOADER.isEditorShow = !LOADER.isEditorShow
+function searchDelay(callback, delay=100) {
+  let timer = ''
+  return nv => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      callback(nv);
+    }, delay);
+  };
+}
+
+watch(
+    () => bu.value,
+    (nv) => {
+      LOADER.isMenuLoad = true
+      FILE_MENU({bu: nv}).then(it => {
+        LOADER.isMenuLoad = false
+        APIRES.menuItems = new Array(0)
+        it.items.forEach(item => APIRES.menuItems.push(item))
+      })
+    }
+)
+watch(
+    () => search.input,
+    searchDelay(value => {
+      const param = {
+        input: value
+      }
+      search.ctxLoad = true
+      SEARCH(param).then(it => {
+        if (param.input === search.input) {
+          search.ctxLoad = false
+          search.res = it.searchResults
+        }
+      })
+    })
+)
+
+const buttonClickHandler = (index) => {
+  switch (index) {
+    case 'search':
+      LOADER.isShowSearchBtnDailog = !LOADER.isShowSearchBtnDailog
+      break
+    case 'newFile':
+      LOADER.isShowCreateBtnDailog = true
+      break
+    case 'uploadAttach':
+      selectAttachInput.value.value = null
+      selectAttachInput.value.click()
+      break
+    case 'edit': {
+      if (APIRES.fileInfo === undefined) {
+        store.commit('unshiftNotice', {type: 3, message: '当前没有可编辑的文件'})
+        return
+      }
+      if (LOADER.isEditorShow) {
+        console.log(APIRES.fileInfo.fileContent);
+        let json = html2json(APIRES.fileInfo.fileContent);
+        LOADER.isUpdateFileLoad = true
+        const params = {
+          fileId: chooseFileId.value,
+          jsonValue: json
+        }
+        UPDATE_FILE(params).then(it => {
+          console.log(it);
+          LOADER.isEditorShow = false
+          LOADER.isUpdateFileLoad = false
+          store.commit('unshiftNotice', {type: 1, message: '更新成功'})
+        }).catch(() => {
+          LOADER.isUpdateFileLoad = false
+          LOADER.isEditorShow = false
+        })
+      } else {
+        LOADER.isEditorShow = true
+      }
+      break
+    }
+    case 'newFileConfirm':{
+      if (newFile.name === '') {
+        store.commit('unshiftNotice', {type: 2, message: '文件名不能为空'})
+        break
+      }
+      LOADER.isCreateFileLoad = true
+      const params = {
+        title: newFile.name,
+        bu: bu.value,
+        userid: userInfo.value.id,
+        isDir: newFile.isDir,
+        parentId: newFile.parentDirId
+      }
+      CREATE_FILE(params).then(it => {
+        LOADER.isCreateFileLoad = false
+        LOADER.isShowCreateBtnDailog = false
+        APIRES.fileInfo = {
+          editor: userInfo.value.name,
+          fileContent: '',
+          lastEditTime: transformTime()
+        }
+        chooseFileId.value = it.fileId
+        buttonClickHandler('edit')
+        store.commit('unshiftNotice', {type: 1, message: '创建成功'})
+      }).catch(() => {
+        LOADER.isCreateFileLoad = false
+        LOADER.isShowCreateBtnDailog = false
+      })
+      break
+    }
+  }
+}
+
+function downloadAttach(link) {
+  console.log(link)
+}
+
+function deleteAttach(name) {
+  console.log(name)
+}
+
+const searchDirectHander = (item) => {
+  LOADER.isShowSearchBtnDailog = !LOADER.isShowSearchBtnDailog
+  chooseFileId.value = item.id
+  selectFileHandler({id: item.id})
+  console.log(item)
 }
 
 const selectFileHandler = (param) => {
@@ -110,27 +324,38 @@ const selectFileHandler = (param) => {
   LOADER.isCtxLoad = true
   LOADER.isCommentLoad = true
   chooseFileId.value = param.id
-  GET_FILE({id: param.id})
-      .then(it => {
-        LOADER.isCtxLoad = false
-        APIRES.fileInfo = it.fileInfo
-        content.value = APIRES.fileInfo.fileContent
-      }).catch(() => LOADER.isCtxLoad = false)
+  GET_FILE({id: param.id}).then(it => {
+    LOADER.isCtxLoad = false
+    APIRES.fileInfo = it.fileInfo
+  }).catch(() => LOADER.isCtxLoad = false)
 
-  COMMENT({id: param.id})
-      .then(it => {
-        LOADER.isCommentLoad = false
-        APIRES.comments.splice(0, APIRES.comments.length)
-        it.comments.forEach((comment) => APIRES.comments.push(comment))
-      }).catch(() => LOADER.isCommentLoad = false)
+  COMMENT({id: param.id}).then(it => {
+    LOADER.isCommentLoad = false
+    APIRES.comments.splice(0, APIRES.comments.length)
+    it.comments.forEach((comment) => APIRES.comments.push(comment))
+  }).catch(() => LOADER.isCommentLoad = false)
 }
 
-const selectBuHandler = () => {
-
-}
 </script>
 
 <style scoped>
+.fade-leave-active {
+  animation: fade ease-in-out .2s reverse;
+}
+
+.fade-enter-active {
+  animation: fade ease-in-out .2s;
+}
+
+@keyframes fade {
+  from {
+    @apply opacity-0
+  }
+  to {
+    @apply opacity-100
+  }
+}
+
 /deep/ .wrap ul {
   list-style-type: disc !important;
   margin-left: 1rem;

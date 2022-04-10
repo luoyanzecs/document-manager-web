@@ -4,10 +4,10 @@
   </template>
   <template v-else>
     <div v-show="show" class="absolute right-0 top-0 w-screen h-screen z-10 bg-gray-700 opacity-40 md:hidden" @click.stop="switchTool"/>
-    <z-header-button v-show="!show" @click="switchTool">工具</z-header-button>
+    <z-button v-show="!show" @click="switchTool" fill="工具"/>
     <transition name="aside">
       <div v-show="show" class="absolute flex flex-col gap-6 pt-4 px-2 w-20 bg-white right-0 top-0 h-screen z-30">
-        <z-header-button @click="switchTool">收起</z-header-button>
+        <z-button @click="switchTool" fill="收起"/>
         <slot></slot>
       </div>
     </transition>
@@ -16,7 +16,7 @@
 
 <script setup>
 import { ref, onBeforeMount, onMounted } from "vue";
-import ZHeaderButton from "@/components/ZButton";
+import ZButton from "@/components/ZButton";
 
 const show = ref(false)
 const type = ref(1)

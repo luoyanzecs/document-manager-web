@@ -22,7 +22,8 @@
         <z-head-menu>
           <z-button fill="搜索" @click="buttonClickHandler('search')"/>
           <z-button fill="新建" v-show="!LOADER.isEditorShow" @click="buttonClickHandler('newFile')"/>
-          <z-button fill="附件" v-show="LOADER.isEditorShow" @click="buttonClickHandler('attach')"/>
+          <z-button fill="附件" v-show="LOADER.isEditorShow" @click="buttonClickHandler('uploadAttach')"/>
+          <input type="file" ref="selectAttachInput" style="display: none" @change="attachSelectHandler">
           <z-button :fill="editorStatus" @click="buttonClickHandler('edit')" :load-visible="LOADER.isUpdateFileLoad"/>
         </z-head-menu>
       </template>
@@ -34,7 +35,7 @@
       <template v-if="APIRES.fileInfo && LOADER.isEditorShow">
         <z-editor v-model:content="APIRES.fileInfo.fileContent"/>
         <div class="flex p-4 items-center gap-2">
-          <div v-for="attach in APIRES.fileInfo.attaches" :key="attach.link" @click="downloadAttach(attach.link)"
+          <div v-for="attach in APIRES.fileInfo.attaches" :key="attach.link" @click="deleteAttach(attach.name)"
                class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center p-2">
             <span class="text-sm text-gray-500 cursor-pointer text-center">{{ attach.name }}</span>
           </div>
@@ -130,7 +131,7 @@ import ZAside from "@/components/ZAside.vue";
 import ZAvatar from "@/components/ZAvatar.vue";
 import ZTree from "@/components/ZTree.vue";
 import ZComment from "@/components/ZComment.vue";
-import {FILE_MENU, COMMENT, GET_FILE, UPDATE_FILE, CREATE_FILE, SEARCH, GET_BU} from "@/api";
+import {FILE_MENU, COMMENT, GET_FILE, UPDATE_FILE, CREATE_FILE, SEARCH, GET_BU, UPLOAD_ATTACH} from "@/api";
 import {useStore} from "vuex";
 import ZEditor from "@/components/ZEditor";
 import { html2json } from "html2json"
@@ -163,12 +164,26 @@ const newFile = reactive({
   name: '',
   parentDirId: ''
 })
-
 const search = reactive({
   input: '',
   res: [],
   ctxLoad: false
 })
+const selectAttachInput = ref()
+
+function attachSelectHandler(event) {
+  const file = event.target.files[0]
+  UPLOAD_ATTACH(file).then(it => {
+    const attach = {
+      name: it.name,
+      link: it.link
+    }
+    APIRES.fileInfo.attaches.unshift(attach)
+    store.commit('unshiftNotice', {type: 1, message: '附件上传成功'})
+  }).catch(() => {
+    store.commit('unshiftNotice', {type: 2, message: '附件上传失败'})
+  })
+}
 
 onMounted(() => {
   FILE_MENU({bu: store.state.userInfo.bu}).then(it => {
@@ -189,6 +204,7 @@ function searchDelay(callback, delay=100) {
     }, delay);
   };
 }
+
 watch(
     () => bu.value,
     (nv) => {
@@ -225,6 +241,8 @@ const buttonClickHandler = (index) => {
       LOADER.isShowCreateBtnDailog = true
       break
     case 'uploadAttach':
+      selectAttachInput.value.value = null
+      selectAttachInput.value.click()
       break
     case 'edit': {
       if (APIRES.fileInfo === undefined) {
@@ -288,6 +306,10 @@ const buttonClickHandler = (index) => {
 
 function downloadAttach(link) {
   console.log(link)
+}
+
+function deleteAttach(name) {
+  console.log(name)
 }
 
 const searchDirectHander = (item) => {

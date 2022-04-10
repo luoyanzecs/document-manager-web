@@ -47,7 +47,7 @@ const sendHttp = (url, params, callback) => {
 
 export const GET_BU = params => sendHttp('getbu', params, post)
 export const LEAVE_MESSAGE = params => sendHttp('user/leaveMessage', params, post)
-export const UPLOAD_ATTACH = file => uploader('attach', file)
+export const UPLOAD_ATTACH = file => sendHttp('attach', file, uploader)
 export const SEARCH = params => sendHttp('search', params, post)
 export const CREATE_FILE = params => sendHttp('user/createFile', params, post)
 export const UPDATE_FILE = params => sendHttp('user/updateFile', params, post)

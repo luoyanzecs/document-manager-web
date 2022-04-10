@@ -184,3 +184,8 @@ Mock.mock('http://localhost:9999/api/user/file', 'post', {
     }]
   }
 })
+
+Mock.mock('http://localhost:9999/api/attach', 'post', {
+  'name': '@ctitle(4, 7)',
+  'link': '@url("http")'
+})

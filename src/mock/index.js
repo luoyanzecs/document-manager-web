@@ -33,7 +33,8 @@ Mock.mock('http://localhost:9999/api/user/createFile', 'post', {
     'statusCode': 200,
     'message': 'OK',
     'timestamp': Date.now()
-  }
+  },
+  'fileId': /\d{8}/
 })
 
 Mock.mock('http://localhost:9999/api/user/updateFile', 'post', {

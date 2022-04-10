@@ -1,22 +1,19 @@
 <template>
-  <template v-if="level === 0 && isMenuLoad">
-    <div v-for="i of 3" :key="i" class="animate-pulse flex flex-col space-y-1 m-2">
-      <div class="bg-gray-300 h-4 rounded"/>
-      <div class="bg-gray-300 h-4 rounded ml-4"/>
-      <div class="bg-gray-300 h-4 rounded ml-4"/>
-      <div class="bg-gray-300 h-4 rounded ml-4"/>
-    </div>
-  </template>
+  <svg v-if="level === 0 && isMenuLoad"
+       class="text-gray-500 w-8 h-8 animate-spin mx-auto mt-16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  </svg>
   <template v-if="catalogue.length !== 0">
     <ul v-for="(item, index) in catalogue" :key="item.id" :class="[{'border-l' : level !== 0}, 'border-gray-300', 'ml-1', 'pl-1']">
-      <li :ref="treeItemRef" v-if="!item.isDir" @click.stop="fileClickHandler(item)">
+      <li v-if="!item.isDir" :ref="treeItemRef" @click.stop="fileClickHandler(item)">
         <span :class="['cata-link', {'bg-blue-200': item.id === chooseId}]">{{ item.title }}</span>
       </li>
-      <li v-else :ref="treeItemRef" >
+      <li v-else :ref="treeItemRef">
         <span class="catalogue-base text-gray-500" @click.stop="folderClickHandler(index)">{{ item.title }}</span>
         <transition name="scrollin">
-          <div v-show="isShow[index]"  style="height: 0; transition: all .3s ease-in-out;">
-            <z-tree :catalogue="item.children" :level="level + 1" :choose-id=chooseId :is-show-componet="isShow[index]" @select-file="fileClickHandler"/>
+          <div v-show="isShow[index]" style="height: 0; transition: all .3s ease-in-out;">
+            <z-tree :catalogue="item.children" :level="level + 1" :choose-id="chooseId" :is-show-componet="isShow[index]" @select-file="fileClickHandler"/>
           </div>
         </transition>
       </li>

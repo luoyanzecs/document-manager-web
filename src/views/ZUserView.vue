@@ -27,7 +27,7 @@
     </Header>
     <div class="overflow-auto flex-grow flex flex-col items-stretch">
       <template v-if="LOADER.isEditorShow">
-        <z-editor v-model:content="content"/>
+        <z-editor v-if="APIRES.fileInfo" v-model:content="APIRES.fileInfo.fileContent"/>
         <div class="flex p-4 items-center gap-2">
           <div class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center">
             <span class="text-sm text-gray-500 cursor-pointer">附件1</span>
@@ -46,7 +46,7 @@
         </div>
         <div v-if="APIRES.fileInfo && !LOADER.isCtxLoad" class="p-4 min-h-30 wrap">
           <p class="mb-1.5 text-gray-400 text-sm">上次编辑于 {{ APIRES.fileInfo.lastEditTime }} by {{APIRES.fileInfo.editor }}</p>
-          <div v-html="content"></div>
+          <div v-html="APIRES.fileInfo.fileContent"></div>
           <div class="flex py-8 items-center gap-2">
             <div class="border rounded-lg h-24 w-20 bg-gray-50 shadow pos-center">
               <span class="text-sm text-gray-500 cursor-pointer">附件1</span>
@@ -128,11 +128,11 @@ import {useStore} from "vuex";
 import ZEditor from "@/components/ZEditor";
 import { html2json } from "html2json"
 import ZLocationSelect from "@/components/ZLocationSelect";
+import {transformTime} from "@/tool/utils";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
 const bu = ref(userInfo.value.bu.length === 0 ? '部门' : userInfo.value.bu)
-const content = ref('')
 const APIRES = reactive({
   fileInfo: undefined,
   menuItems: [],
@@ -211,7 +211,8 @@ const buttonClickHandler = (index) => {
         return
       }
       if (LOADER.isEditorShow) {
-        let json = html2json(content.value);
+        console.log(APIRES.fileInfo.fileContent);
+        let json = html2json(APIRES.fileInfo.fileContent);
         LOADER.isUpdateFileLoad = true
         const params = {
           fileId: chooseFileId.value,
@@ -241,9 +242,15 @@ const buttonClickHandler = (index) => {
         parentId: newFile.parentDirId
       }
       CREATE_FILE(params).then(it => {
-        console.log(it)
         LOADER.isCreateFileLoad = false
         LOADER.isShowCreateBtnDailog = false
+        APIRES.fileInfo = {
+          editor: userInfo.value.name,
+          fileContent: '',
+          lastEditTime: transformTime()
+        }
+        chooseFileId.value = it.fileId
+        buttonClickHandler('edit')
         store.commit('unshiftNotice', {type: 1, message: '创建成功'})
       }).catch(() => {
         LOADER.isCreateFileLoad = false
@@ -270,7 +277,6 @@ const selectFileHandler = (param) => {
   GET_FILE({id: param.id}).then(it => {
     LOADER.isCtxLoad = false
     APIRES.fileInfo = it.fileInfo
-    content.value = APIRES.fileInfo.fileContent
   }).catch(() => LOADER.isCtxLoad = false)
 
   COMMENT({id: param.id}).then(it => {

@@ -5,3 +5,11 @@
 .pos-center {
     @apply flex items-center justify-center
 }
+
+.spacer-b::after {
+    content: '';
+    display: block;
+    margin: .25rem 0;
+    width: 100%;
+    border-bottom: solid rgba(209, 213, 219) 1px;
+}

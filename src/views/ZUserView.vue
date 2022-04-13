@@ -69,18 +69,15 @@
     </div>
   </div>
   <transition-group name="fade">
-    <div v-show="LOADER.isShowCreateBtnDailog" :key="1"
-         class="absolute z-30 left-0 top-0 w-screen h-screen bg-black bg-opacity-25" @click.stop>
-      <div class="w-35 bg-white rounded-xl p-4 flex flex-col gap-4 mt-24 mx-auto">
-        <p class="text-2xl text-gray-700">请确认您的信息</p>
-        <hr>
+    <z-dailog :key="1" v-show="LOADER.isShowCreateBtnDailog" v-model:click-toggle="LOADER.isShowCreateBtnDailog">
+      <template #title>请确认您的信息</template>
+      <template #body>
         <div class="space-x-4 flex items-center text-gray-500">
           <p class="w-24 border-r-2 px-2">当前部门</p>
           <p>{{ bu }}</p>
         </div>
         <div class="space-x-4 flex items-center text-gray-500">
           <p class="w-24 border-r-2 px-2 flex-shrink-0">文件位置</p>
-
           <z-location-select :items="APIRES.menuItems"/>
         </div>
         <div class="space-x-4 flex items-center text-gray-500">
@@ -92,33 +89,28 @@
           <p class="w-24 border-r-2 px-2">文件夹？</p>
           <p class="cursor-pointer text-blue-500" @click="newFile.isDir = !newFile.isDir">{{ newFile.isDir ? '是' : '否' }}</p>
         </div>
-        <div class="space-x-4 py-2">
-          <z-button fill="确认" @click="buttonClickHandler('newFileConfirm')" :load-visible="LOADER.isCreateFileLoad"/>
-          <z-button fill="取消" @click="LOADER.isShowCreateBtnDailog = !LOADER.isShowCreateBtnDailog"/>
-        </div>
-      </div>
-    </div>
-    <div v-show="LOADER.isShowSearchBtnDailog" class="absolute z-30 left-0 top-0 w-screen h-screen bg-black bg-opacity-25"
-         @click.stop="LOADER.isShowSearchBtnDailog = !LOADER.isShowSearchBtnDailog"
-         :key="2">
-      <div class="w-35 bg-white rounded-xl p-4 flex flex-col gap-4 mt-24 mx-auto min-h-15" @click.stop>
-        <input type="text" v-model="search.input"
-               class="border rounded-md text-gray-500 p-2 w-full text-2xl focus:outline-none focus:ring-blue-500 focus:ring-2"
-               placeholder="查询内容" spellcheck="false">
-        <svg v-if="search.ctxLoad"
-             class="text-gray-500 w-10 h-10 animate-spin mx-auto mt-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      </template>
+      <template #bottom>
+        <z-button fill="确认" @click="buttonClickHandler('newFileConfirm')" :load-visible="LOADER.isCreateFileLoad"/>
+        <z-button fill="取消" @click="LOADER.isShowCreateBtnDailog = !LOADER.isShowCreateBtnDailog"/>
+      </template>
+    </z-dailog>
+    <z-dailog :key="2" v-show="LOADER.isShowSearchBtnDailog" v-model:click-toggle="LOADER.isShowSearchBtnDailog">
+      <template #body>
+        <input type="text" v-model="search.input" placeholder="查询内容" spellcheck="false"
+               class="border rounded-md text-gray-500 p-2 w-full text-2xl focus:outline-none focus:ring-blue-500 focus:ring-2">
+        <svg v-if="search.ctxLoad" class="text-gray-500 w-10 h-10 animate-spin mx-auto mt-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
         <div v-else class="flex flex-col gap-2">
-          <div v-for="item in search.res" :key="item.id" @click="searchDirectHander(item)"
-               class="px-4 py-2 hover:bg-blue-400 rounded-md shadow cursor-pointer" >
+          <div v-for="item in search.res" :key="item.id" @click="searchDirectHander(item)" class="px-4 py-2 hover:bg-blue-400 rounded-md shadow cursor-pointer" >
             <p>{{ item.title }}</p>
             <p>{{ item.ctx }}</p>
           </div>
         </div>
-      </div>
-    </div>
+      </template>
+    </z-dailog>
   </transition-group>
 </template>
 
@@ -131,6 +123,7 @@ import ZAside from "@/components/ZAside.vue";
 import ZAvatar from "@/components/ZAvatar.vue";
 import ZTree from "@/components/ZTree.vue";
 import ZComment from "@/components/ZComment.vue";
+import ZDailog from "@/components/ZDailog";
 import {FILE_MENU, COMMENT, GET_FILE, UPDATE_FILE, CREATE_FILE, SEARCH, GET_BU, UPLOAD_ATTACH} from "@/api";
 import {useStore} from "vuex";
 import ZEditor from "@/components/ZEditor";

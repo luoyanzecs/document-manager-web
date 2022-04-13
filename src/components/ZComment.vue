@@ -130,11 +130,10 @@ function buttonClickHandler(fun: String, param?: any) {
         ctx: msgInput.aboveCtx
       }
       LEAVE_MESSAGE(params).then(() => {
-        msgInput.inputLoadAboue = !msgInput.inputLoadAboue
         commentWrapper.comment = msgInput.aboveCtx
         msgInput.inputLoadSingle.unshift(false)
         comments.value.unshift(commentWrapper)
-      }).catch(() => msgInput.inputLoadAboue = !msgInput.inputLoadAboue)
+      }).finally(() => msgInput.inputLoadAboue = !msgInput.inputLoadAboue)
       break
     }
     case 'reply': {

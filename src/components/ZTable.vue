@@ -10,7 +10,7 @@
       <div @click.stop="toggle(-1)" :class="[isToggleAll ? 'bg-blue-500' : 'bg-white', 'choose-box']"/>
       <div :class="['field-item', 'row-base',  gridN]">
         <div v-for="(value, index) in fields" :key="index" :class="['pos-center', colSpanList[index]]">
-          <span class="truncate">{{ value }}</span>
+          <span>{{ value }}</span>
         </div>
       </div>
       <div class="w-5 h-5"/>
@@ -18,7 +18,7 @@
     <div v-for="(list, i) in items" :key="list.id" class="flex gap-2 w-full items-center pl-2 pr-4 border-b hover:border-blue-300">
       <div v-show="!isExpand[i]" @click.stop="toggle(i)" :class="[isSelect[i] ? 'bg-blue-500' : 'bg-white', 'choose-box']"/>
       <div :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'row-base']" :ref="tableItemRef">
-          <div  v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-full flex justify-end " @click.stop="switchToCollapse(i)">
+          <div v-show="isExpand[i]" class="text-blue-500 cursor-pointer flex justify-end" @click.stop="switchToCollapse(i)">
             <span>关闭</span>
           </div>
           <div v-for="(key, keyIndex) in keys" :key="list.id + keyIndex" :class="[isExpand[i] ? 'flex' : 'pos-center',  colSpanList[keyIndex]]">
@@ -30,12 +30,11 @@
         <path fill="currentColor" d="M104.704 338.752a64 64 0 0190.496 0l316.8 316.8 316.8-316.8a64 64 0 0190.496 90.496L557.248 791.296a64 64 0 01-90.496 0L104.704 429.248a64 64 0 010-90.496z"></path>
       </svg>
     </div>
-
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref, defineProps, onBeforeMount, watch, Ref, PropType, onBeforeUpdate, onUpdated} from 'vue'
+import {ref, defineProps, onBeforeMount, watch, Ref, PropType, onBeforeUpdate, onUpdated, defineExpose} from 'vue'
 
 const props = defineProps({
   cols: {
@@ -95,7 +94,10 @@ watch(
 
 watch(
     () => props.items,
-    () => isSelect.value.fill(isToggleAll.value)
+    () => {
+      isSelect.value = Array(props.items.length).fill(false)
+      isToggleAll.value = false
+    }
 )
 
 const expand = (index: number) => {
@@ -113,6 +115,10 @@ const toggle = (index: number) => {
     isSelect.value[index] = !isSelect.value[index]
   }
 }
+
+defineExpose({
+  isSelect
+})
 </script>
 
 <style scoped>

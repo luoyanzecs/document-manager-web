@@ -45,6 +45,9 @@ const sendHttp = (url, params, callback) => {
     .catch(errorHandler)
 }
 
+// TODO
+export const ADMIN_SEARCH_ALL_IN_ONE = params => sendHttp('admin/search', params, post)
+export const DELETE_TABLE_ITEMS = params => sendHttp('admin/delete', params, post)
 export const GET_BU = params => sendHttp('getbu', params, post)
 export const LEAVE_MESSAGE = params => sendHttp('user/leaveMessage', params, post)
 export const UPLOAD_ATTACH = file => sendHttp('attach', file, uploader)
@@ -55,8 +58,4 @@ export const LOGIN = params => sendHttp('login', params, post)
 export const FILE_MENU = params => sendHttp('user/menu', params, post)
 export const COMMENT = params => sendHttp('user/comment', params, post)
 export const GET_FILE = params => sendHttp('user/file', params, post)
-export const USER_LIST = params => sendHttp('admin/users', params, post)
-export const FILE_LIST = params => sendHttp('admin/files', params, post)
-export const RECORD_LIST = params => sendHttp('admin/records', params, post)
-export const NOTICE_LIST = params => sendHttp('admin/notices', params, post)
 export const NOTICE_GLOBAL = params => sendHttp('notice', params, post)

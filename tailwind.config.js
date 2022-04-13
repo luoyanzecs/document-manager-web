@@ -37,7 +37,8 @@ module.exports = {
     minWidth: {
       '4': '4rem',
       '75': '75%',
-      '85': '85%'
+      '85': '85%',
+      '35': '35rem',
     },
     minHeight: {
       '0': '0px',

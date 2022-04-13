@@ -18,7 +18,9 @@
     <div v-for="(list, i) in items" :key="list.id" class="flex gap-2 w-full items-center pl-2 pr-4 border-b hover:border-blue-300">
       <div v-show="!isExpand[i]" @click.stop="toggle(i)" :class="[isSelect[i] ? 'bg-blue-500' : 'bg-white', 'choose-box']"/>
       <div :class="isExpand[i] ? ['expand-item']: [gridN, 'collapse-item', 'row-base']" :ref="tableItemRef">
-          <span v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-20" @click.stop="switchToCollapse(i)">关闭</span>
+          <div  v-show="isExpand[i]" class="text-blue-500 cursor-pointer w-full flex justify-end " @click.stop="switchToCollapse(i)">
+            <span>关闭</span>
+          </div>
           <div v-for="(key, keyIndex) in keys" :key="list.id + keyIndex" :class="[isExpand[i] ? 'flex' : 'pos-center',  colSpanList[keyIndex]]">
             <span v-if="isExpand[i]" class="w-20 grid flex-shrink-0">{{ fields[keyIndex] }}</span>
             <span :class="!isExpand[i] ? ['text-sm', 'md:text-base', 'truncate'] :''">{{ list[key] }}</span>

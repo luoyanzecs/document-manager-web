@@ -120,7 +120,6 @@ const headButtonHandler = index => {
     case '32':
     case '33':
   }
-  console.log(index)
 }
 
 watch(

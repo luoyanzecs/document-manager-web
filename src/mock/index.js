@@ -5,17 +5,27 @@ Mock.setup({
 })
 
 Mock.mock('http://localhost:9999/api/admin/search', 'post', {
-  'fields': ['字段1', '字段1', '字段1', '字段1'],
-  'keys': ['id', 'name', 'bu', 'tel'],
-  'cols': [4, 4, 4, 4],
+  'pairs': [
+    {'name': '字段一', 'key': 'a'},
+    {'name': '字段二', 'key': 'b'},
+    {'name': '字段三', 'key': 'c'},
+    {'name': '字段四', 'key': 'd'},
+    {'name': '字段五', 'key': 'e'},
+    {'name': '字段六', 'key': 'f'},
+    {'name': '字段七', 'key': 'g'},
+    {'name': '字段七', 'key': 'h'},
+  ],
   'currentPage|0-50': 1,
   'totalPage': 50,
-  'items|20': [{
-    'id': /\d{8}/,
-    'name': '@cword',
-    'userId': /\d{8}/,
-    'bu': "@pick(['开发', '人事', '产品', '运营'])",
-    'tel': '@email'
+  'items|35': [{
+    'a': '@ctitle(6, 12)',
+    'b': '@ctitle(6, 12)',
+    'c': '@ctitle(6, 12)',
+    'd': '@ctitle(6, 12)',
+    'e': '@ctitle(6, 12)',
+    'f': '@ctitle(6, 12)',
+    'g': '@ctitle(6, 12)',
+    'h': '@ctitle(6, 12)',
   }]
 })
 
@@ -124,68 +134,6 @@ Mock.mock('http://localhost:9999/api/user/comment', 'post', {
       'comment': '@ctitle(20, 30)',
       'time': '@datetime("yyyy年MM月dd日 HH:mm")'
     }]
-  }]
-})
-
-Mock.mock('http://localhost:9999/api/admin/files', 'post', {
-  'fields': ['编号', '作者', '部门', '标题', '创建时间'],
-  'keys': ['id', 'owner', 'bu', 'title', 'createTime'],
-  'cols': [2, 2, 2, 8, 4],
-  'currentPage|0-50': 1,
-  'totalPage': 50,
-  'items|20': [{
-    'id': /\d{8}/,
-    'owner': '@FIRST LAST',
-    'userId': /\d{8}/,
-    'title': '@ctitle(10, 20)',
-    'bu': "@pick(['开发', '人事', '产品', '运营'])",
-    'createTime': '@datetime("yyyy年MM月dd日 HH:mm")'
-  }]
-})
-
-Mock.mock('http://localhost:9999/api/admin/users', 'post', {
-  'fields': ['编号', '姓名', '部门', '联系方式'],
-  'keys': ['id', 'name', 'bu', 'tel'],
-  'cols': [4, 4, 4, 4],
-  'currentPage|0-50': 1,
-  'totalPage': 50,
-  'items|20': [{
-    'id': /\d{8}/,
-    'name': '@FIRST LAST',
-    'userId': /\d{8}/,
-    'bu': "@pick(['开发', '人事', '产品', '运营'])",
-    'tel': '@email'
-  }]
-})
-
-Mock.mock('http://localhost:9999/api/admin/records', 'post', {
-  'fields': ['用户编号', '操作', '部门', '文件编号', '时间'],
-  'keys': ['id', 'operate', 'bu', 'fid', 'operateTime'],
-  'cols': [3, 3, 3, 4, 7],
-  'currentPage|0-50': 1,
-  'totalPage': 50,
-  'items|20': [{
-    'id': /\d{8}/,
-    'fid': /\d{8}/,
-    'bu': "@pick(['开发', '人事', '产品', '运营'])",
-    'operateTime': '@datetime("yyyy年MM月dd日 HH:mm")',
-    'operate': "@pick(['更新', '删除', '浏览', '创建', '评论'])"
-  }]
-})
-
-Mock.mock('http://localhost:9999/api/admin/notices', 'post', {
-  'fields': ['编号', '对象', '部门', '内容', '创建时间', '结束时间'],
-  'keys': ['id', 'to', 'bu', 'ctx', 'startTime', 'endTime'],
-  'cols': [2, 2, 2, 7, 4, 4],
-  'currentPage|0-50': 1,
-  'totalPage': 50,
-  'items|20': [{
-    'id': /\d{8}/,
-    'to': /\d{8}/,
-    'bu': "@pick(['开发', '人事', '产品', '运营'])",
-    'ctx': "@csentence(10, 20)",
-    'startTime': '@datetime("yyyy年MM月dd日 HH:mm")',
-    'endTime': '@datetime("yyyy年MM月dd日 HH:mm")'
   }]
 })
 

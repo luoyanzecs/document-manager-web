@@ -1,51 +1,61 @@
 <template>
-  <z-aside>
-    <template v-slot:context>
-      <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">管理员界面</div>
-      <div class="ml-4 mt-4 mr-2 flex flex-col gap-2 text-xl font-normal tracking-widest ">
-        <div v-for="(item, index) in menu"
-             :key="index"
-             @click="menuSelect(index)"
-             :class="{'select-menu': index === SEARCH_PARAMS.menuIndex, 'menu-base': true}"
-        >{{ item }}
+  <div class="flex w-full overflow-hidden relative h-screen">
+    <z-aside>
+      <template v-slot:context>
+        <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">管理员界面</div>
+        <div class="ml-4 mt-4 mr-2 flex flex-col gap-2 text-xl font-normal tracking-widest ">
+          <div v-for="(item, index) in menu" :key="index" @click="menuSelect(index)"
+               :class="{'select-menu': index === SEARCH_PARAMS.menuIndex, 'menu-base': true}"
+          >{{ item }}
+          </div>
         </div>
+      </template>
+    </z-aside>
+    <div class="flex-1 overflow-y-auto h-screen">
+      <z-header>
+        <template v-slot:tools>
+          <z-head-menu>
+            <template v-if="SEARCH_PARAMS.menuIndex === 0">
+              <z-button fill="新增" @click="headButtonHandler('10')" :load-visible="BUTTON_LOADER._10"/>
+              <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00"/>
+              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"/>
+              <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._02"/>
+            </template>
+            <template v-if="SEARCH_PARAMS.menuIndex === 1">
+              <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00"/>
+              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"/>
+              <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._02"/>
+            </template>
+            <template v-if="SEARCH_PARAMS.menuIndex === 2">
+              <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00"/>
+              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"/>
+              <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._02"/>
+            </template>
+            <template v-if="SEARCH_PARAMS.menuIndex === 3">
+              <z-button fill="新增" @click="headButtonHandler('30')" :load-visible="BUTTON_LOADER._30"/>
+              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"/>
+              <z-button fill="记录" @click="headButtonHandler('33')" :load-visible="BUTTON_LOADER._33"/>
+            </template>
+          </z-head-menu>
+        </template>
+        <template v-slot:avatar>
+          <z-avatar :image="userInfo.avatar"/>
+        </template>
+      </z-header>
+      <div class="h-full overflow-auto space-y-4 flex flex-col">
+        <div v-if="tableProp.pairs.length === 0" class="pos-center mt-60">
+          <svg class="text-gray-400 w-20 h-20 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        <template v-else>
+          <z-table ref="table" v-bind="tableProp" class=""/>
+          <div class="w-full mx-auto sticky bottom-0 bg-white py-4">
+            <z-pagination v-bind="pageProp" @select-page="selectPageHandler"/>
+          </div>
+        </template>
       </div>
-    </template>
-  </z-aside>
-  <div class="h-screen flex-grow flex flex-col">
-    <z-header>
-      <template v-slot:tools>
-        <z-head-menu>
-          <template v-if="SEARCH_PARAMS.menuIndex === 0">
-            <z-button fill="新增" @click="headButtonHandler('10')" :load-visible="BUTTON_LOADER._10"/>
-            <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00"/>
-            <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"/>
-            <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._02"/>
-          </template>
-          <template v-if="SEARCH_PARAMS.menuIndex === 1">
-            <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00"/>
-            <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"/>
-            <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._02"/>
-          </template>
-          <template v-if="SEARCH_PARAMS.menuIndex === 2">
-            <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00"/>
-            <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"/>
-            <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._02"/>
-          </template>
-          <template v-if="SEARCH_PARAMS.menuIndex === 3">
-            <z-button fill="新增" @click="headButtonHandler('30')" :load-visible="BUTTON_LOADER._30"/>
-            <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"/>
-            <z-button fill="记录" @click="headButtonHandler('33')" :load-visible="BUTTON_LOADER._33"/>
-          </template>
-        </z-head-menu>
-      </template>
-      <template v-slot:avatar>
-        <z-avatar :image="userInfo.avatar"/>
-      </template>
-    </z-header>
-    <div class="flex flex-col items-center overflow-auto gap-4 pb-16">
-      <z-table ref="table" v-bind="tableProp"/>
-      <z-pagination v-show="tableProp.fields.length !== 0" v-bind="pageProp" @select-page="selectPageHandler"/>
     </div>
   </div>
   <transition-group name="fade">
@@ -108,9 +118,7 @@ const pageProp = reactive({
 })
 
 const tableProp = reactive({
-  fields: [],
-  keys: [],
-  cols: [],
+  pairs: [],
   items: []
 })
 
@@ -125,7 +133,8 @@ const BUTTON_LOADER = reactive({
 const setProps = (res, selectPage) => {
   pageProp.currentPage = selectPage
   pageProp.totalPage = res.totalPage
-  Object.assign(tableProp, res)
+  tableProp.pairs = res.pairs
+  tableProp.items = res.items
 }
 
 const selectPageHandler = (page=SEARCH_PARAMS.page, paginationDisplay=true) => {
@@ -201,9 +210,7 @@ watch(
     () => SEARCH_PARAMS.menuIndex,
     () => {
       SEARCH_PARAMS.page = 0
-      tableProp.cols.splice(0, tableProp.cols.length)
-      tableProp.fields.splice(0, tableProp.fields.length)
-      tableProp.keys.splice(0, tableProp.keys.length)
+      tableProp.pairs.splice(0, tableProp.pairs.length)
       tableProp.items.splice(0, tableProp.items.length)
     }
 )

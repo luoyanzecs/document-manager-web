@@ -35,6 +35,7 @@ module.exports = {
       24: 'repeat(24, minmax(0, 1fr))',
     },
     minWidth: {
+      '0': '0',
       '4': '4rem',
       '75': '75%',
       '85': '85%',

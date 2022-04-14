@@ -59,7 +59,7 @@
     <z-dailog :key="2" v-show="BUTTON_LOADER.isBuSelectDailogShow" v-model:click-toggle="BUTTON_LOADER.isBuSelectDailogShow">
       <template #title>选择筛选的部门</template>
       <template #body>
-        <div class="flex gap-2">
+        <div class="flex gap-2 mb-6">
           <div v-for="bu in buList" :key="bu.name" @click="bu.checked = !bu.checked"
                :class="[{'bg-yellow-500 bg-opacity-30': bu.checked}, 'px-3', 'py-0.5', 'border', 'rounded-2xl', 'cursor-pointer']">
             <span class="whitespace-nowrap text-gray-500 text-sm">{{ bu.name }}</span>
@@ -157,7 +157,10 @@ function deleteItemHandler() {
 
 function buSelectHandler() {
   BUTTON_LOADER.buSelectConfirmBtn = true
-  selectHandler().finally(() => BUTTON_LOADER.buSelectConfirmBtn = false)
+  selectHandler().finally(() => {
+    BUTTON_LOADER.buSelectConfirmBtn = false
+    BUTTON_LOADER.isBuSelectDailogShow = false
+  })
 }
 
 function selectHandler() {

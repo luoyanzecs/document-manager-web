@@ -1,5 +1,5 @@
 <template>
-  <table class="table-auto ">
+  <table class="table-auto">
     <thead>
     <tr class="sticky top-0 bg-white z-10">
       <th class="sticky left-0 bg-white"><div @click.stop="toggle(-1)" :class="[isToggleAll ? 'bg-blue-500' : 'bg-white', 'choose-box']"/></th>
@@ -14,14 +14,14 @@
         <td v-for="key in pairs.map(it => it.key)" :key="list.id + key">
           <span class="text-sm md:text-base truncate">{{ list[key] }}</span>
         </td>
-        <td>
+        <td class="sticky right-0 bg-white bg-opacity-75">
           <svg  @click="isExpand[i] = true" class="text-gray-200 cursor-pointer w-5 h-5 items-end" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-042ca774="">
             <path fill="currentColor" d="M104.704 338.752a64 64 0 0190.496 0l316.8 316.8 316.8-316.8a64 64 0 0190.496 90.496L557.248 791.296a64 64 0 01-90.496 0L104.704 429.248a64 64 0 010-90.496z"></path>
           </svg>
         </td>
       </template>
       <template v-else>
-        <td :colspan="pairs.length + 2">
+        <td :colspan="pairs.length + 2" class="">
           <div class="bg-gray-200 rounded-lg p-2">
             <div class="text-blue-500 cursor-pointer flex justify-end" @click.stop="isExpand[i] = false">
               <span>关闭</span>

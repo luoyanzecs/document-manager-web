@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full overflow-hidden relative h-screen">
+  <div class="flex w-full overflow-hidden h-screen">
     <z-aside>
       <template v-slot:context>
         <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">管理员界面</div>
@@ -11,7 +11,7 @@
         </div>
       </template>
     </z-aside>
-    <div class="flex-1 overflow-y-auto h-screen">
+    <div class="flex-auto relative h-screen min-w-0">
       <z-header>
         <template v-slot:tools>
           <z-head-menu>
@@ -42,7 +42,7 @@
           <z-avatar :image="userInfo.avatar"/>
         </template>
       </z-header>
-      <div class="h-full overflow-auto space-y-4 flex flex-col">
+      <div class="h-screen overflow-auto">
         <div v-if="tableProp.pairs.length === 0" class="pos-center mt-60">
           <svg class="text-gray-400 w-20 h-20 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -50,8 +50,8 @@
           </svg>
         </div>
         <template v-else>
-          <z-table ref="table" v-bind="tableProp" class=""/>
-          <div class="w-full mx-auto sticky bottom-0 bg-white py-4">
+          <z-table ref="table" v-bind="tableProp" class="mb-32"/>
+          <div class="w-full mx-auto bg-white py-4 absolute z-10 bottom-0">
             <z-pagination v-bind="pageProp" @select-page="selectPageHandler"/>
           </div>
         </template>
@@ -112,7 +112,7 @@ const SEARCH_PARAMS = reactive({
 })
 
 const pageProp = reactive({
-  currentPage: 0,
+  currentPage: 1,
   visible: false,
   totalPage: 0
 })
@@ -209,7 +209,7 @@ onMounted(() => {
 watch(
     () => SEARCH_PARAMS.menuIndex,
     () => {
-      SEARCH_PARAMS.page = 0
+      SEARCH_PARAMS.page = 1
       tableProp.pairs.splice(0, tableProp.pairs.length)
       tableProp.items.splice(0, tableProp.items.length)
     }

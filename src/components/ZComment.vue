@@ -46,7 +46,7 @@ import ZAvatar from "@/components/ZAvatar.vue";
 import {computed, onBeforeMount, ref, defineProps, PropType, Ref, reactive} from "vue";
 import ZButton from "@/components/ZButton.vue";
 import {useStore} from "vuex";
-import {LEAVE_MESSAGE} from "@/api";
+import {LEAVE_COMMENT} from "@/api";
 import {transformTime} from "@/tool/utils";
 
 interface Comment {
@@ -129,12 +129,11 @@ function buttonClickHandler(fun: String, param?: any) {
         fileId: param,
         ctx: msgInput.aboveCtx
       }
-      LEAVE_MESSAGE(params).then(() => {
-        msgInput.inputLoadAboue = !msgInput.inputLoadAboue
+      LEAVE_COMMENT(params).then(() => {
         commentWrapper.comment = msgInput.aboveCtx
         msgInput.inputLoadSingle.unshift(false)
         comments.value.unshift(commentWrapper)
-      }).catch(() => msgInput.inputLoadAboue = !msgInput.inputLoadAboue)
+      }).finally(() => msgInput.inputLoadAboue = !msgInput.inputLoadAboue)
       break
     }
     case 'reply': {
@@ -147,7 +146,7 @@ function buttonClickHandler(fun: String, param?: any) {
         parentCommentId: param.id,
         ctx: msgInput.aboveCtx
       }
-      LEAVE_MESSAGE(params).then(() => {
+      LEAVE_COMMENT(params).then(() => {
         msgInput.inputLoadSingle[param.index] = false
         commentWrapper.comment = msgInput.singleCtx
         comments.value.find(it => it.id === param.id)?.reply.unshift(commentWrapper)

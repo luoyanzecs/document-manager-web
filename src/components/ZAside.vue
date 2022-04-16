@@ -2,7 +2,7 @@
   <div v-if="isAsideShow"
        class="absolute w-screen h-screen z-10 bg-gray-700 opacity-40 md:hidden"
        @click.stop="toggleAside"/>
-  <div class="border-r border-gray-200 border-opacity-70 bg-white absolute z-30 md:relative"
+  <div class="border-r border-gray-200 border-opacity-70 bg-white absolute z-30 md:relative flex-shrink-0"
        @click.stop>
     <div class="z-30 absolute h-16 flex items-center px-4">
       <z-button fill="边栏" @click="toggleAside"/>

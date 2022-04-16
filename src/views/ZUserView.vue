@@ -1,9 +1,8 @@
 <template>
   <z-aside>
     <template #right>
-      <select v-model="bu" style="height: 2.25rem" class="min-w-4 focus:outline-none bg-blue-500 rounded-2xl py-2 pl-1.5 text-center text-sm text-white tracking-widest flex-shrink-0 select-none">
-        <option v-for="bu in buList" :value="bu" :key="bu"> {{ bu }}</option>
-      </select>
+      <z-select class="bg-blue-500 rounded-2xl text-white min-w-4 py-2 pl-4 text-sm"
+                v-model:value="bu" :options="buList.map(it => {return {value: it, name: it}})"/>
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
@@ -79,7 +78,7 @@
           </div>
           <div class="space-x-4 flex items-center text-gray-500">
             <p class="w-24 border-r-2 px-2 flex-shrink-0">文件位置</p>
-            <z-location-select :items="APIRES.menuItems"/>
+            <z-location-select class="md:pr-2" :items="APIRES.menuItems" @select-dir="localtionSelectHandler"/>
           </div>
           <div class="space-x-4 flex items-center text-gray-500">
             <label class="w-24 border-r-2 px-2" for="createFileName">文件名</label>
@@ -126,12 +125,13 @@ import ZAvatar from "@/components/ZAvatar.vue";
 import ZTree from "@/components/ZTree.vue";
 import ZComment from "@/components/ZComment.vue";
 import ZDailog from "@/components/ZDailog";
-import {FILE_MENU, COMMENT, GET_FILE, UPDATE_FILE, CREATE_FILE, SEARCH, GET_BU, UPLOAD_ATTACH} from "@/api";
+import {FILE_MENU, GET_COMMENT, GET_FILE, UPDATE_FILE, CREATE_FILE, SEARCH, GET_BU, UPLOAD_ATTACH} from "@/api";
 import {useStore} from "vuex";
 import ZEditor from "@/components/ZEditor";
 import { html2json } from "html2json"
 import ZLocationSelect from "@/components/ZLocationSelect";
 import {transformTime} from "@/tool/utils";
+import ZSelect from "@/components/ZSelect";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
@@ -299,6 +299,10 @@ const buttonClickHandler = (index) => {
   }
 }
 
+function localtionSelectHandler(dirId) {
+  newFile.parentDirId = dirId
+}
+
 function downloadAttach(link) {
   console.log(link)
 }
@@ -324,7 +328,7 @@ const selectFileHandler = (param) => {
     APIRES.fileInfo = it.fileInfo
   }).catch(() => LOADER.isCtxLoad = false)
 
-  COMMENT({id: param.id}).then(it => {
+  GET_COMMENT({id: param.id}).then(it => {
     LOADER.isCommentLoad = false
     APIRES.comments.splice(0, APIRES.comments.length)
     it.comments.forEach((comment) => APIRES.comments.push(comment))

@@ -1,5 +1,5 @@
 <template>
-  <button class="btn-class relative">
+  <button :class="[{'animate-shake': denyAnimation}, 'btn-class']">
     <span :class="[{'invisible': loadVisible}]">{{ fill }}</span>
     <span class="absolute pos-center top-0 left-0 w-full h-full">
       <svg v-if="loadVisible" class="text-white w-6 h-6 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -22,12 +22,17 @@ defineProps({
   fill: {
     type: String,
     required: false
+  },
+  denyAnimation: {
+    type: Boolean,
+    default: false,
+    required: false
   }
 })
 </script>
 
 <style scoped>
 .btn-class {
-  @apply min-w-4 bg-blue-500 rounded-2xl p-2 text-sm text-white tracking-widest flex-shrink-0 select-none
+  @apply min-w-4 bg-blue-500 rounded-2xl p-2 text-sm text-white tracking-widest flex-shrink-0 select-none relative
 }
 </style>

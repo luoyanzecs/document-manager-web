@@ -29,6 +29,24 @@ Mock.mock('http://localhost:9999/api/admin/search', 'post', {
   }]
 })
 
+Mock.mock('http://localhost:9999/api/admin/add/user', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/admin/add/notice', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
 Mock.mock('http://localhost:9999/api/user/leaveMessage', 'post', {
   'head': {
     'status': 'success',

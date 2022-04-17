@@ -284,7 +284,7 @@ const BUTTON_LOADER = reactive({
   isDeleteBtnShake: false, isDeleteDailogShow: false, deleteConfirmBtn: false,
   isBuSelectDailogShow: false, buSelectConfirmBtn: false,
   isAddUserDailogShow: false, isAddUserConfirmBtn: false, isAddUserConfirmBtnShake: false,
-  isAddNoticeDailogShow: true, isAddNoticeConfirmBtn: false, isAddNoticeConfirmBtnShake: false
+  isAddNoticeDailogShow: false, isAddNoticeConfirmBtn: false, isAddNoticeConfirmBtnShake: false
 })
 
 const setProps = (res, selectPage) => {

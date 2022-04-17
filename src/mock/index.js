@@ -167,7 +167,7 @@ Mock.mock('http://localhost:9999/api/user/file', 'post', {
   'fileInfo': {
     'editor': '@First @Last',
     'lastEditTime': '@datetime("yyyy年MM月dd日 HH:mm")',
-    'fileContent': '<p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p>',
+    'fileContent': '<p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p>',
     'attaches|0-3': [{
       'name': '@ctitle(4, 7)',
       'link': '@url("http")'
@@ -175,7 +175,25 @@ Mock.mock('http://localhost:9999/api/user/file', 'post', {
   }
 })
 
-Mock.mock('http://localhost:9999/api/attach', 'post', {
+Mock.mock('http://localhost:9999/api/uploadAttach', 'post', {
   'name': '@ctitle(4, 7)',
   'link': '@url("http")'
+})
+
+Mock.mock('http://localhost:9999/api/user/downloadAttach', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/user/deleteAttach', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
 })

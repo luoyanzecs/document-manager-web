@@ -14,7 +14,7 @@
 
   <template v-if="comments.length !== 0 && !isCommentLoad">
     <div v-for="(comment, index) in comments" :key="comment.commentId" class="my-2 flex gap-3 w-full px-2 md:w-11/12">
-      <z-avatar :image="comment.avatar"/>
+      <z-avatar :image="comment.avatar" class="flex-shrink-0"/>
       <div class="flex-grow flex flex-col gap-2">
         <div>
           <p class="font-bold">{{ comment.name }}</p>

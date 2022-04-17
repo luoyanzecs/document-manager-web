@@ -45,14 +45,15 @@ const sendHttp = (url, params, callback) => {
     .catch(errorHandler)
 }
 
-// TODO
 export const ADD_NEW_USER = params => sendHttp('admin/add/user', params, post)
 export const ADD_NEW_NOTICE = params => sendHttp('admin/add/notice', params, post)
 export const ADMIN_SEARCH_ALL_IN_ONE = params => sendHttp('admin/search', params, post)
 export const DELETE_TABLE_ITEMS = params => sendHttp('admin/delete', params, post)
 export const GET_BU = params => sendHttp('getbu', params, post)
 export const LEAVE_COMMENT = params => sendHttp('user/leaveMessage', params, post)
-export const UPLOAD_ATTACH = file => sendHttp('attach', file, uploader)
+export const UPLOAD_ATTACH = file => sendHttp('user/uploadAttach', file, uploader) //上传附件
+export const DOWNLOAD_ATTACH = params => sendHttp('user/downloadAttach', params, post) // 下载附件
+export const DELETE_ATTACH = params => sendHttp('user/deleteAttach', params, post) // 删除附件
 export const SEARCH = params => sendHttp('search', params, post)
 export const CREATE_FILE = params => sendHttp('user/createFile', params, post)
 export const UPDATE_FILE = params => sendHttp('user/updateFile', params, post)

@@ -90,7 +90,7 @@
             <li><p class="text-gray-400 text-xs">* 用户等级范围为0-10。</p></li>
           </ul>
         <form class="mb-4">
-          <table class="table-fixed text-gray-500 border-separate" style="border-spacing: 1rem 1rem">
+          <table class="table-fixed text-gray-500 border-separate" style="border-spacing: .5rem 1rem">
             <tr>
               <td class="border-r-2 pr-2">用户名</td>
               <td>
@@ -104,9 +104,9 @@
             </tr>
             <tr>
               <td class="border-r-2 pr-2">部门</td>
-              <td class="space-x-2">
-              <span v-for="bu in buList" :key="bu" @click="NEW_USER_PARAMS.bu = bu.name"
-                    :class="[{'selected-item': NEW_USER_PARAMS.bu === bu.name}, 'select-item']">{{ bu.name }}</span>
+              <td class="flex gap-2">
+                <p v-for="bu in buList" :key="bu" @click="NEW_USER_PARAMS.bu = bu.name"
+                      :class="[{'selected-item': NEW_USER_PARAMS.bu === bu.name}, 'select-item']">{{ bu.name }}</p>
               </td>
             </tr>
             <tr>

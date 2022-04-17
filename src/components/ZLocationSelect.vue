@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col gap-1 flex-grow ml-2">
+  <div :class="[{'ml-2': !isTop}, 'flex', 'flex-col', 'gap-1']">
     <div class="flex">
-      <div v-if="!isTop" class="w-4 h-4 border-l-2 border-b-2 rounded-bl-lg border-blue-300 py-1"></div>
-      <z-select class="w-full border rounded-lg px-2" v-model:value="dirId" :options="dirs"/>
+      <div v-if="!isTop" class="w-4 h-4 border-l-2 border-b-2 rounded-bl-lg border-blue-300 py-1 flex-shrink-0"></div>
+      <z-select class="border rounded-lg px-2 w-full" v-model:value="dirId" :options="dirs"/>
     </div>
     <template v-if="subDirs.length !== 0" >
       <z-location-select :items="subDirs" :level="level + 1" @select-dir="selectDirHandler"/>

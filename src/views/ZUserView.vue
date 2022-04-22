@@ -96,7 +96,7 @@
             <tr>
               <td class="border-r-2 pr-2 whitespace-nowrap">文件位置</td>
               <td>
-                <z-location-select class="mr-2 w-72 sm:w-96" :items="APIRES.menuItems" @select-dir="localtionSelectHandler"/>
+                <z-location-select class="mr-2 w-64 sm:w-96" :items="APIRES.menuItems" @select-dir="localtionSelectHandler"/>
               </td>
             </tr>
             <tr>

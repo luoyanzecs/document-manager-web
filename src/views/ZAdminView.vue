@@ -5,8 +5,7 @@
         <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">管理员界面</div>
         <div class="ml-4 mt-4 mr-2 flex flex-col gap-2 text-xl font-normal tracking-widest ">
           <div v-for="(item, index) in menu" :key="index" @click="menuSelect(index)"
-               :class="{'select-menu': index === SEARCH_PARAMS.menuIndex, 'menu-base': true}"
-          >{{ item }}
+            :class="{ 'select-menu': index === SEARCH_PARAMS.menuIndex, 'menu-base': true }">{{ item }}
           </div>
         </div>
       </template>
@@ -16,43 +15,50 @@
         <template v-slot:tools>
           <z-head-menu>
             <template v-if="SEARCH_PARAMS.menuIndex === 0">
-              <z-button fill="新增" @click="headButtonHandler('10')" :load-visible="BUTTON_LOADER._10"/>
-              <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00"/>
-              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01" :deny-animation="BUTTON_LOADER.isDeleteBtnShake"/>
-              <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._22"/>
+              <z-button fill="新增" @click="headButtonHandler('10')" :load-visible="BUTTON_LOADER._10" />
+              <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00" />
+              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"
+                :deny-animation="BUTTON_LOADER.isDeleteBtnShake" />
+              <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._22" />
             </template>
             <template v-if="SEARCH_PARAMS.menuIndex === 1">
               <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00" />
-              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01" :deny-animation="BUTTON_LOADER.isDeleteBtnShake"/>
-              <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._22"/>
+              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"
+                :deny-animation="BUTTON_LOADER.isDeleteBtnShake" />
+              <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._22" />
             </template>
             <template v-if="SEARCH_PARAMS.menuIndex === 2">
-              <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00"/>
-              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01" :deny-animation="BUTTON_LOADER.isDeleteBtnShake"/>
-              <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._22"/>
+              <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00" />
+              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"
+                :deny-animation="BUTTON_LOADER.isDeleteBtnShake" />
+              <z-button fill="所有" @click="headButtonHandler('22')" :load-visible="BUTTON_LOADER._22" />
             </template>
             <template v-if="SEARCH_PARAMS.menuIndex === 3">
-              <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00"/>
-              <z-button fill="新增" @click="headButtonHandler('30')" :load-visible="BUTTON_LOADER._30"/>
-              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01" :deny-animation="BUTTON_LOADER.isDeleteBtnShake"/>
+              <z-button fill="部门" @click="headButtonHandler('00')" :load-visible="BUTTON_LOADER._00" />
+              <z-button fill="新增" @click="headButtonHandler('30')" :load-visible="BUTTON_LOADER._30" />
+              <z-button fill="删除" @click="headButtonHandler('01')" :load-visible="BUTTON_LOADER._01"
+                :deny-animation="BUTTON_LOADER.isDeleteBtnShake" />
             </template>
           </z-head-menu>
         </template>
         <template v-slot:avatar>
-          <z-avatar :image="userInfo.avatar"/>
+          <z-avatar :image="userInfo.avatar" />
         </template>
       </z-header>
       <div class="h-screen overflow-auto">
         <div v-if="tableProp.pairs.length === 0" class="pos-center mt-60">
-          <svg class="text-gray-400 w-20 h-20 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg class="text-gray-400 w-20 h-20 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
           </svg>
         </div>
         <template v-else>
-          <z-table ref="table" v-bind="tableProp" class="mb-32"/>
+          <z-table ref="table" v-bind="tableProp" class="mb-32" />
           <div class="w-full mx-auto bg-white py-4 absolute z-10 bottom-0">
-            <z-pagination v-bind="pageProp" @select-page="selectPageHandler"/>
+            <z-pagination v-bind="pageProp" @select-page="selectPageHandler" />
           </div>
         </template>
       </div>
@@ -104,9 +110,9 @@
             </tr>
             <tr>
               <td class="border-r-2 pr-2">部门</td>
-              <td class="flex gap-2">
-                <p v-for="bu in buList" :key="bu" @click="NEW_USER_PARAMS.bu = bu.name"
-                      :class="[{'selected-item': NEW_USER_PARAMS.bu === bu.name}, 'select-item']">{{ bu.name }}</p>
+              <td>
+                <span v-for="bu in buList" :key="bu" @click="NEW_USER_PARAMS.bu = bu.name"
+                  :class="[{ 'selected-item': NEW_USER_PARAMS.bu === bu.name }, 'select-item']">{{ bu.name }}</span>
               </td>
             </tr>
             <tr>
@@ -170,9 +176,9 @@
             <tr>
               <td class="border-r-2 pr-2 whitespace-nowrap">通知内容</td>
               <td class="w-full">
-                <textarea class="focus:outline-none border rounded-lg px-2 py-2 resize-none"
-                          spellcheck="false" @input="$event.target.required='required'" rows="2" cols="30"
-                          minlength="5" maxlength="60" placeholder="请输入通知内容" v-model="NEW_NOTICE_PARAMS.text"/>
+                <textarea class="focus:outline-none border rounded-lg px-2 py-2 resize-x" spellcheck="false"
+                  @input="$event.target.required = 'required'" rows="2" minlength="5" maxlength="60" placeholder="请输入通知内容"
+                  v-model="NEW_NOTICE_PARAMS.text" />
               </td>
             </tr>
           </table>
@@ -188,18 +194,18 @@
 </template>
 
 <script setup>
-import {computed, onMounted, reactive, ref, watch} from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import ZHeadMenu from "@/components/ZHeadMenu";
 import ZButton from "@/components/ZButton";
 import ZAside from "@/components/ZAside";
 import ZHeader from "@/components/ZHeader";
 import ZAvatar from "@/components/ZAvatar";
 import ZPagination from "@/components/ZPagination"
-import {useStore} from "vuex";
+import { useStore } from "vuex";
 import ZTable from "@/components/ZTable";
-import {DELETE_TABLE_ITEMS, GET_BU, ADMIN_SEARCH_ALL_IN_ONE, ADD_NEW_USER, ADD_NEW_NOTICE} from "@/api";
+import { DELETE_TABLE_ITEMS, GET_BU, ADMIN_SEARCH_ALL_IN_ONE, ADD_NEW_USER, ADD_NEW_NOTICE } from "@/api";
 import ZDailog from "@/components/ZDailog";
-import {sleep, transformTimeShort} from "@/tool/utils";
+import { sleep, transformTimeShort } from "@/tool/utils";
 
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
@@ -222,11 +228,11 @@ const NEW_USER_PARAMS = reactive({
   },
   get: function () {
     return {
-      name: this.name,
-      password: this.password,
-      isAdmin: this.isAdmin,
-      bu: this.bu,
-      rank: this.rank
+      name: NEW_USER_PARAMS.name,
+      password: NEW_USER_PARAMS.password,
+      isAdmin: NEW_USER_PARAMS.isAdmin,
+      bu: NEW_USER_PARAMS.bu,
+      rank: NEW_USER_PARAMS.rank
     }
   }
 })
@@ -240,17 +246,17 @@ const NEW_NOTICE_PARAMS = reactive({
   clearAll: function () {
     this.text = ''
     this.bu = []
-    this.isGlobal= false
-    this.expiredTime= ''
-    this.startTime=  transformTimeShort()
+    this.isGlobal = false
+    this.expiredTime = ''
+    this.startTime = transformTimeShort()
   },
   get: function () {
     return {
-      text: this.text,
-      bu: this.bu,
-      isGlobal: this.isGlobal,
-      expiredTime: this.expiredTime,
-      startTime: this.startTime,
+      text: NEW_NOTICE_PARAMS.text,
+      bu: NEW_NOTICE_PARAMS.bu,
+      isGlobal: NEW_NOTICE_PARAMS.isGlobal,
+      expiredTime: NEW_NOTICE_PARAMS.expiredTime,
+      startTime: NEW_NOTICE_PARAMS.startTime,
     }
   }
 })
@@ -259,12 +265,21 @@ const SEARCH_PARAMS = reactive({
   menuIndex: 0,
   page: 1,
   pageSize: 20,
-  bu: computed(() => buList.value.filter(it => it.checked)),
+  bu: computed(() => buList.value.filter(it => it.checked)).value,
   userids: [],
   clearAll: function () {
     this.page = 1
     this.userids = []
     buList.value.forEach(it => it.checked = false)
+  },
+  get: function () {
+    return {
+      menuIndex: SEARCH_PARAMS.menuIndex,
+      page: SEARCH_PARAMS.page,
+      pageSize: SEARCH_PARAMS.pageSize,
+      bu: SEARCH_PARAMS.bu,
+      userids: SEARCH_PARAMS.userids,
+    }
   }
 })
 
@@ -294,7 +309,7 @@ const setProps = (res, selectPage) => {
   tableProp.items = res.items
 }
 
-const selectPageHandler = (page=SEARCH_PARAMS.page, paginationDisplay=true) => {
+const selectPageHandler = (page = SEARCH_PARAMS.page, paginationDisplay = true) => {
   SEARCH_PARAMS.page = parseInt(page)
   pageProp.visible = paginationDisplay
   selectHandler().finally(() => pageProp.visible = false)
@@ -311,37 +326,37 @@ const menuSelect = (index) => {
 
 function addUserHandler() {
   const regExp = new RegExp("([a-z|A-Z]|[.|@]|[0-9]){6,16}");
-  if ( !regExp.test(NEW_USER_PARAMS.name) || !regExp.test(NEW_USER_PARAMS.password) || NEW_USER_PARAMS.bu === '') {
+  if (!regExp.test(NEW_USER_PARAMS.name) || !regExp.test(NEW_USER_PARAMS.password) || NEW_USER_PARAMS.bu === '') {
     sleep(800, () => {
       BUTTON_LOADER.isAddUserConfirmBtnShake = true
-      store.commit('unshiftNotice', {type: 2, message: '输入必要字段'})
+      store.commit('unshiftNotice', { type: 2, message: '输入必要字段' })
     }).then(() => BUTTON_LOADER.isAddUserConfirmBtnShake = false)
     return
   }
   BUTTON_LOADER.isAddUserConfirmBtn = true
   ADD_NEW_USER(NEW_USER_PARAMS.get())
-      .then(() => store.commit('unshiftNotice', {type: 1, message: '新用户已添加'}))
-      .finally(() => {
-        BUTTON_LOADER.isAddUserConfirmBtn = false
-        BUTTON_LOADER.isAddUserDailogShow = false
-      })
+    .then(() => store.commit('unshiftNotice', { type: 1, message: '新用户已添加' }))
+    .finally(() => {
+      BUTTON_LOADER.isAddUserConfirmBtn = false
+      BUTTON_LOADER.isAddUserDailogShow = false
+    })
 }
 
 function addNoticeHandler() {
   if (NEW_NOTICE_PARAMS.text.length < 5 || NEW_NOTICE_PARAMS.text.length > 60 || NEW_NOTICE_PARAMS.expiredTime === '') {
     sleep(800, () => {
       BUTTON_LOADER.isAddNoticeConfirmBtnShake = true
-      store.commit('unshiftNotice', {type: 2, message: '输入必要字段'})
+      store.commit('unshiftNotice', { type: 2, message: '输入必要字段' })
     }).then(() => BUTTON_LOADER.isAddNoticeConfirmBtnShake = false)
     return
   }
   BUTTON_LOADER.isAddNoticeConfirmBtn = true
   ADD_NEW_NOTICE(NEW_NOTICE_PARAMS.get())
-      .then(() => store.commit('unshiftNotice', {type: 1, message: '新通知已添加'}))
-      .finally(() => {
-        BUTTON_LOADER.isAddNoticeConfirmBtn = false
-        BUTTON_LOADER.isAddNoticeDailogShow = false
-      })
+    .then(() => store.commit('unshiftNotice', { type: 1, message: '新通知已添加' }))
+    .finally(() => {
+      BUTTON_LOADER.isAddNoticeConfirmBtn = false
+      BUTTON_LOADER.isAddNoticeDailogShow = false
+    })
 }
 
 function deleteItemHandler() {
@@ -367,7 +382,7 @@ function buSelectHandler() {
 }
 
 function selectHandler() {
-  return ADMIN_SEARCH_ALL_IN_ONE(SEARCH_PARAMS).then(it => setProps(it, SEARCH_PARAMS.page))
+  return ADMIN_SEARCH_ALL_IN_ONE(SEARCH_PARAMS.get()).then(it => setProps(it, SEARCH_PARAMS.page))
 }
 
 function headButtonHandler(index) {
@@ -378,8 +393,8 @@ function headButtonHandler(index) {
     case '01': {// 打开删除确认对话框
       if (table.value.isSelect.filter(it => it).length === 0) {
         sleep(800,
-            () => BUTTON_LOADER.isDeleteBtnShake = true)
-            .then(() => BUTTON_LOADER.isDeleteBtnShake = false)
+          () => BUTTON_LOADER.isDeleteBtnShake = true)
+          .then(() => BUTTON_LOADER.isDeleteBtnShake = false)
         break
       }
       BUTTON_LOADER.isDeleteDailogShow = true
@@ -408,18 +423,18 @@ onMounted(() => {
   selectPageHandler()
   GET_BU({}).then(it => {
     buList.value = it.buList.map(it => {
-      return {name: it, checked: false}
+      return { name: it, checked: false }
     })
   })
 })
 
 watch(
-    () => SEARCH_PARAMS.menuIndex,
-    () => {
-      SEARCH_PARAMS.page = 1
-      tableProp.pairs.splice(0, tableProp.pairs.length)
-      tableProp.items.splice(0, tableProp.items.length)
-    }
+  () => SEARCH_PARAMS.menuIndex,
+  () => {
+    SEARCH_PARAMS.page = 1
+    tableProp.pairs.splice(0, tableProp.pairs.length)
+    tableProp.items.splice(0, tableProp.items.length)
+  }
 )
 
 </script>
@@ -429,31 +444,40 @@ textarea:invalid,
 input:invalid {
   @apply border-dashed border-red-600
 }
+
 .selected-item {
   @apply border-indigo-500 bg-indigo-500 text-white select-none
 }
+
 .new-user-input {
-  @apply focus:outline-none border rounded-lg px-2 py-0.5 select-none
+  @apply focus: outline-none border rounded-lg px-2 py-0.5 select-none
 }
+
 .select-item {
-  @apply px-3 py-0.5 border rounded-2xl cursor-pointer
+  @apply px-3 py-0.5 border rounded-2xl cursor-pointer whitespace-nowrap
 }
+
 .menu-base {
-  @apply hover:text-blue-500 rounded-md px-2 py-1.5 cursor-pointer text-gray-700 select-none
+  @apply hover: text-blue-500 rounded-md px-2 py-1.5 cursor-pointer text-gray-700 select-none
 }
+
 .select-menu {
   @apply bg-blue-200 text-blue-500 italic;
 }
+
 .fade-leave-active {
   animation: fade ease-in-out .15s reverse;
 }
+
 .fade-enter-active {
   animation: fade ease-in-out .15s;
 }
+
 @keyframes fade {
   from {
     @apply opacity-0
   }
+
   to {
     @apply opacity-100
   }

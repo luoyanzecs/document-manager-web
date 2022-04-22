@@ -450,7 +450,7 @@ input:invalid {
 }
 
 .new-user-input {
-  @apply focus: outline-none border rounded-lg px-2 py-0.5 select-none
+  @apply focus:outline-none border rounded-lg px-2 py-0.5 select-none
 }
 
 .select-item {
@@ -458,7 +458,7 @@ input:invalid {
 }
 
 .menu-base {
-  @apply hover: text-blue-500 rounded-md px-2 py-1.5 cursor-pointer text-gray-700 select-none
+  @apply hover:text-blue-500 rounded-md px-2 py-1.5 cursor-pointer text-gray-700 select-none
 }
 
 .select-menu {

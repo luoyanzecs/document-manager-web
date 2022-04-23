@@ -87,25 +87,33 @@
     <z-dailog :key="1" v-show="LOADER.isShowCreateBtnDailog" v-model:click-toggle="LOADER.isShowCreateBtnDailog">
       <template #title>请确认您的信息</template>
       <template #body>
-        <div class="flex flex-col gap-4 mb-6">
-          <div class="space-x-4 flex items-center text-gray-500">
-            <p class="w-24 border-r-2 px-2">当前部门</p>
-            <p>{{ bu }}</p>
-          </div>
-          <div class="space-x-4 flex items-center text-gray-500">
-            <p class="w-24 border-r-2 px-2 flex-shrink-0">文件位置</p>
-            <z-location-select class="md:pr-2" :items="APIRES.menuItems" @select-dir="localtionSelectHandler"/>
-          </div>
-          <div class="space-x-4 flex items-center text-gray-500">
-            <label class="w-24 border-r-2 px-2" for="createFileName">文件名</label>
-            <input type="text" v-model="newFile.name" class="border rounded-lg px-2 py-1 w-72 focus:outline-none" id="createFileName"
-                   placeholder="输入文件名" spellcheck="false" autocomplete="off">
-          </div>
-          <div class="space-x-4 flex items-center text-gray-500">
-            <p class="w-24 border-r-2 px-2">文件夹？</p>
-            <p class="cursor-pointer text-blue-500" @click="newFile.isDir = !newFile.isDir">{{ newFile.isDir ? '是' : '否' }}</p>
-          </div>
-        </div>
+        <form action="">
+          <table class="table-fixed text-gray-500 border-separate mb-4" style="border-spacing: 1rem 1rem">
+            <tr>
+              <td class="border-r-2 pr-2">当前部门</td>
+              <td>{{ bu }}</td>
+            </tr>
+            <tr>
+              <td class="border-r-2 pr-2 whitespace-nowrap">文件位置</td>
+              <td>
+                <z-location-select class="mr-2 w-64 sm:w-96" :items="APIRES.menuItems" @select-dir="localtionSelectHandler"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="border-r-2 pr-2 whitespace-nowrap"><label for="createFileName">文件名</label></td>
+              <td>
+                <input type="text" v-model="newFile.name" class="border rounded-lg px-2 py-1 w-72 focus:outline-none" id="createFileName"
+                       placeholder="输入文件名" spellcheck="false" autocomplete="off">
+              </td>
+            </tr>
+            <tr>
+              <td class="border-r-2 pr-2 whitespace-nowrap">文件夹？</td>
+              <td>
+                <span class="cursor-pointer text-blue-500" @click="newFile.isDir = !newFile.isDir">{{ newFile.isDir ? '是' : '否' }}</span>
+              </td>
+            </tr>
+          </table>
+        </form>
       </template>
       <template #bottom>
         <z-button fill="确认" @click="buttonClickHandler('newFileConfirm')" :load-visible="LOADER.isCreateFileLoad"/>
@@ -366,6 +374,8 @@ const selectFileHandler = (param) => {
   GET_FILE({id: param.id}).then(it => {
     LOADER.isCtxLoad = false
     APIRES.fileInfo = it.fileInfo
+    console.log(APIRES.fileInfo.fileContent)
+    // APIRES.fileInfo.fileContent = json2html(APIRES.fileInfo.fileContent)
     APIRES.fileInfo.attaches.forEach(it => {
       it.isAttachDownloading = false
       it.isAttachDeleting = false

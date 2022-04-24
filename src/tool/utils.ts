@@ -1,8 +1,7 @@
-import {App, h, Ref, VNode} from "vue";
-import { createApp } from 'vue'
-import {Vue} from "vue-class-component";
+import {Ref} from "vue";
 
-export const sleep = (time: number) => {
+export const sleep = (time: number, callback?: Function) => {
+  if (callback) { callback() }
   return new Promise((resolve, reject) => setTimeout(resolve, time))
 }
 
@@ -10,16 +9,39 @@ export const revert = (bool:Ref<boolean>) => {
   bool.value = !bool.value
 }
 
-export const refineHtml = (htmlText: string): string => {
-    htmlText.match(/>([^/]*?)<[a-z]/g)
-      ?.filter(it => it.substring(1, it.length - 2).trim() !== '')
-      .forEach(it => {
-        htmlText = htmlText.replace(it, `><p>${ it.substring(1, it.length-2).trim() }</p>${it.substring(it.length-2)}`)
-      })
-  return htmlText
+export const revertArray= (...values:Ref<boolean>[]) => {
+  values.forEach(revert)
 }
 
-export const toVnode = (htmlText: string): VNode => {
+export function transformTime(timestamp: number = +new Date()) {
+  if (timestamp) {
+    const time = new Date(timestamp);
+    const y = time.getFullYear();
+    const M = time.getMonth() + 1;
+    const d = time.getDate();
+    const h = time.getHours();
+    const m = time.getMinutes();
+    const s = time.getSeconds();
+    return y + '年' + addZero(M) + '月' + addZero(d) + '日 ' + addZero(h) + ':' + addZero(m) + ':' + addZero(s);
+  } else {
+    return '';
+  }
+}
+function addZero(m:number) {
+  return m < 10 ? '0' + m : m;
+}
 
-    return h('h1', {}, 'test')
+export function transformTimeShort(timestamp: number = +new Date()) {
+  if (timestamp) {
+    const time = new Date(timestamp);
+    const y = time.getFullYear();
+    const M = time.getMonth() + 1;
+    const d = time.getDate();
+    const h = time.getHours();
+    const m = time.getMinutes();
+    const s = time.getSeconds();
+    return y + '-' + addZero(M) + '-' + addZero(d);
+  } else {
+    return '';
+  }
 }

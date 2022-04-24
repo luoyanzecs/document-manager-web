@@ -1,5 +1,10 @@
 module.exports = {
-  content: ['./index.ts.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  content: ['./index.js.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  purge: [
+    './src/**/*.html',
+    './src/**/*.vue',
+    './src/**/*.jsx',
+  ],
   darkMode: 'class',
   theme: {
     gridTemplateColumns: {
@@ -30,15 +35,19 @@ module.exports = {
       24: 'repeat(24, minmax(0, 1fr))',
     },
     minWidth: {
+      '0': '0',
       '4': '4rem',
       '75': '75%',
-      '85': '85%'
+      '85': '85%',
+      '35': '35rem',
     },
     minHeight: {
       '0': '0px',
+      '6': '1.25rem',
       'full': '100%',
       'screen': '100vh',
       'notice': '5rem',
+      '15': '15rem',
       '30': '30rem',
       '40': '40rem',
       '80': '80rem'
@@ -47,6 +56,9 @@ module.exports = {
       center: true
     },
     extend: {
+      width: {
+        '35': '35rem'
+      },
       animation: {
         shake: 'shake .8s ease-in-out'
       },

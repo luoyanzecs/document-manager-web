@@ -4,8 +4,102 @@ Mock.setup({
   timeout: '600-2000'
 })
 
-Mock.mock('http://localhost:8081/api/login', 'post', {
-  'status': Boolean,
+Mock.mock('http://localhost:9999/api/admin/search', 'post', {
+  'pairs': [
+    {'name': '字段一', 'key': 'a'},
+    {'name': '字段二', 'key': 'b'},
+    {'name': '字段三', 'key': 'c'},
+    {'name': '字段四', 'key': 'd'},
+    {'name': '字段五', 'key': 'e'},
+    {'name': '字段六', 'key': 'f'},
+    {'name': '字段七', 'key': 'g'},
+    {'name': '字段七', 'key': 'h'},
+  ],
+  'currentPage|0-50': 1,
+  'totalPage': 50,
+  'items|35': [{
+    'a': '@ctitle(6, 12)',
+    'b': '@ctitle(6, 12)',
+    'c': '@ctitle(6, 12)',
+    'd': '@ctitle(6, 12)',
+    'e': '@ctitle(6, 12)',
+    'f': '@ctitle(6, 12)',
+    'g': '@ctitle(6, 12)',
+    'h': '@ctitle(6, 12)',
+  }]
+})
+
+Mock.mock('http://localhost:9999/api/admin/add/user', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/admin/add/notice', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/user/leaveMessage', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/admin/delete', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/search', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  },
+  'searchResults|3-6': [{
+    'id': /\d{8}/,
+    'title': '@ctitle(6, 9)',
+    'ctx': '@csentence(10, 12)'
+  }]
+})
+
+Mock.mock('http://localhost:9999/api/user/createFile', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  },
+  'fileId': /\d{8}/
+})
+
+Mock.mock('http://localhost:9999/api/user/updateFile', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/login', 'post', {
+  'token': '123213123',
   'userInfo': {
     'name': '@FIRST @LAST',
     'avatar': '@image',
@@ -15,19 +109,27 @@ Mock.mock('http://localhost:8081/api/login', 'post', {
   }
 })
 
-Mock.mock('http://localhost:8081/api/user/menu', 'get', {
+Mock.mock('http://localhost:9999/api/getbu', 'post', {
+  'buList': ['开发', '人事', '产品', '运营']
+})
+
+Mock.mock('http://localhost:9999/api/user/menu', 'post', {
   'items|5-10': [{
     'id': /\d{8}/,
     'title': '@ctitle(10, 20)',
+    'isDir': '@boolean',
     'children|2-10': [{
       'id': /\d{8}/,
       'title': '@ctitle(10, 20)',
+      'isDir': '@boolean',
       'children|2-5': [{
         'id': /\d{8}/,
         'title': '@ctitle(10, 20)',
+        'isDir': '@boolean',
         'children|0-5': [{
           'id': /\d{8}/,
           'title': '@ctitle(10, 20)',
+          'isDir': '@boolean',
           'children|0': []
         }]
       }]
@@ -35,7 +137,7 @@ Mock.mock('http://localhost:8081/api/user/menu', 'get', {
   }]
 })
 
-Mock.mock('http://localhost:8081/api/user/comment', 'post', {
+Mock.mock('http://localhost:9999/api/user/comment', 'post', {
   'comments|4-7': [{
     'commentId': /\d{8}/,
     'name': '@FIRST @LAST',
@@ -53,69 +155,7 @@ Mock.mock('http://localhost:8081/api/user/comment', 'post', {
   }]
 })
 
-Mock.mock('http://localhost:8081/api/admin/files', 'post', {
-  'fields': ['编号', '作者', '部门', '标题', '创建时间'],
-  'keys': ['id', 'owner', 'bu', 'title', 'createTime'],
-  'cols': [2, 2, 2, 8, 4],
-  'currentPage|0-50': 1,
-  'totalPage': 50,
-  'items|20': [{
-    'id': /\d{8}/,
-    'owner': '@FIRST LAST',
-    'userId': /\d{8}/,
-    'title': '@ctitle(10, 20)',
-    'bu': "@pick(['开发', '人事', '产品', '运营'])",
-    'createTime': '@datetime("yyyy年MM月dd日 HH:mm")'
-  }]
-})
-
-Mock.mock('http://localhost:8081/api/admin/users', 'post', {
-  'fields': ['编号', '姓名', '部门', '联系方式'],
-  'keys': ['id', 'name', 'bu', 'tel'],
-  'cols': [4, 4, 4, 4],
-  'currentPage|0-50': 1,
-  'totalPage': 50,
-  'items|20': [{
-    'id': /\d{8}/,
-    'name': '@FIRST LAST',
-    'userId': /\d{8}/,
-    'bu': "@pick(['开发', '人事', '产品', '运营'])",
-    'tel': '@email'
-  }]
-})
-
-Mock.mock('http://localhost:8081/api/admin/records', 'post', {
-  'fields': ['用户编号', '操作', '部门', '文件编号', '时间'],
-  'keys': ['id', 'oprate', 'bu', 'fid', 'oprateTime'],
-  'cols': [3, 3, 3, 4, 7],
-  'currentPage|0-50': 1,
-  'totalPage': 50,
-  'items|20': [{
-    'id': /\d{8}/,
-    'fid': /\d{8}/,
-    'bu': "@pick(['开发', '人事', '产品', '运营'])",
-    'oprateTime': '@datetime("yyyy年MM月dd日 HH:mm")',
-    'oprate': "@pick(['更新', '删除', '浏览', '创建', '评论'])"
-  }]
-})
-
-Mock.mock('http://localhost:8081/api/admin/notices', 'post', {
-  'fields': ['编号', '对象', '部门', '内容', '创建时间', '结束时间'],
-  'keys': ['id', 'to', 'bu', 'ctx', 'startTime', 'endTime'],
-  'cols': [2, 2, 2, 7, 4, 4],
-  'currentPage|0-50': 1,
-  'totalPage': 50,
-  'items|20': [{
-    'id': /\d{8}/,
-    'to': /\d{8}/,
-    'bu': "@pick(['开发', '人事', '产品', '运营'])",
-    'ctx': "@csentence(10, 20)",
-    'startTime': '@datetime("yyyy年MM月dd日 HH:mm")',
-    'endTime': '@datetime("yyyy年MM月dd日 HH:mm")'
-  }]
-})
-
-Mock.mock('http://localhost:8081/api/notice', 'get', {
+Mock.mock('http://localhost:9999/api/notice', 'post', {
   'notices|0-2': [{
     'id': /\d{8}/,
     'type|1-3': 1,
@@ -123,10 +163,37 @@ Mock.mock('http://localhost:8081/api/notice', 'get', {
   }]
 })
 
-Mock.mock('http://localhost:8081/api/file', 'get', {
+Mock.mock('http://localhost:9999/api/user/file', 'post', {
   'fileInfo': {
     'editor': '@First @Last',
-    'lastEditTime': '@datetime("yyyy年MM月dd日 HH:mm")'
-  },
-  'fileContent': '<p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p>'
+    'lastEditTime': '@datetime("yyyy年MM月dd日 HH:mm")',
+    'fileContent': '<p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p><p>@cparagraph()</p>',
+    'attaches|0-3': [{
+      'name': '@ctitle(4, 7)',
+      'link': '@url("http")'
+    }]
+  }
+})
+
+Mock.mock('http://localhost:9999/api/uploadAttach', 'post', {
+  'name': '@ctitle(4, 7)',
+  'link': '@url("http")'
+})
+
+Mock.mock('http://localhost:9999/api/user/downloadAttach', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
+})
+
+Mock.mock('http://localhost:9999/api/user/deleteAttach', 'post', {
+  'head': {
+    'status': 'success',
+    'statusCode': 200,
+    'message': 'OK',
+    'timestamp': Date.now()
+  }
 })

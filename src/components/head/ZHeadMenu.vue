@@ -1,11 +1,6 @@
 <template>
   <component :is="componentItem[type]">
-    <template #collapse>
-      <slot name="tools"></slot>
-    </template>
-    <template #expand>
-      <slot name="tools"></slot>
-    </template>
+    <slot></slot>
   </component>
 </template>
 

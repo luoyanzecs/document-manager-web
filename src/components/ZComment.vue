@@ -5,21 +5,12 @@
            class="flex-grow focus:border-blue-500 bg-gray-200 bg-opacity-70 rounded-xl h-10 px-2"/>
     <z-button fill="发表"/>
   </div>
-  <div v-if="isCommentLoad" class="my-2 flex gap-3 w-full px-2 md:w-11/12 animate-pulse">
-    <z-avatar/>
-    <div class="flex-grow flex flex-col gap-2">
-      <div class="flex flex-col gap-1">
-        <p class="bg-gray-300 w-4/12 h-4 rounded"/>
-        <p class="bg-gray-300 w-4/12 h-4 rounded"/>
-        <p class="bg-gray-300 w-7/12 h-4 rounded"/>
-      </div>
-      <div class="bg-gray-300 p-2.5 rounded-lg flex flex-col gap-1">
-        <p class="bg-gray-400 w-4/12 h-4 rounded"/>
-        <p class="bg-gray-400 w-4/12 h-4 rounded"/>
-        <p class="bg-gray-400 w-7/12 h-4 rounded"/>
-      </div>
-      <hr>
-    </div>
+
+  <div v-if="isCommentLoad" class="pos-center mt-10">
+    <svg class="text-gray-400 w-10 h-10 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
   </div>
 
   <template v-if="comments.length !== 0 && !isCommentLoad">
@@ -31,8 +22,8 @@
           <p class="text-gray-500 text-xs">{{ comment.time }}</p>
           <p class="text-justify">{{ comment.comment }}</p>
         </div>
-        <ul class="bg-gray-300 px-2.5 rounded-lg" v-if="comment.reply.length !== 0">
-          <li v-for="reply in comment.reply" :key="reply.id" class="my-1 w-full flex-grow">
+        <ul class="border-l-2 px-2 ml-1 flex flex-col gap-1" v-if="comment.reply.length !== 0">
+          <li v-for="reply in comment.reply" :key="reply.id" class="w-full flex-grow">
             <p class="font-bold text-sm">{{ reply.name }}</p>
             <p class="text-gray-700 text-xs">{{ reply.time }}</p>
             <p class="text-sm">{{ reply.comment }}</p>

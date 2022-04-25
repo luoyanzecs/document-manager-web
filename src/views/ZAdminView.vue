@@ -423,7 +423,7 @@ onMounted(() => {
   selectPageHandler()
   GET_BU({}).then(it => {
     buList.value = it.buList.map(it => {
-      return { name: it, checked: false }
+      return { name: it.name, checked: false, id: it.BuId }
     })
   })
 })

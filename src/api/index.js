@@ -6,7 +6,8 @@ const generateHead = () => {
     timestamp: Date.now() + "",
     username: store.state.userInfo.name || localStorage.getItem('name'),
     token: localStorage.getItem('token'),
-    role: store.state.userInfo.role || localStorage.getItem('rank'),
+    role: store.state.userInfo.role || localStorage.getItem('role'),
+    rank: store.state.userInfo.rank || localStorage.getItem('rank'),
     bu: store.state.userInfo.bu || localStorage.getItem('bu'),
     userId: store.state.userInfo.id || localStorage.getItem('id')
   }

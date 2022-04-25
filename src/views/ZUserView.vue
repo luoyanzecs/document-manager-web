@@ -2,7 +2,7 @@
   <z-aside>
     <template #right>
       <z-select class="bg-blue-500 rounded-2xl text-white min-w-4 py-2 pl-4 text-sm"
-                v-model:value="bu" :options="buList.map(it => {return {value: it, name: it}})"/>
+                v-model:value="bu" :options="buList.map(it => {return {value: it.buId, name: it.name}})"/>
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>

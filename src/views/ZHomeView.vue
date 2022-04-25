@@ -54,7 +54,10 @@ const loginHandler = () => {
   LOGIN({username: account.value, password: password.value})
       .then(it => {
         localStorage.setItem('token', it.token)
-        localStorage.setItem('name', JSON.stringify(it.userInfo))
+
+        for (let key in it.userInfo) {
+          localStorage.setItem(key, it.userInfo[key])
+        }
         loadVisible.value = false
         store.commit('updateUserInfo', it.userInfo)
         router.push(switchValue.value ? '/user' : '/admin')

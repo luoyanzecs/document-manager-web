@@ -14,8 +14,10 @@ export function post (url, data) {
     return axios.post(url, data)
 }
 // upload 请求
-export function uploader (url, file) {
+export function uploader (url, data) {
     let params = new FormData()
-    params.append('file', file)
+    for (let key in data) {
+        params.append(key, data[key])
+    }
     return axios.post(url, params)
 }

@@ -6,12 +6,13 @@ const generateHead = () => {
     timestamp: Date.now() + "",
     username: store.state.userInfo.name || localStorage.getItem('name'),
     token: localStorage.getItem('token'),
-    role: store.state.userInfo.role
+    role: store.state.userInfo.role || localStorage.getItem('rank'),
+    bu: store.state.userInfo.bu || localStorage.getItem('bu'),
+    userId: store.state.userInfo.id || localStorage.getItem('id')
   }
 }
 
 const validateResponseHead = res => {
-  console.log(res.data)
   if (process.env.VUE_APP_MODE === 'mock') {
     return res.data
   }
@@ -61,6 +62,6 @@ export const FILE_MENU = params => sendHttp('user/menu', params, post)
 export const GET_COMMENT = params => sendHttp('user/comment', params, post)
 export const GET_FILE = params => sendHttp('user/file', params, post)
 export const LEAVE_COMMENT = params => sendHttp('user/leaveMessage', params, post)
-export const UPLOAD_ATTACH = file => sendHttp('user/uploadAttach', file, uploader) //上传附件
+export const UPLOAD_ATTACH = params => sendHttp('user/uploadAttach', params, uploader) //上传附件
 export const DOWNLOAD_ATTACH = params => sendHttp('user/downloadAttach', params, post) // 下载附件
 export const DELETE_ATTACH = params => sendHttp('user/deleteAttach', params, post) // 删除附件

@@ -202,8 +202,11 @@ const search = reactive({
 const selectAttachInput = ref()
 
 function attachSelectHandler(event) {
-  const file = event.target.files[0]
-  UPLOAD_ATTACH(file).then(it => {
+  const params = {
+    file: event.target.files[0],
+    docId: chooseFileId.value
+  }
+  UPLOAD_ATTACH(params).then(it => {
     const attach = {
       name: it.name,
       link: it.link,

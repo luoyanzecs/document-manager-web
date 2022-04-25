@@ -16,14 +16,18 @@ import ZSelect from "@/components/ZSelect";
 
 const emit = defineEmits(['selectDir'])
 
-const dirId = ref('')
+const dirId = ref(1)
 const dirs = computed(
-    () => props.items.filter(it => it.isDir).map(it => {
-      return {
-        value: it.id,
-        name: it.title
+    () => {
+      const res = props.items.filter(it => it.isDir).map(it => {
+        return { value: it.id, name: it.title }
+      })
+      if (isTop.value) {
+        res.unshift({value: 1, name: '----root----'})
       }
-    }))
+      return res;
+    }
+)
 const subDirs = computed(() => {
   let dir = props.items.find(it => it.id === dirId.value);
   if (dir === undefined) {

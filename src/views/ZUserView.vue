@@ -90,10 +90,6 @@
         <form action="">
           <table class="table-fixed text-gray-500 border-separate mb-4" style="border-spacing: 1rem 1rem">
             <tr>
-              <td class="border-r-2 pr-2">当前部门</td>
-              <td>{{ bu }}</td>
-            </tr>
-            <tr>
               <td class="border-r-2 pr-2 whitespace-nowrap">文件位置</td>
               <td>
                 <z-location-select class="mr-2 w-64 sm:w-96" :items="APIRES.menuItems" @select-dir="localtionSelectHandler"/>
@@ -163,7 +159,7 @@ import {
 } from "@/api";
 import {useStore} from "vuex";
 import ZEditor from "@/components/ZEditor";
-import { html2json } from "html2json"
+import { json2html, html2json } from "html2json"
 import ZLocationSelect from "@/components/ZLocationSelect";
 import {transformTime} from "@/tool/utils";
 import ZSelect from "@/components/ZSelect";
@@ -171,7 +167,7 @@ import ZSelect from "@/components/ZSelect";
 const store = useStore()
 const userInfo = computed(() => store.state.userInfo)
 const buList = ref([])
-const bu = ref(userInfo.value.bu.length === 0 ? '部门' : userInfo.value.bu)
+const bu = ref(parseInt(localStorage.getItem('bu')))
 const APIRES = reactive({
   fileInfo: undefined,
   menuItems: [],
@@ -187,12 +183,12 @@ const LOADER = reactive({
   isCreateFileLoad: false,
   isShowSearchBtnDailog: false,
 })
-const chooseFileId = ref('')
+const chooseFileId = ref(0)
 const editorStatus = computed(() => LOADER.isEditorShow ? '更新' : '编辑')
 const newFile = reactive({
   isDir: false,
   name: '',
-  parentDirId: ''
+  parentDirId: 1
 })
 const search = reactive({
   input: '',
@@ -290,7 +286,7 @@ const buttonClickHandler = (index) => {
         LOADER.isUpdateFileLoad = true
         const params = {
           fileId: chooseFileId.value,
-          jsonValue: json
+          jsonValue: JSON.stringify(json)
         }
         UPDATE_FILE(params).then(it => {
           console.log(it);
@@ -315,7 +311,6 @@ const buttonClickHandler = (index) => {
       const params = {
         title: newFile.name,
         bu: bu.value,
-        userid: userInfo.value.id,
         isDir: newFile.isDir,
         parentId: newFile.parentDirId
       }
@@ -377,8 +372,7 @@ const selectFileHandler = (param) => {
   GET_FILE({id: param.id}).then(it => {
     LOADER.isCtxLoad = false
     APIRES.fileInfo = it.fileInfo
-    console.log(APIRES.fileInfo.fileContent)
-    // APIRES.fileInfo.fileContent = json2html(APIRES.fileInfo.fileContent)
+    APIRES.fileInfo.fileContent = json2html(JSON.parse(APIRES.fileInfo.fileContent))
     APIRES.fileInfo.attaches.forEach(it => {
       it.isAttachDownloading = false
       it.isAttachDeleting = false

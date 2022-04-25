@@ -1,7 +1,7 @@
 <template>
   <div class="w-12 h-12 rounded-full bg-gray-300 pos-center relative"
        @mouseleave="isPopOver = false"
-       @mouseenter="isPopOver = true">
+       @mouseenter="isPopOver = isPopOverProp">
     <img v-if="image.trim() !== ''"
          :src="image"
          alt=""
@@ -47,7 +47,12 @@ defineProps({
   image: {
     type: String,
     default: '',
-    required:false
+    required: false
+  },
+  isPopOverProp: {
+    type: Boolean,
+    default: true,
+    required: false
   }
 });
 const isPopOver = ref(false)

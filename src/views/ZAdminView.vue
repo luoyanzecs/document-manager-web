@@ -361,7 +361,7 @@ function addNoticeHandler() {
 
 function deleteItemHandler() {
   const params = {
-    type: SEARCH_PARAMS.menuIndex,
+    menuIndex: SEARCH_PARAMS.menuIndex,
     ids: tableProp.items.filter((it, idx) => table.value.isSelect[idx]).map(it => it.id)
   }
   BUTTON_LOADER.deleteConfirmBtn = true

@@ -2,7 +2,7 @@
   <z-aside>
     <template #right>
       <z-select class="bg-blue-500 rounded-2xl text-white min-w-4 py-2 pl-4 text-sm"
-                v-model:value="bu" :options="buList.map(it => {return {value: it.buId, name: it.name}})"/>
+                v-model:value="bu" :options="buList.map(it => ({value: it.buId, name: it.name}))"/>
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
@@ -305,10 +305,7 @@ const buttonClickHandler = (index) => {
           jsonValue: JSON.stringify(html2json(APIRES.fileInfo.fileContent))
         })
             .then(() => store.commit('unshiftNotice', {type: 1, message: '更新成功'}))
-            .finally(() => {
-              LOADER.isUpdateFileLoad = false
-              LOADER.isEditorShow = false
-            })
+            .finally(() => LOADER.isUpdateFileLoad = LOADER.isEditorShow = false)
       } else {
         LOADER.isEditorShow = true
       }
@@ -334,10 +331,7 @@ const buttonClickHandler = (index) => {
         chooseFileId.value = it.fileId
         buttonClickHandler('edit')
         store.commit('unshiftNotice', {type: 1, message: '创建成功'})
-      }).finally(() => {
-        LOADER.isCreateFileLoad = false
-        LOADER.isShowCreateBtnDailog = false
-      })
+      }).finally(() => LOADER.isCreateFileLoad = LOADER.isShowCreateBtnDailog = false)
       break
     }
   }
@@ -370,17 +364,13 @@ const searchDirectHander = (item) => {
 
 const selectFileHandler = (param) => {
   LOADER.isEditorShow = false
-  LOADER.isCtxLoad = true
-  LOADER.isCommentLoad = true
+  LOADER.isCtxLoad = LOADER.isCommentLoad = true
   chooseFileId.value = param.id
   GET_FILE({id: param.id}).then(it => {
     LOADER.isCtxLoad = false
     APIRES.fileInfo = it.fileInfo
     APIRES.fileInfo.fileContent = json2html(JSON.parse(APIRES.fileInfo.fileContent))
-    APIRES.fileInfo.attaches.forEach(it => {
-      it.isAttachDownloading = false
-      it.isAttachDeleting = false
-    })
+    APIRES.fileInfo.attaches.forEach(it => it.isAttachDownloading = it.isAttachDeleting = false)
   }).catch(() => LOADER.isCtxLoad = false)
 
   GET_COMMENT({id: param.id}).then(it => {

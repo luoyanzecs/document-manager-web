@@ -17,7 +17,7 @@ import {sleep} from "@/tool/utils";
 
 const props = defineProps({
   catalogue: {type: Array, required: true},
-  chooseId: {type: String || Number, required: false},
+  chooseId: {type: Number, required: false},
   level: {type: Number, default: 0, required: false},
   isShowComponet: {type: Boolean, default: false, required: false},
 })

@@ -17,7 +17,11 @@ export function post (url, data) {
 export function uploader (url, data) {
     let params = new FormData()
     for (let key in data) {
-        params.append(key, data[key])
+        params.append(key,
+          key === 'file'
+            ? data[key]
+            : new Blob([JSON.stringify(data[key])], { type: 'application/json' })
+        )
     }
     return axios.post(url, params)
 }

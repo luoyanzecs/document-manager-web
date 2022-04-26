@@ -67,9 +67,7 @@
           </template>
         </div>
         <div v-if="APIRES.fileInfo && !LOADER.isCtxLoad" class="p-4 wrap">
-          <p class="mb-1.5 text-gray-400 text-sm">上次编辑于 {{ APIRES.fileInfo.lastEditTime }} by {{
-              APIRES.fileInfo.editor
-            }}</p>
+          <p class="mb-1.5 text-gray-400 text-sm">上次编辑于 {{ APIRES.fileInfo.lastEditTime }} by {{ APIRES.fileInfo.editor }}</p>
           <div v-html="APIRES.fileInfo.fileContent" style="min-height: 20rem"></div>
           <div class="flex py-8 items-center gap-2">
             <div v-for="attach in APIRES.fileInfo.attaches" :key="attach.link" @click="downloadAttach(attach.link)"
@@ -79,8 +77,7 @@
               <svg v-if="!attach.isAttachDownloading"
                    class="cursor-pointer w-4 h-4 stroke-2 text-blue-400 transform duration-100 hover:scale-125"
                    viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                <path fill="currentColor"
-                      d="M160 832h704a32 32 0 1 1 0 64H160a32 32 0 1 1 0-64zm384-253.696 236.288-236.352 45.248 45.248L508.8 704 192 387.2l45.248-45.248L480 584.704V128h64v450.304z"></path>
+                <path fill="currentColor" d="M160 832h704a32 32 0 1 1 0 64H160a32 32 0 1 1 0-64zm384-253.696 236.288-236.352 45.248 45.248L508.8 704 192 387.2l45.248-45.248L480 584.704V128h64v450.304z"></path>
               </svg>
               <svg v-else class="text-gray-500 w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
                    viewBox="0 0 24 24">
@@ -225,8 +222,8 @@ function attachSelectHandler(event) {
     docId: chooseFileId.value
   }).then(it => {
     const attach = {
-      name: it.name,
-      link: it.link,
+      name: it.attach.name,
+      link: it.attach.link,
       isAttachDeleting: false,
       isAttachDownloading: false
     }
@@ -348,7 +345,7 @@ function downloadAttach(link) {
 function deleteAttach(link) {
   const attach = APIRES.fileInfo.attaches.find(it => it.link === link);
   attach.isAttachDeleting = true
-  DELETE_ATTACH({link: link})
+  DELETE_ATTACH({attachId: link})
       .then(() => {
         APIRES.fileInfo.attaches = APIRES.fileInfo.attaches.filter(it => it.link !== link)
         store.commit('unshiftNotice', {type: 1, message: '文件删除成功'})

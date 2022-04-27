@@ -74,16 +74,9 @@
                  class="border rounded-lg h-24 w-20 bg-gray-50  pos-center pt-4 pb-2 px-2 flex flex-col gap-2"
             >
               <p class="text-xs text-gray-500 text-center flex-1">{{ attach.name }}</p>
-              <svg v-if="!attach.isAttachDownloading"
-                   class="cursor-pointer w-4 h-4 stroke-2 text-blue-400 transform duration-100 hover:scale-125"
+              <svg class="cursor-pointer w-4 h-4 stroke-2 text-blue-400 transform duration-100 hover:scale-125"
                    viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor" d="M160 832h704a32 32 0 1 1 0 64H160a32 32 0 1 1 0-64zm384-253.696 236.288-236.352 45.248 45.248L508.8 704 192 387.2l45.248-45.248L480 584.704V128h64v450.304z"></path>
-              </svg>
-              <svg v-else class="text-gray-500 w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
             </div>
           </div>
@@ -224,8 +217,7 @@ function attachSelectHandler(event) {
     const attach = {
       name: it.attach.name,
       link: it.attach.link,
-      isAttachDeleting: false,
-      isAttachDownloading: false
+      isAttachDeleting: false
     }
     APIRES.fileInfo.attaches.unshift(attach)
     store.commit('unshiftNotice', {type: 1, message: '附件上传成功'})
@@ -336,7 +328,6 @@ const buttonClickHandler = (index) => {
 
 function downloadAttach(link) {
   const attach = APIRES.fileInfo.attaches.find(it => it.link === link);
-  attach.isAttachDownloading = true
   DOWNLOAD_ATTACH({link: link})
       .then(it => {
         let url = window.URL.createObjectURL(new Blob([it]))
@@ -349,7 +340,6 @@ function downloadAttach(link) {
         link.parentElement.removeChild(link)
         store.commit('unshiftNotice', {type: 1, message: '文件下载完成'})
       })
-      .finally(() => attach.isAttachDownloading = false)
 }
 
 function deleteAttach(link) {
@@ -377,7 +367,7 @@ const selectFileHandler = (param) => {
     LOADER.isCtxLoad = false
     APIRES.fileInfo = it.fileInfo
     APIRES.fileInfo.fileContent = json2html(JSON.parse(APIRES.fileInfo.fileContent))
-    APIRES.fileInfo.attaches.forEach(it => it.isAttachDownloading = it.isAttachDeleting = false)
+    APIRES.fileInfo.attaches.forEach(it => it.isAttachDeleting = false)
   }).catch(() => LOADER.isCtxLoad = false)
 
   GET_COMMENT({id: param.id}).then(it => {

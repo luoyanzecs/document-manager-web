@@ -7,7 +7,7 @@
       </div>
       <input class="input-home" type="text" v-model="account" spellcheck="false" placeholder="输入账号"/>
       <input class="input-home" type="password" v-model="password" placeholder="输入密码">
-      <z-switch class="py-2 font-light" left="管理员" right="员工" v-model:value="switchValue"/>
+      <z-switch class="py-2 font-light" left="管理员" right="员工" v-model:value="role"/>
       <div class="transform scale-110">
         <z-button fill="登录" :class="{'animate-shake' : isButtonShake}" :load-visible="loadVisible"
                   @click="loginHandler"/>
@@ -32,7 +32,7 @@ import {sleep} from "@/tool/utils.ts";
 const router = useRouter()
 const store = useStore()
 
-const switchValue = ref(true)
+const role = ref(true)
 const account = ref('')
 const password = ref('')
 const loadVisible = ref(false)
@@ -51,17 +51,15 @@ const loginHandler = () => {
     return
   }
   loadVisible.value = true
-  LOGIN({username: account.value, password: password.value})
+  LOGIN({username: account.value, password: password.value, role: role.value ? '用户': '管理员'})
       .then(it => {
         localStorage.setItem('token', it.token)
-
         for (let key in it.userInfo) {
           localStorage.setItem(key, it.userInfo[key])
         }
-        loadVisible.value = false
         store.commit('updateUserInfo', it.userInfo)
-        router.push(switchValue.value ? '/user' : '/admin')
-      })
+        router.push(role.value ? '/user' : '/admin')
+      }).finally(() => loadVisible.value = false)
 }
 </script>
 

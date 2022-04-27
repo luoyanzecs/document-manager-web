@@ -338,7 +338,17 @@ function downloadAttach(link) {
   const attach = APIRES.fileInfo.attaches.find(it => it.link === link);
   attach.isAttachDownloading = true
   DOWNLOAD_ATTACH({link: link})
-      .then(() => store.commit('unshiftNotice', {type: 1, message: '文件下载完成'}))
+      .then(it => {
+        let url = window.URL.createObjectURL(new Blob([it]))
+        let link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', attach.name)
+        document.body.append(link)
+        link.click()
+        link.parentElement.removeChild(link)
+        store.commit('unshiftNotice', {type: 1, message: '文件下载完成'})
+      })
       .finally(() => attach.isAttachDownloading = false)
 }
 

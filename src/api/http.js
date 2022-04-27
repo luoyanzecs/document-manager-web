@@ -23,5 +23,5 @@ export function uploader (url, data) {
             : new Blob([JSON.stringify(data[key])], { type: 'application/json' })
         )
     }
-    return axios.post(url, params)
+    return axios.post(url, params, {responseType: 'blob'})
 }

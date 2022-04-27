@@ -18,7 +18,7 @@ const validateResponseHead = res => {
     return res.data
   }
   const head = res.data.head;
-  if (head.status === "error") {
+  if (head !== undefined && head.status === "error") {
     throw new Error(head.message)
   }
   return res.data

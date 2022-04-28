@@ -2,7 +2,7 @@
   <div v-if="currentPage !== 0" class="pos-center flex-shrink-0">
     <p class="pagination-text mr-1 md:mr-4">首页</p>
     <template v-for="i of 5" :key="currentPage - i + 3">
-      <p v-if="currentPage + i - 3 > 0"
+      <p v-if="currentPage + i - 3 > 0 && currentPage + i - 3 <= totalPage"
          :class="['pagination-text', {'ring-1': i === 3}]"
          @click="$emit('selectPage', currentPage + i - 3)"
       >{{ currentPage + i - 3}}</p>

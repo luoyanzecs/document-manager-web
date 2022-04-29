@@ -25,10 +25,12 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ZButton from "@/components/ZButton";
 import ZSwitch from "@/components/ZSwitch";
-import { LOGIN } from "@/api";
+import {GET_BU, LOGIN} from "@/api";
 import {emitNotice, noticeInquiry, sleep, updateUserStore} from "@/tool/utils.ts";
+import {useStore} from "vuex";
 
 const router = useRouter()
+const store = useStore()
 
 const role = ref(true)
 const account = ref('')
@@ -48,7 +50,10 @@ const loginHandler = () => {
   LOGIN({username: account.value, password: password.value, role: role.value ? '用户': '管理员'})
       .then(it => {
         updateUserStore(it.userInfo, it.token)
-        router.push(role.value ? '/user' : '/admin').then(() => noticeInquiry())
+        GET_BU({}).then(it => {
+          store.commit('setAllBu', it.buList)
+          router.push(role.value ? '/user' : '/admin').then(() => noticeInquiry())
+        })
       })
       .finally(() => loadVisible.value = false)
 }

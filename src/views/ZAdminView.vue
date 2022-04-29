@@ -207,13 +207,15 @@ import ZHeader from "@/components/ZHeader";
 import ZAvatar from "@/components/ZAvatar";
 import ZPagination from "@/components/ZPagination";
 import ZTable from "@/components/ZTable";
-import {DELETE_TABLE_ITEMS, GET_BU, ADMIN_SEARCH_ALL_IN_ONE, ADD_NEW_USER, ADD_NEW_NOTICE,} from "@/api";
+import {DELETE_TABLE_ITEMS, ADMIN_SEARCH_ALL_IN_ONE, ADD_NEW_USER, ADD_NEW_NOTICE,} from "@/api";
 import ZDailog from "@/components/ZDailog";
 import {emitNotice, loadUserStore, sleep, transformTimeShort} from "@/tool/utils";
+import {useStore} from "vuex";
 
 const userInfo = loadUserStore();
+const store = useStore()
 const table = ref();
-const buList = ref([]);
+const buList = ref(store.state.allBu.map(it => ({name: it.name, checked: false, id: it.buId})));
 const menu = ["用户管理", "记录管理", "文件管理", "发布通知"];
 
 const NEW_USER_PARAMS = reactive({
@@ -400,11 +402,7 @@ function headButtonHandler(index) {
   }
 }
 
-onMounted(() => {
-  selectPageHandler();
-  GET_BU({})
-      .then(it => buList.value = it.buList.map(it => ({name: it.name, checked: false, id: it.buId})))
-})
+onMounted(() => selectPageHandler())
 
 watch(
     () => SEARCH_PARAMS.menuIndex,

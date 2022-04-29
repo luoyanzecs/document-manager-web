@@ -23,7 +23,8 @@ const getDelay = ()=> {
 export const store = createStore({
   state() {
     return {
-      notificationQuene: []
+      notificationQuene: [],
+      allBu: []
     }
   },
   mutations: {
@@ -35,6 +36,9 @@ export const store = createStore({
     },
     removeNotice (state, id) {
       state.notificationQuene = state.notificationQuene.filter(it => it.id !== id)
+    },
+    setAllBu (state, bus) {
+      state.allBu = bus
     }
   }
 })

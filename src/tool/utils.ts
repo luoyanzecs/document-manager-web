@@ -43,7 +43,7 @@ export const loadUserStore = (): userStore  => {
   const user: userStore = {
       username: localStorage.getItem('name')!,
       avatar: localStorage.getItem('avatar')!,
-      userId: parseInt(localStorage.getItem('id')!),
+      userId: parseInt(localStorage.getItem('userId')!),
       bu: parseInt(localStorage.getItem('bu')!),
       rank: parseInt(localStorage.getItem('rank')!),
       role: localStorage.getItem('role')!,

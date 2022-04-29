@@ -25,7 +25,7 @@ import {computed, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import ZButton from "@/components/ZButton";
 import ZSwitch from "@/components/ZSwitch";
-import {LOGIN} from "@/api";
+import {LOGIN, NOTICE_GLOBAL} from "@/api";
 import {useStore} from "vuex";
 import {sleep} from "@/tool/utils.ts";
 
@@ -59,6 +59,12 @@ const loginHandler = () => {
         }
         store.commit('updateUserInfo', it.userInfo)
         router.push(role.value ? '/user' : '/admin')
+
+        const noticeInquiry = params =>  NOTICE_GLOBAL(params).then(it => {
+          it.notices.forEach(notice => store.commit('unshiftNotice', notice))
+          sleep(60 * 1000).then(() => noticeInquiry(params))
+        })
+        noticeInquiry({})
       }).finally(() => loadVisible.value = false)
 }
 </script>

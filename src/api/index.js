@@ -17,20 +17,21 @@ const validateResponseHead = res => {
   if (process.env.VUE_APP_MODE === 'mock') {
     return res.data
   }
-  const head = res.data.head;
-  if (head !== undefined && head.status === "error") {
-    throw new Error(head.message)
-  }
   return res.data
 }
 
 const errorHandler = (error) => {
-  console.log(error)
   // 错误处理
   if (error.response) {
     // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-    let head = error.response.data.head;
-    store.commit('unshiftNotice', {message: head.message, type: 2})
+    if (error.response.status === 500) {
+      let head = error.response.data.head;
+      store.commit(
+        'unshiftNotice',
+        { message: head &&head.message || error.response.statusText, type: 2 }
+      )
+      throw new Error(head.statusCode)
+    }
   } else if (error.request) {
     // 请求已经成功发起，但没有收到响应
     store.commit('unshiftNotice', {message: '请求超时', type: 2})
@@ -38,6 +39,7 @@ const errorHandler = (error) => {
     // 发送请求时出了点问题
     store.commit('unshiftNotice', {message: "客户端异常", type: 2})
   }
+  throw new Error()
 }
 
 const sendHttp = (url, params, callback) => {

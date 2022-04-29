@@ -1,5 +1,5 @@
 <template>
-  <table class="table-fixed w-full">
+  <table class="table-auto w-full">
     <thead>
     <tr class="sticky top-0 bg-white z-10">
       <th class="w-6 py-1"><div @click.stop="toggle(-1)" :class="[isToggleAll ? 'bg-blue-500' : 'bg-white', 'choose-box']"/></th>

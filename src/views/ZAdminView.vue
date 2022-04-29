@@ -159,10 +159,10 @@
               <td class="border-r-2 pr-2 whitespace-nowrap">部门</td>
               <td class="space-x-2">
                 <span v-for="bu in buList" :key="bu"
-                      @click="NEW_NOTICE_PARAMS.bu.includes(bu.name)
-                      ? NEW_NOTICE_PARAMS.bu.splice(NEW_NOTICE_PARAMS.bu.indexOf(bu.name),1)
-                      : NEW_NOTICE_PARAMS.bu.unshift(bu.name)"
-                    :class="[{ 'selected-item': NEW_NOTICE_PARAMS.bu.includes(bu.name) },'select-item']"
+                      @click="NEW_NOTICE_PARAMS.bu.includes(bu.id)
+                      ? NEW_NOTICE_PARAMS.bu.splice(NEW_NOTICE_PARAMS.bu.indexOf(bu.id),1)
+                      : NEW_NOTICE_PARAMS.bu.unshift(bu.id)"
+                    :class="[{ 'selected-item': NEW_NOTICE_PARAMS.bu.includes(bu.id) },'select-item']"
                 >{{ bu.name }}</span>
               </td>
             </tr>

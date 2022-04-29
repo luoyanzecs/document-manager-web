@@ -1,23 +1,24 @@
 <template>
   <div class="relative max-w-screen-2xl h-screen flex overflow-auto container">
     <router-view/>
-    <div class="absolute w-screen flex flex-col items-center top-0 sm:w-auto sm:right-2 sm:items-end z-40 max-h-screen overflow-y-auto">
-      <z-notifacation v-for="notice in notifications" v-bind="notice" :key="notice.id" @close="noticeCloseHandler"/>
+    <div class="absolute w-screen flex flex-col items-center top-0 sm:w-auto sm:right-2 pt-2 sm:items-end z-40 max-h-screen overflow-y-auto">
+      <z-notifacation v-for="notice in store.state.notificationQuene" v-bind="notice" :key="notice.id" @close="noticeCloseHandler"/>
     </div>
   </div>
 </template>
 
 
-<script setup lang="ts">
-import {computed} from "vue";
+<script setup>
+import { onMounted } from "vue";
 import { useStore } from 'vuex'
 import ZNotifacation from "@/components/ZNotifacation.vue";
+import { loadUserStore } from "@/tool/utils";
 
 const store = useStore()
-const notifications = computed(() => store.state.notificationQuene)
 
+const noticeCloseHandler = id => store.commit('removeNotice', id)
 
-const noticeCloseHandler = (id: string) => store.commit('removeNotice', id)
+onMounted(() => loadUserStore())
 
 </script>
 <style>

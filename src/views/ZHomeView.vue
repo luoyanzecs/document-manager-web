@@ -21,16 +21,14 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
-import {useRouter} from 'vue-router'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import ZButton from "@/components/ZButton";
 import ZSwitch from "@/components/ZSwitch";
-import {LOGIN, NOTICE_GLOBAL} from "@/api";
-import {useStore} from "vuex";
-import {sleep} from "@/tool/utils.ts";
+import { LOGIN } from "@/api";
+import {emitNotice, noticeInquiry, sleep, updateUserStore} from "@/tool/utils.ts";
 
 const router = useRouter()
-const store = useStore()
 
 const role = ref(true)
 const account = ref('')
@@ -42,30 +40,17 @@ const isButtonShake = ref(false)
 const loginHandler = () => {
   if (!loginCheck.value) {
     isButtonShake.value = true
-    store.commit('unshiftNotice', {
-      id: Date.now() + '',
-      type: 2,
-      message: '请输入正确的账号和密码'
-    })
+    emitNotice({ id: Date.now() + '', type: 2, message: '请输入正确的账号和密码' })
     sleep(700).then(() => isButtonShake.value = false)
     return
   }
   loadVisible.value = true
   LOGIN({username: account.value, password: password.value, role: role.value ? '用户': '管理员'})
       .then(it => {
-        localStorage.setItem('token', it.token)
-        for (let key in it.userInfo) {
-          localStorage.setItem(key, it.userInfo[key])
-        }
-        store.commit('updateUserInfo', it.userInfo)
-        router.push(role.value ? '/user' : '/admin')
-
-        const noticeInquiry = params =>  NOTICE_GLOBAL(params).then(it => {
-          it.notices.forEach(notice => store.commit('unshiftNotice', notice))
-          sleep(60 * 1000).then(() => noticeInquiry(params))
-        })
-        noticeInquiry({})
-      }).finally(() => loadVisible.value = false)
+        updateUserStore(it.userInfo, it.token)
+        router.push(role.value ? '/user' : '/admin').then(() => noticeInquiry())
+      })
+      .finally(() => loadVisible.value = false)
 }
 </script>
 

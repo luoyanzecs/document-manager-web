@@ -16,7 +16,7 @@
           <tr class="border-b border-gray-400">
             <td class="p-2 whitespace-nowrap">用户名</td>
             <td>:</td>
-            <td class="p-2 whitespace-nowrap">{{ myInfo.name }}</td>
+            <td class="p-2 whitespace-nowrap">{{ myInfo.username }}</td>
           </tr>
           <tr class="border-b border-gray-400">
             <td class="p-2 whitespace-nowrap">部门</td>
@@ -38,10 +38,10 @@
 </template>
 
 <script setup >
-import {computed, defineProps, ref} from "vue";
-import {useStore} from "vuex";
+import {defineProps, ref} from "vue";
 import ZButton from "@/components/ZButton";
 import {useRouter} from "vue-router";
+import {loadUserStore} from "@/tool/utils";
 
 defineProps({
   image: {
@@ -57,7 +57,7 @@ defineProps({
 });
 const isPopOver = ref(false)
 const router = useRouter()
-const myInfo = computed(() => useStore().state.userInfo)
+const myInfo = loadUserStore()
 
 function logoutHandler() {
   localStorage.clear()

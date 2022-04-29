@@ -1,15 +1,12 @@
 import {post, uploader} from './http'
 import {store} from "@/store";
+import {emitNotice, loadUserStore} from "@/tool/utils";
+import router from "@/router";
 
 const generateHead = () => {
   return {
     timestamp: Date.now() + "",
-    username: store.state.userInfo.name || localStorage.getItem('name'),
-    token: localStorage.getItem('token'),
-    role: store.state.userInfo.role || localStorage.getItem('role'),
-    rank: store.state.userInfo.rank || localStorage.getItem('rank'),
-    bu: store.state.userInfo.bu || localStorage.getItem('bu'),
-    userId: store.state.userInfo.id || localStorage.getItem('id')
+    ...loadUserStore()
   }
 }
 
@@ -24,6 +21,10 @@ const errorHandler = (error) => {
   // 错误处理
   if (error.response) {
     // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+    if (error.response.status === 403) {
+      router.push("/")
+        .then(() => store.commit('unshiftNotice', { message: '身份过期， 请重新登录', type: 0 }))
+    }
     if (error.response.status === 500) {
       let head = error.response.data.head;
       store.commit(
@@ -34,10 +35,10 @@ const errorHandler = (error) => {
     }
   } else if (error.request) {
     // 请求已经成功发起，但没有收到响应
-    store.commit('unshiftNotice', {message: '请求超时', type: 2})
+    emitNotice({message: '请求超时', type: 2})
   } else {
     // 发送请求时出了点问题
-    store.commit('unshiftNotice', {message: "客户端异常", type: 2})
+    emitNotice({message: "客户端异常", type: 2})
   }
   throw new Error()
 }

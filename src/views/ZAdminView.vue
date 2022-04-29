@@ -206,14 +206,12 @@ import ZAside from "@/components/ZAside";
 import ZHeader from "@/components/ZHeader";
 import ZAvatar from "@/components/ZAvatar";
 import ZPagination from "@/components/ZPagination";
-import {useStore} from "vuex";
 import ZTable from "@/components/ZTable";
 import {DELETE_TABLE_ITEMS, GET_BU, ADMIN_SEARCH_ALL_IN_ONE, ADD_NEW_USER, ADD_NEW_NOTICE,} from "@/api";
 import ZDailog from "@/components/ZDailog";
-import {sleep, transformTimeShort} from "@/tool/utils";
+import {emitNotice, loadUserStore, sleep, transformTimeShort} from "@/tool/utils";
 
-const store = useStore();
-const userInfo = computed(() => store.state.userInfo);
+const userInfo = loadUserStore();
 const table = ref();
 const buList = ref([]);
 const menu = ["用户管理", "记录管理", "文件管理", "发布通知"];
@@ -301,13 +299,13 @@ function addUserHandler() {
     sleep(800,
         () => {
           BUTTON_LOADER.isAddUserConfirmBtnShake = true
-          store.commit("unshiftNotice", { type: 2, message: "输入必要字段" })
+          emitNotice({ type: 2, message: "输入必要字段" })
         })
         .then(() => (BUTTON_LOADER.isAddUserConfirmBtnShake = false));
   } else {
     BUTTON_LOADER.isAddUserConfirmBtn = true;
     ADD_NEW_USER(NEW_USER_PARAMS)
-        .then(() => store.commit("unshiftNotice", { type: 1, message: "新用户已添加" }))
+        .then(() => emitNotice({ type: 1, message: "新用户已添加" }))
         .finally(() => {
           BUTTON_LOADER.isAddUserConfirmBtn = false;
           BUTTON_LOADER.isAddUserDailogShow = false;
@@ -319,14 +317,14 @@ function addNoticeHandler() {
   if (NEW_NOTICE_PARAMS.text.length < 5 || NEW_NOTICE_PARAMS.text.length > 60 || NEW_NOTICE_PARAMS.expiredTime === "") {
     sleep(800,
         () => {
-          BUTTON_LOADER.isAddNoticeConfirmBtnShake = true;
-          store.commit("unshiftNotice", {type: 2, message: "输入必要字段"});
+          BUTTON_LOADER.isAddNoticeConfirmBtnShake = true
+          emitNotice({type: 2, message: "输入必要字段"})
         })
-        .then(() => (BUTTON_LOADER.isAddNoticeConfirmBtnShake = false));
+        .then(() => (BUTTON_LOADER.isAddNoticeConfirmBtnShake = false))
   } else {
     BUTTON_LOADER.isAddNoticeConfirmBtn = true;
     ADD_NEW_NOTICE(NEW_NOTICE_PARAMS)
-        .then(() => store.commit("unshiftNotice", {type: 1, message: "新通知已添加"}))
+        .then(() => emitNotice({type: 1, message: "新通知已添加"}))
         .finally(() => {
           BUTTON_LOADER.isAddNoticeConfirmBtn = false;
           BUTTON_LOADER.isAddNoticeDailogShow = false;

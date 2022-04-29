@@ -1,6 +1,6 @@
 <template>
   <div class="flex gap-3 items-center px-2 md:w-11/12">
-    <z-avatar :image="myInfo.avatar" :is-pop-over-prop="false" />
+    <z-avatar :image="info?.avatar" :is-pop-over-prop="false" />
     <input spellcheck="false" v-model="msgInput.aboveCtx" class="flex-grow bg-gray-200 bg-opacity-70 rounded-xl h-10 px-2 focus:outline-none "/>
     <z-button fill="发表" :load-visible="msgInput.inputLoadAboue" @click="buttonClickHandler('fileComment', fileId)"/>
   </div>
@@ -43,11 +43,10 @@
 
 <script setup lang="ts">
 import ZAvatar from "@/components/ZAvatar.vue";
-import {computed, onBeforeMount, ref, defineProps, PropType, Ref, reactive} from "vue";
+import { onBeforeMount, ref, defineProps, PropType, Ref, reactive } from "vue";
 import ZButton from "@/components/ZButton.vue";
-import {useStore} from "vuex";
-import {LEAVE_COMMENT} from "@/api";
-import {transformTime} from "@/tool/utils";
+import { LEAVE_COMMENT } from "@/api";
+import { transformTime } from "@/tool/utils";
 
 interface Comment {
   id: number,
@@ -80,9 +79,6 @@ const props = defineProps({
   }
 })
 
-const store = useStore()
-
-const myInfo = computed(() => store.state.userInfo)
 const comments = ref(props.commentsList)
 const isRepleyShow: Ref<boolean[]> = ref([])
 
@@ -111,10 +107,10 @@ onBeforeMount(() => {
 
 function buttonClickHandler(fun: String, param?: any) {
   const commentWrapper: Comment = {
-    id: myInfo.value.id,
+    id: props.info.userId!,
     commentId: -1,
-    name: myInfo.value.name,
-    avatar: myInfo.value.avatar,
+    name: props.info.username!,
+    avatar: props.info.avatar!,
     time: transformTime(),
     reply: new Array(0)
   }

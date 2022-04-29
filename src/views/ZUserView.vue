@@ -167,6 +167,7 @@ import {
   UPDATE_FILE,
   CREATE_FILE,
   SEARCH,
+  GET_BU,
   UPLOAD_ATTACH,
   DOWNLOAD_ATTACH,
   DELETE_ATTACH
@@ -176,12 +177,10 @@ import {json2html, html2json} from "html2json"
 import ZLocationSelect from "@/components/ZLocationSelect";
 import {emitNotice, loadUserStore, transformTime} from "@/tool/utils";
 import ZSelect from "@/components/ZSelect";
-import {useStore} from "vuex";
 
 
 const userInfo = ref(loadUserStore())
-const store = useStore()
-const buList = ref(store.state.allBu)
+const buList = ref([])
 const bu = ref(parseInt(localStorage.getItem('bu')))
 const APIRES = reactive({
   fileInfo: undefined,
@@ -235,6 +234,7 @@ onMounted(() => {
     LOADER.isMenuLoad = false
     it.items.forEach(item => APIRES.menuItems.push(item))
   })
+  GET_BU({}).then(it => buList.value = it.buList)
 })
 
 function searchDelay(callback, delay = 100) {

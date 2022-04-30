@@ -77,4 +77,9 @@ const handleCreated = (editor) => {
 /deep/ ol li {
   list-style: decimal !important;
 }
+
+:deep(h1) { font-size: 2em; }
+:deep(h2) { font-size: 1.5em; }
+:deep(h3) { font-size: 1.17em; }
+
 </style>

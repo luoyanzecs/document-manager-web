@@ -229,7 +229,6 @@ function attachSelectHandler(event) {
 }
 
 onMounted(() => {
-  // userInfo.value =
   FILE_MENU({ bu: userInfo.value.bu }).then(it => {
     LOADER.isMenuLoad = false
     it.items.forEach(item => APIRES.menuItems.push(item))
@@ -285,7 +284,7 @@ const buttonClickHandler = (index) => {
       break
     case 'edit': {
       if (APIRES.fileInfo === undefined) {
-        emitNotice({type: 3, message: '当前没有可编辑的文件'})
+        emitNotice({ type: 3, message: '当前没有可编辑的文件' })
         return
       }
       if (LOADER.isEditorShow) {
@@ -422,4 +421,10 @@ const selectFileHandler = (param) => {
 :deep(.wrap td) {
   @apply border border-gray-300 px-4 py-1
 }
+
+:deep(.wrap h1) { font-size: 2em; }
+:deep(.wrap h2) { font-size: 1.5em; }
+:deep(.wrap h3) { font-size: 1.17em; }
+
+
 </style>

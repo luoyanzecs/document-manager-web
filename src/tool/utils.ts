@@ -20,6 +20,23 @@ export interface Notice {
   message: string
 }
 
+export const getUUID = (): string => {
+    function S4() {
+      return (((1+Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    }
+    return S4() + S4() +S4() + S4() + S4()+ S4() + S4() + S4()
+}
+
+export function hashCode(str: string): string{
+  let hashcode = 0;
+  for(let i = 0; i < str.length; i++){
+    //溢出需要每次运算后立即处理，否则可能超过js数值的表示范围。
+    hashcode = hashcode*31 + str.charCodeAt(i);
+    hashcode &= 0xffffffff;
+  }
+  return String(hashcode);
+}
+
 export const updateUserStore = (userInfo: userStore, token: string): void => {
   localStorage.setItem('name', userInfo.username ?? "")
   localStorage.setItem('avatar', userInfo.avatar ?? "")

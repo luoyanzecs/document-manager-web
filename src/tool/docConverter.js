@@ -1,10 +1,10 @@
 import {getUUID, hashCode} from "@/tool/utils";
 
-const ID = 'z-id'
-const PARENT = 'z-parent'
-const INDEX = 'z-index'
-const HASH = 'z-hash'
-const CHILDREN = 'z-children'
+const ID = 'data-id'
+const PARENT = 'data-parent'
+const INDEX = 'data-index'
+const HASH = 'data-hash'
+const CHILDREN = 'data-children'
 const STYLE = 'style'
 const CLASS = 'class'
 const CUSTOM_TAG = 'zzz'
@@ -47,6 +47,15 @@ const getHash = (cur) => {
 
 const jsonRefine = (node, res, queue) => {
   if (node.child) {
+    // for (let i = 0; i < node.child.length; i++) {
+    //   console.log(JSON.stringify(node.child[i].attr));
+    //   console.log(node.child[i])
+    //   console.log(Object.keys(node.child[i]))
+    //   console.log(node.child[i].child)
+    //   console.log(node.child[i].attr)
+    //   console.log(JSON.stringify(node.child[i].attr))
+    //   console.log("----------")
+    // }
     node.child.reduce(
       (pre, cur, curIndex, arr) => {
         if (cur.node === type.TEXT && pre && pre.tag === CUSTOM_TAG && pre.node !== type.TEXT) {
@@ -55,7 +64,8 @@ const jsonRefine = (node, res, queue) => {
         if (!cur.attr) {
           cur.attr = {}
         }
-        if (!cur.attr[ID] && (cur.tag !== CUSTOM_TAG || cur.node === type.TEXT)) {
+        cur.attr = JSON.parse(JSON.stringify(cur.attr))
+        if (cur.attr[ID] === undefined && (cur.tag !== CUSTOM_TAG || cur.node === type.TEXT)) {
           res.newNode.push(cur)
         }
         if (cur.tag !== CUSTOM_TAG || cur.node === type.TEXT) {

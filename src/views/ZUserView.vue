@@ -369,7 +369,6 @@ const selectFileHandler = (param) => {
     LOADER.isCtxLoad = false
     APIRES.fileInfo = it.fileInfo
     APIRES.rootAttr = it.rootAttr
-    console.log(JSON.parse(APIRES.fileInfo.fileContent))
     APIRES.fileInfo.fileContent = json2html(JSON.parse(APIRES.fileInfo.fileContent))
     APIRES.fileInfo.attaches.forEach(it => it.isAttachDeleting = false)
   }).catch(() => LOADER.isCtxLoad = false)

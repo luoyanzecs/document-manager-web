@@ -177,13 +177,16 @@ import {json2html, html2json} from "html2json"
 import ZLocationSelect from "@/components/ZLocationSelect";
 import {emitNotice, loadUserStore, transformTime} from "@/tool/utils";
 import ZSelect from "@/components/ZSelect";
+import { toRequest } from '@/tool/docConverter';
 
 
 const userInfo = ref(loadUserStore())
 const buList = ref([])
 const bu = ref(parseInt(localStorage.getItem('bu')))
+
 const APIRES = reactive({
   fileInfo: undefined,
+  rootAttr: undefined,
   menuItems: [],
   comments: []
 })
@@ -291,7 +294,7 @@ const buttonClickHandler = (index) => {
         LOADER.isUpdateFileLoad = true
         UPDATE_FILE({
           fileId: chooseFileId.value,
-          jsonValue: JSON.stringify(html2json(APIRES.fileInfo.fileContent))
+          ...toRequest(html2json(APIRES.fileInfo.fileContent), APIRES.rootAttr)
         })
             .then(() => emitNotice({type: 1, message: '更新成功'}))
             .finally(() => LOADER.isUpdateFileLoad = LOADER.isEditorShow = false)
@@ -365,6 +368,8 @@ const selectFileHandler = (param) => {
   GET_FILE({id: param.id}).then(it => {
     LOADER.isCtxLoad = false
     APIRES.fileInfo = it.fileInfo
+    APIRES.rootAttr = it.rootAttr
+    console.log(JSON.parse(APIRES.fileInfo.fileContent))
     APIRES.fileInfo.fileContent = json2html(JSON.parse(APIRES.fileInfo.fileContent))
     APIRES.fileInfo.attaches.forEach(it => it.isAttachDeleting = false)
   }).catch(() => LOADER.isCtxLoad = false)

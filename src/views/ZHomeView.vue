@@ -48,6 +48,7 @@ const loginHandler = () => {
   LOGIN({username: account.value, password: password.value, role: role.value ? '用户': '管理员'})
       .then(it => {
         updateUserStore(it.userInfo, it.token)
+        localStorage.setItem('role', role.value ? '用户': '管理员')
         router.push(role.value ? '/user' : '/admin').then(() => noticeInquiry())
       })
       .finally(() => loadVisible.value = false)

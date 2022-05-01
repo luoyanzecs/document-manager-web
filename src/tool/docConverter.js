@@ -9,11 +9,7 @@ const STYLE = 'style'
 const CLASS = 'class'
 const CUSTOM_TAG = 'zzz'
 
-const type = {
-  ELEMENT: 'element',
-  ROOT: 'root',
-  TEXT: 'text'
-}
+const type = { ELEMENT: 'element', ROOT: 'root', TEXT: 'text' }
 
 const getIndex = (curIndex, arr) => {
   let [ low, high ] = [0.0 , 100000000000000.3]
@@ -31,18 +27,19 @@ const getIndex = (curIndex, arr) => {
     }
   }
   let mid = (low + high) / 2.0
-  return String(mid + mid > 1.0 ? Math.random(0, 1) : Math.random(0, mid))
+  return String(mid + (mid > 1.0 ? Math.random(0, 1) : Math.random(0, mid)))
 }
 
 const getHash = (cur) => {
   if (cur.node === type.TEXT) {
     return hashCode(cur.text)
   } else {
-    let payload = ""
+    let payload = ''
     for (let k in cur.attr) {
       if (![ID, PARENT, INDEX, HASH, CHILDREN].includes(k)) {
-        payload += String(cur.attr[k])
+        payload += Array.isArray(cur.attr[k]) ? cur.attr[k].join('') : cur.attr[k]
       }
+      payload += cur.tag || ''
     }
     return hashCode(payload)
   }
@@ -83,25 +80,38 @@ const findUpdateAndDlete = (node, res, queue) => {
   const newNodeIds = res.newNode.map(it => it.attr[ID]);
   if (newNodeIds.indexOf(node.attr[ID]) === -1) {
     if (getHash(node) !== node.attr[HASH]) {
+      node.attr[HASH] = getHash(node)
       res.modifyNodeAttribute.push(node)
     }
     const childIds = node.child ? node.child.map(it => it.attr[ID]) : []
-    node.attr[CHILDREN].split(',').filter(it => it.trim() !== '' && childIds.indexOf(it) === -1).forEach(res.deleteNode.push)
+    node.attr[CHILDREN].split(',').filter(it => it.trim() !== '' && childIds.indexOf(it) === -1)
+      .forEach(it => res.deleteNodeIds.push(it))
   }
   node.attr[CHILDREN] = node.child ? node.child.map(it => it.attr[ID]).join(',') : ""
   if (node.child) {
     node.child.forEach(it => queue.push(it))
   }
-
-
 }
 
-export function toRequest(root, rootAttribute={ 'z-id': '0', 'z-children': '', 'z-hash': '0', 'style': [], 'class': []}) {
+const attrToString = (attr) => {
+  const [custom, other] = [{}, {}]
+  for (let k in attr) {
+    if ([ID, PARENT, INDEX, HASH, CHILDREN, CLASS, STYLE].includes(k)) {
+      custom[k] = Array.isArray(attr[k]) ? attr[k].join(' ') : attr[k]
+    } else {
+      other[k] = Array.isArray(attr[k]) ? attr[k].join(' ') : attr[k]
+    }
+  }
+
+  return { ...custom, attr: other }
+}
+
+export function toRequest(root, rootAttribute) {
   root.attr = rootAttribute
 
   const res = {
     modifyNodeAttribute: [],
-    deleteNode: [],
+    deleteNodeIds: [],
     newNode: []
   }
 
@@ -118,15 +128,15 @@ export function toRequest(root, rootAttribute={ 'z-id': '0', 'z-children': '', '
   const updateAttrNodes =  res.modifyNodeAttribute.map(it =>
     it.node === type.TEXT
       ? { id: it.attr[ID], text: it.text }
-      : { id: it.attr[ID], attr: it.attr }
+      : { id: it.attr[ID], ...attrToString(it.attr) }
   )
 
   return {
     updateNodes: updateAttrNodes,
-    deleteNodes: res.deleteNode.map(it => it.attr[ID]),
+    deleteNodes: res.deleteNodeIds,
     newNodes: res.newNode.map(it => {
       delete it.attr[CHILDREN]
-      return { node: it.node, attr: it.attr, tag: it.tag, text: it.text }
+      return { node: it.node, ...attrToString(it.attr), tag: it.tag, text: it.text }
     })
   }
 }

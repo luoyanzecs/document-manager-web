@@ -1,81 +1,94 @@
 import {getUUID, hashCode} from "@/tool/utils";
 
+const ID = 'z-id'
+const PARENT = 'z-parent'
+const INDEX = 'z-index'
+const HASH = 'z-hash'
+const CHILDREN = 'z-children'
+const STYLE = 'style'
+const CLASS = 'class'
+const CUSTOM_TAG = 'zzz'
+
+const type = {
+  ELEMENT: 'element',
+  ROOT: 'root',
+  TEXT: 'text'
+}
+
 const getIndex = (curIndex, arr) => {
   let [ low, high ] = [0.0 , 100000000000000.3]
   for (let i = curIndex - 1; i >= 0; i--) {
-    if (arr[i].attr && arr[i].attr['z-index']) {
-      low = parseFloat(arr[i].attr['z-index'])
+    if (arr[i].attr && arr[i].attr[INDEX]) {
+      low = parseFloat(arr[i].attr[INDEX])
       break
     }
   }
 
   for (let i = curIndex + 1; i < arr.length; i++) {
-    if (arr[i].attr && arr[i].attr['z-index']) {
-      high = parseFloat(arr[i].attr['z-index'])
+    if (arr[i].attr && arr[i].attr[INDEX]) {
+      high = parseFloat(arr[i].attr[INDEX])
       break
     }
   }
-  return String((low + high) / 2.0)
+  let mid = (low + high) / 2.0
+  return String(mid + mid > 1.0 ? Math.random(0, 1) : Math.random(0, mid))
 }
 
 const getHash = (cur) => {
-  let payload;
-  if (cur.node === 'text') {
-    payload = cur.text
+  if (cur.node === type.TEXT) {
+    return hashCode(cur.text)
   } else {
-    payload = cur.attr['style'].join(',') + cur.attr['class'].join(',')
+    let payload = ""
+    for (let k in cur.attr) {
+      if (![ID, PARENT, INDEX, HASH, CHILDREN].includes(k)) {
+        payload += String(cur.attr[k])
+      }
+    }
+    return hashCode(payload)
   }
-  return hashCode(payload)
 }
 
 const jsonRefine = (node, res, queue) => {
   if (node.child) {
     node.child.reduce(
       (pre, cur, curIndex, arr) => {
-        if (cur.node === 'text' && pre && pre.tag === 'zzz' && pre.node !== 'text') {
+        if (cur.node === type.TEXT && pre && pre.tag === CUSTOM_TAG && pre.node !== type.TEXT) {
           [cur.attr, cur.tag ] = [pre.attr, pre.tag]
         }
         if (!cur.attr) {
           cur.attr = {}
         }
-        if (!cur.attr['z-id'] && (cur.tag !== 'zzz' || cur.node === 'text')) {
+        if (!cur.attr[ID] && (cur.tag !== CUSTOM_TAG || cur.node === type.TEXT)) {
           res.newNode.push(cur)
         }
-        if (cur.tag !== 'zzz' || cur.node === 'text') {
-          cur.attr['z-id'] = cur.attr['z-id'] || getUUID()
-          cur.attr['style'] = cur.attr['style'] || []
-          cur.attr['class'] = cur.attr['class'] || []
-          cur.attr['z-parent'] = cur.attr['z-parent'] || node.attr['z-id']
-          cur.attr['z-index'] = cur.attr['z-index'] || getIndex(curIndex, arr)
-          cur.attr['z-hash'] = cur.attr['z-hash'] || getHash(cur)
+        if (cur.tag !== CUSTOM_TAG || cur.node === type.TEXT) {
+          cur.attr[ID] = cur.attr[ID] || getUUID()
+          cur.attr[STYLE] = Array.isArray(cur.attr[STYLE]) ? cur.attr[STYLE].join(' ') : cur.attr[STYLE] || ''
+          cur.attr[CLASS] = Array.isArray(cur.attr[CLASS]) ? cur.attr[CLASS].join(' ') : cur.attr[CLASS] || ''
+          cur.attr[PARENT] = cur.attr[PARENT] || node.attr[ID]
+          cur.attr[INDEX] = cur.attr[INDEX] || getIndex(curIndex, arr)
+          cur.attr[HASH] = cur.attr[HASH] || getHash(cur)
         }
 
         return cur
       },
       null
     )
-    node.child = node.child.filter(it => it.tag !== 'zzz' || it.node === 'text')
+    node.child = node.child.filter(it => it.tag !== CUSTOM_TAG || it.node === type.TEXT)
     node.child.forEach(it => queue.push(it))
   }
 }
 
 const findUpdateAndDlete = (node, res, queue) => {
-  const newNodeIds = res.newNode.map(it => it.attr['z-id']);
-  if (newNodeIds.indexOf(node.attr['z-id']) === -1) {
-    const currentHash = getHash(node);
-    if (currentHash !== node.attr['z-hash']) {
+  const newNodeIds = res.newNode.map(it => it.attr[ID]);
+  if (newNodeIds.indexOf(node.attr[ID]) === -1) {
+    if (getHash(node) !== node.attr[HASH]) {
       res.modifyNodeAttribute.push(node)
     }
-    const childIds = node.child ? node.child.map(it => it.attr['z-id']) : []
-    const attributeChildren = node.attr['z-children'].split(',').filter(it => it.trim() !== '')
-
-    const deleteIds = attributeChildren.filter(it => childIds.indexOf(it) === -1);
-    if (deleteIds.length > 0 ) {
-      deleteIds.forEach(res.deleteNode.push)
-      res.modifyNodeChildren.push(node)
-    }
+    const childIds = node.child ? node.child.map(it => it.attr[ID]) : []
+    node.attr[CHILDREN].split(',').filter(it => it.trim() !== '' && childIds.indexOf(it) === -1).forEach(res.deleteNode.push)
   }
-  node.attr['z-children'] = node.child ? node.child.map(it => it.attr['z-id']).join(',') : ""
+  node.attr[CHILDREN] = node.child ? node.child.map(it => it.attr[ID]).join(',') : ""
   if (node.child) {
     node.child.forEach(it => queue.push(it))
   }
@@ -88,7 +101,6 @@ export function toRequest(root, rootAttribute={ 'z-id': '0', 'z-children': '', '
 
   const res = {
     modifyNodeAttribute: [],
-    modifyNodeChildren: [],
     deleteNode: [],
     newNode: []
   }
@@ -104,28 +116,17 @@ export function toRequest(root, rootAttribute={ 'z-id': '0', 'z-children': '', '
   }
 
   const updateAttrNodes =  res.modifyNodeAttribute.map(it =>
-    it.node === 'text'
-      ? { id: it.attr['z-id'], text: it.text }
-      : { id: it.attr['z-id'], class: it.attr['class'], styles: it.attr['style'] }
+    it.node === type.TEXT
+      ? { id: it.attr[ID], text: it.text }
+      : { id: it.attr[ID], attr: it.attr }
   )
-  const updateChildNodes =  res.modifyNodeChildren.map(it => ({id: it.attr['z-id'], zChildren: it.attr['child']}))
-
-  const updateNodes = updateAttrNodes.concat(updateChildNodes).reduce((pre, cur) => {
-      let find = pre.find(it => it.id === cur.id);
-      if (find) {
-        find.class = find.class || cur.class
-        find.styles = find.styles || cur.styles
-        find.zChildren = find.zChildren || cur.zChildren
-        find.text = find.text || cur.text
-      } else {
-        pre.push(cur)
-      }
-      return pre
-    }, []);
 
   return {
-    updateNodes,
-    deleteNodes: res.deleteNode.map(it => it.attr['z-id']),
-    newNodes: res.newNode.map(it => ({node: it.node, ...it.attr, tag: it.tag, text: it.text}))
+    updateNodes: updateAttrNodes,
+    deleteNodes: res.deleteNode.map(it => it.attr[ID]),
+    newNodes: res.newNode.map(it => {
+      delete it.attr[CHILDREN]
+      return { node: it.node, attr: it.attr, tag: it.tag, text: it.text }
+    })
   }
 }

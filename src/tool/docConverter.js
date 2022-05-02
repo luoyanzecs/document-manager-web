@@ -47,15 +47,6 @@ const getHash = (cur) => {
 
 const jsonRefine = (node, res, queue) => {
   if (node.child) {
-    // for (let i = 0; i < node.child.length; i++) {
-    //   console.log(JSON.stringify(node.child[i].attr));
-    //   console.log(node.child[i])
-    //   console.log(Object.keys(node.child[i]))
-    //   console.log(node.child[i].child)
-    //   console.log(node.child[i].attr)
-    //   console.log(JSON.stringify(node.child[i].attr))
-    //   console.log("----------")
-    // }
     node.child.reduce(
       (pre, cur, curIndex, arr) => {
         if (cur.node === type.TEXT && pre && pre.tag === CUSTOM_TAG && pre.node !== type.TEXT) {
@@ -64,7 +55,6 @@ const jsonRefine = (node, res, queue) => {
         if (!cur.attr) {
           cur.attr = {}
         }
-        cur.attr = JSON.parse(JSON.stringify(cur.attr))
         if (cur.attr[ID] === undefined && (cur.tag !== CUSTOM_TAG || cur.node === type.TEXT)) {
           res.newNode.push(cur)
         }

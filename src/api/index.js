@@ -29,9 +29,9 @@ const errorHandler = (error) => {
       let head = error.response.data.head;
       store.commit(
         'unshiftNotice',
-        { message: head &&head.message || error.response.statusText, type: 2 }
+        { message: (head && head.message) || error.response.data.error, type: 2 }
       )
-      throw new Error(head.statusCode)
+      throw new Error((head && head.statusCode) || error.response.status)
     }
   } else if (error.request) {
     // 请求已经成功发起，但没有收到响应

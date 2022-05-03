@@ -73,10 +73,13 @@
           <div v-html="APIRES.fileInfo.fileContent" style="min-height: 20rem"></div>
           <div class="flex py-8 items-center gap-2">
             <div v-for="attach in APIRES.fileInfo.attaches" :key="attach.link" @click="downloadAttach(attach.link)"
-                 class="border rounded-lg h-24 w-20 bg-gray-50  pos-center pt-4 pb-2 px-2 flex flex-col gap-2"
+                 class="border rounded-lg h-28 w-20 bg-gray-50  pos-center px-2 flex flex-col whitespace-normal "
             >
-              <p class="text-xs text-gray-500 text-center flex-1">{{ attach.name }}</p>
-              <svg class="cursor-pointer w-4 h-4 stroke-2 text-blue-400 transform duration-100 hover:scale-125"
+              <p class="text-sm text-gray-500 text-center flex-1 m-2 truncate">
+                <span>{{ attach.name.split('.').slice(0, -1).join(".") }}</span>
+              </p>
+              <p class="text-xs border p-px border-indigo-400 rounded-md text-indigo-400 cursor-default">{{ attach.name.split('.').pop() }}</p>
+              <svg class="cursor-pointer w-4 h-4 my-1 stroke-2 text-blue-400 transform duration-100 hover:scale-125"
                    viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor"
                       d="M160 832h704a32 32 0 1 1 0 64H160a32 32 0 1 1 0-64zm384-253.696 236.288-236.352 45.248 45.248L508.8 704 192 387.2l45.248-45.248L480 584.704V128h64v450.304z"></path>
@@ -140,9 +143,15 @@
         </svg>
         <div v-else class="flex flex-col gap-2 mt-4">
           <div v-for="item in search.res" :key="item.id" @click="searchDirectHander(item)"
-               class="px-4 py-2 hover:bg-blue-400 rounded-md shadow cursor-pointer">
-            <p>{{ item.title }}</p>
-            <p>{{ item.ctx }}</p>
+               class="px-4 py-2 hover:bg-blue-400 space-y-1 rounded-md shadow cursor-pointer">
+            <div class="flex flex-grow justify-between items-baseline">
+              <p>
+                <span class="text-lg text-blue-500 mr-1">#</span>
+                <span class="text-gray-700 font-bold" v-html="item.title"></span>
+              </p>
+              <p class="text-gray-500 text-sm">{{ item.author }}</p>
+            </div>
+            <p class="text-gray-700 ml-3" v-html="item.ctx"></p>
           </div>
         </div>
       </template>
@@ -263,13 +272,15 @@ watch(
 watch(
     () => search.input,
     searchDelay(value => {
-      search.ctxLoad = true
-      SEARCH({input: value}).then(it => {
-        if (value === search.input) {
-          search.ctxLoad = false
-          search.res = it.searchResults
-        }
-      })
+      if (search.input !== "") {
+        search.ctxLoad = true
+        SEARCH({input: value}).then(it => {
+          if (value === search.input) {
+            search.ctxLoad = false
+            search.res = it.searchResults
+          }
+        })
+      }
     })
 )
 

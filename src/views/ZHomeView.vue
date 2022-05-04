@@ -5,9 +5,9 @@
       <div>
         <span class="text-xl font-bold tracking-widest">登录</span>
       </div>
-      <input class="input-home" type="text" v-model="account" spellcheck="false" placeholder="输入账号"/>
-      <input class="input-home" type="password" v-model="password" placeholder="输入密码">
-      <z-switch class="py-2 font-light" left="管理员" right="员工" v-model:value="role"/>
+      <input class="input-home" type="text" v-model="loginForm.username" spellcheck="false" placeholder="输入账号"/>
+      <input class="input-home" type="password" v-model="loginForm.password" placeholder="输入密码">
+      <z-switch class="py-2 font-light" left="管理员" right="员工" v-model:value="loginForm.role"/>
       <div class="transform scale-110">
         <z-button fill="登录" :class="{'animate-shake' : isButtonShake}" :load-visible="loadVisible"
                   @click="loginHandler"/>
@@ -22,19 +22,14 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import ZButton from "@/components/ZButton";
 import ZSwitch from "@/components/ZSwitch";
-import {LOGIN} from "@/api";
-import {emitNotice, noticeInquiry, sleep, updateUserStore} from "@/tool/utils.ts";
+import {emitNotice, sleep} from "@/tool/utils.ts";
+import { useUser } from '@/composables/useUser';
 
-const router = useRouter()
-
-const role = ref(true)
-const account = ref('')
-const password = ref('')
+const { loginForm, login } = useUser()
 const loadVisible = ref(false)
-const loginCheck = computed(() => account.value.length >= 6 && password.value.length >= 6)
+const loginCheck = computed(() => loginForm.username.length >= 6 && loginForm.password.length >= 6)
 const isButtonShake = ref(false)
 
 const loginHandler = () => {
@@ -45,13 +40,7 @@ const loginHandler = () => {
     return
   }
   loadVisible.value = true
-  LOGIN({username: account.value, password: password.value, role: role.value ? '用户': '管理员'})
-      .then(it => {
-        updateUserStore(it.userInfo, it.token)
-        localStorage.setItem('role', role.value ? '用户': '管理员')
-        router.push(role.value ? '/user' : '/admin').then(() => noticeInquiry())
-      })
-      .finally(() => loadVisible.value = false)
+  login().finally(() => loadVisible.value = false)
 }
 </script>
 

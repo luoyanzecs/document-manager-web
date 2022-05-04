@@ -9,16 +9,17 @@
 
 
 <script setup>
-import { onMounted } from "vue";
+// import { onMounted } from "vue";
 import { useStore } from 'vuex'
 import ZNotifacation from "@/components/ZNotifacation.vue";
-import { loadUserStore } from "@/tool/utils";
+// import { useUser } from "./composables/useUser";
 
 const store = useStore()
+// const { loadUserWithCheck } = useUser()
 
 const noticeCloseHandler = id => store.commit('removeNotice', id)
 
-onMounted(() => loadUserStore())
+// onMounted(() => loadUserWithCheck())
 
 </script>
 <style>

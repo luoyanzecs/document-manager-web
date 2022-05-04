@@ -16,21 +16,21 @@
           <tr class="border-b border-gray-400">
             <td class="p-2 whitespace-nowrap">用户名</td>
             <td>:</td>
-            <td class="p-2 whitespace-nowrap">{{ myInfo.username }}</td>
+            <td class="p-2 whitespace-nowrap">{{ myInfo?.username }}</td>
           </tr>
           <tr class="border-b border-gray-400">
             <td class="p-2 whitespace-nowrap">部门</td>
             <td>:</td>
-            <td class="p-2 whitespace-nowrap">{{ myInfo.bu }}</td>
+            <td class="p-2 whitespace-nowrap">{{ userBu.name }}</td>
           </tr>
           <tr class="border-b border-gray-400">
             <td class="p-2 whitespace-nowrap">角色</td>
             <td>:</td>
-            <td class="p-2 whitespace-nowrap" >{{ myInfo.role }}</td>
+            <td class="p-2 whitespace-nowrap" >{{ myInfo?.role }}</td>
           </tr>
         </table>
         <div class="flex justify-end">
-          <z-button fill="登出" class="transform scale-90" @click="logoutHandler"/>
+          <z-button fill="登出" class="transform scale-90" @click="logout()"/>
         </div>
       </div>
     </transition-group>
@@ -40,8 +40,8 @@
 <script setup >
 import {defineProps, ref} from "vue";
 import ZButton from "@/components/ZButton";
-import {useRouter} from "vue-router";
-import {loadUserStore} from "@/tool/utils";
+import { useUser } from "@/composables/useUser";
+import {useBu} from "@/composables/useBu";
 
 defineProps({
   image: {
@@ -55,14 +55,13 @@ defineProps({
     required: false
   }
 });
-const isPopOver = ref(false)
-const router = useRouter()
-const myInfo = loadUserStore()
 
-function logoutHandler() {
-  localStorage.clear()
-  router.push('/')
-}
+const { loadUserWithCheck, logout } = useUser()
+const { userBuModel } = useBu()
+const isPopOver = ref(false)
+const myInfo = loadUserWithCheck()
+const userBu = userBuModel()
+
 
 </script>
 

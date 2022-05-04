@@ -11,7 +11,7 @@
     "build-mock": "vue-cli-service build --mode mock"
   },
   "dependencies": {
-    "@vueuse/core": "^7.5.5",
+    "@vueuse/core": "^7.7.1",
     "@wangeditor/editor-for-vue": "^5.1.9",
     "autoprefixer": "^9.8.8",
     "axios": "^0.26.0",

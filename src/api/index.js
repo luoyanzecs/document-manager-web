@@ -1,12 +1,15 @@
 import {post, uploader} from './http'
 import {store} from "@/store";
-import {emitNotice, loadUserStore} from "@/tool/utils";
+import { emitNotice } from "@/tool/utils";
 import router from "@/router";
+import { useUser } from '@/composables/useUser';
+
+const { loadUserWithCheck } = useUser()
 
 const generateHead = () => {
   return {
     timestamp: Date.now() + "",
-    ...loadUserStore()
+    ...loadUserWithCheck().value
   }
 }
 
@@ -44,6 +47,7 @@ const errorHandler = (error) => {
 }
 
 const sendHttp = (url, params, callback) => {
+  params = params ? params : {}
   params["head"] = generateHead()
   return callback(url, params)
     .then(validateResponseHead)

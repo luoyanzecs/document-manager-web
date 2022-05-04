@@ -33,7 +33,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/composables/useUser.js", "src/composables/useBu.js"  ],
   "exclude": [
     "node_modules"
   ]

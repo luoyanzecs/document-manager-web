@@ -209,9 +209,11 @@ import ZPagination from "@/components/ZPagination";
 import ZTable from "@/components/ZTable";
 import {DELETE_TABLE_ITEMS, GET_BU, ADMIN_SEARCH_ALL_IN_ONE, ADD_NEW_USER, ADD_NEW_NOTICE,} from "@/api";
 import ZDailog from "@/components/ZDailog";
-import {emitNotice, loadUserStore, sleep, transformTimeShort} from "@/tool/utils";
+import {emitNotice, sleep, transformTimeShort} from "@/tool/utils";
+import { useUser } from "@/composables/useUser";
 
-const userInfo = loadUserStore();
+const { loadUserWithCheck } = useUser()
+const userInfo = loadUserWithCheck();
 const table = ref();
 const buList = ref([]);
 const menu = ["用户管理", "记录管理", "文件管理", "发布通知"];

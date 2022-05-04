@@ -2,18 +2,18 @@
   <z-aside>
     <template #right>
       <z-select class="bg-blue-500 rounded-2xl text-white min-w-4 py-2 pl-4 text-sm"
-                v-model:value="bu" :options="buList.map(it => ({value: it.buId, name: it.name}))"/>
+                v-model:value="userBuIdRef" :options="buModels.map(it => ({value: it.buId, name: it.name}))"/>
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
       <div class="overflow-auto flex-1">
-        <svg v-if="LOADER.isMenuLoad" class="text-gray-500 w-8 h-8 animate-spin mx-auto mt-16"
+        <svg v-if="menuModel.loader" class="text-gray-500 w-8 h-8 animate-spin mx-auto mt-16"
              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor"
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        <z-tree v-else class="pb-8" :catalogue="APIRES.menuItems" :choose-id="chooseFileId"
+        <z-tree v-else class="pb-8" :catalogue="menuModel.items" :choose-id="chooseFileId"
                 @select-file="selectFileHandler"/>
       </div>
     </template>
@@ -104,7 +104,7 @@
             <tr>
               <td class="border-r-2 pr-2 whitespace-nowrap">文件位置</td>
               <td>
-                <z-location-select class="mr-2 w-64 sm:w-96" :items="APIRES.menuItems"
+                <z-location-select class="mr-2 w-64 sm:w-96" :items="menuModel.items"
                                    @select-dir="id => newFile.parentDirId = id"/>
               </td>
             </tr>
@@ -170,13 +170,10 @@ import ZTree from "@/components/ZTree.vue";
 import ZComment from "@/components/ZComment.vue";
 import ZDailog from "@/components/ZDailog";
 import {
-  FILE_MENU,
   GET_COMMENT,
   GET_FILE,
   UPDATE_FILE,
   CREATE_FILE,
-  SEARCH,
-  GET_BU,
   UPLOAD_ATTACH,
   DOWNLOAD_ATTACH,
   DELETE_ATTACH
@@ -184,23 +181,30 @@ import {
 import ZEditor from "@/components/ZEditor";
 import {json2html, html2json} from "html2json"
 import ZLocationSelect from "@/components/ZLocationSelect";
-import {emitNotice, loadUserStore, transformTime} from "@/tool/utils";
+import {emitNotice, transformTime} from "@/tool/utils";
 import ZSelect from "@/components/ZSelect";
 import { toRequest } from '@/tool/docConverter';
+import { useBu } from '@/composables/useBu';
+import { useUser } from '@/composables/useUser';
+import { useSearcher } from "@/composables/useSearcher";
+import {useMenu} from "@/composables/useMenu";
 
+const { initBu, buModels, userBuModel, userBuIdRef } = useBu()
 
-const userInfo = ref(loadUserStore())
-const buList = ref([])
-const bu = ref(parseInt(localStorage.getItem('bu')))
+const { loadUserWithCheck } = useUser()
+const userInfo = loadUserWithCheck()
+
+const { search } = useSearcher()
+
+const { menuModel, getMenuByBuId } = useMenu()
 
 const APIRES = reactive({
   fileInfo: undefined,
   rootAttr: undefined,
-  menuItems: [],
   comments: []
 })
+
 const LOADER = reactive({
-  isMenuLoad: true,
   isEditorShow: false,
   isCtxLoad: false,
   isCommentLoad: false,
@@ -216,11 +220,7 @@ const newFile = reactive({
   name: '',
   parentDirId: 1
 })
-const search = reactive({
-  input: '',
-  res: [],
-  ctxLoad: false
-})
+
 const selectAttachInput = ref()
 
 function attachSelectHandler(event) {
@@ -241,47 +241,16 @@ function attachSelectHandler(event) {
 }
 
 onMounted(() => {
-  FILE_MENU({ bu: userInfo.value.bu }).then(it => {
-    LOADER.isMenuLoad = false
-    it.items.forEach(item => APIRES.menuItems.push(item))
-  })
-  GET_BU({}).then(it => buList.value = it.buList)
+  getMenuByBuId(userInfo.value.bu)
+  initBu()
 })
 
-function searchDelay(callback, delay = 100) {
-  let timer = ''
-  return nv => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      callback(nv);
-    }, delay);
-  };
-}
-
 watch(
-    () => bu.value,
+    () => userBuModel.value,
     (nv) => {
-      LOADER.isMenuLoad = true
-      FILE_MENU({bu: nv}).then(it => {
-        LOADER.isMenuLoad = false
-        APIRES.menuItems = new Array(0)
-        it.items.forEach(item => APIRES.menuItems.push(item))
-      })
+      console.log(nv)
+      getMenuByBuId(nv)
     }
-)
-watch(
-    () => search.input,
-    searchDelay(value => {
-      if (search.input !== "") {
-        search.ctxLoad = true
-        SEARCH({input: value}).then(it => {
-          if (value === search.input) {
-            search.ctxLoad = false
-            search.res = it.searchResults
-          }
-        })
-      }
-    })
 )
 
 const buttonClickHandler = (index) => {
@@ -322,7 +291,7 @@ const buttonClickHandler = (index) => {
       LOADER.isCreateFileLoad = true
       CREATE_FILE({
         title: newFile.name,
-        bu: bu.value,
+        bu: userBuIdRef.value,
         isDir: newFile.isDir,
         parentId: newFile.parentDirId
       }).then(it => {

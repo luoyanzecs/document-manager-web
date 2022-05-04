@@ -2,7 +2,7 @@
   <z-aside>
     <template #right>
       <z-select class="bg-blue-500 rounded-2xl text-white min-w-4 py-2 pl-4 text-sm"
-                v-model:value="userBuIdRef" :options="buModels.map(it => ({value: it.buId, name: it.name}))"/>
+                v-model:value="buID" :options="buModels.map(it => ({value: it.buId, name: it.name}))"/>
     </template>
     <template #context>
       <div class="m-4 text-lg tracking-wide font-medium text-gray-800 dark:text-white">文件目录</div>
@@ -23,10 +23,11 @@
       <template #tools>
         <z-head-menu>
           <z-button fill="搜索" @click="buttonClickHandler('search')"/>
-          <z-button fill="新建" v-show="!LOADER.isEditorShow" @click="buttonClickHandler('newFile')"/>
-          <z-button fill="附件" v-show="LOADER.isEditorShow" @click="buttonClickHandler('uploadAttach')"/>
+          <z-button fill="新建" v-show="!FILE_LOADERS.isEditorShow" @click="buttonClickHandler('newFile')"/>
+          <z-button fill="附件" v-show="FILE_LOADERS.isEditorShow" @click="buttonClickHandler('uploadAttach')"/>
           <input type="file" ref="selectAttachInput" style="display: none" @change="attachSelectHandler">
-          <z-button :fill="editorStatus" @click="buttonClickHandler('edit')" :load-visible="LOADER.isUpdateFileLoad"/>
+          <z-button :fill="editorStatus" @click="buttonClickHandler('edit')"
+                    :load-visible="FILE_LOADERS.isUpdateFileLoad"/>
         </z-head-menu>
       </template>
       <template #avatar>
@@ -34,10 +35,10 @@
       </template>
     </Header>
     <div class="overflow-auto flex-grow flex flex-col items-stretch">
-      <template v-if="APIRES.fileInfo && LOADER.isEditorShow">
+      <template v-if="APIRES.fileInfo && FILE_LOADERS.isEditorShow">
         <z-editor v-model:content="APIRES.fileInfo.fileContent"/>
         <div class="flex p-4 items-center gap-2">
-          <div v-for="attach in APIRES.fileInfo.attaches" :key="attach.link" @click="deleteAttach(attach.link)"
+          <div v-for="attach in APIRES.fileInfo?.attaches" :key="attach.link" @click="deleteAttach(attach.link)"
                class="border rounded-lg h-24 w-20 bg-gray-50  pos-center pt-4 pb-2 px-2 flex flex-col gap-2"
           >
             <p class="text-xs text-gray-500 text-center flex-1">{{ attach.name }}</p>
@@ -57,7 +58,7 @@
         </div>
       </template>
       <template v-else>
-        <div v-if="LOADER.isCtxLoad" class="animate-pulse flex flex-col gap-2 p-4 min-h-30">
+        <div v-if="FILE_LOADERS.isCtxLoad" class="animate-pulse flex flex-col gap-2 p-4 min-h-30">
           <p class="h-4 bg-gray-300 w-5/12 rounded-lg"></p>
           <template v-for="i in 4" :key="i">
             <p class="h-4 bg-gray-300 w-full rounded-lg"></p>
@@ -66,9 +67,9 @@
             <p class="h-4 bg-gray-300 w-7/12 rounded-lg"></p>
           </template>
         </div>
-        <div v-if="APIRES.fileInfo && !LOADER.isCtxLoad" class="p-4 wrap">
-          <p class="mb-1.5 text-gray-400 text-sm">上次编辑于 {{ APIRES.fileInfo.lastEditTime }} by {{
-              APIRES.fileInfo.editor
+        <div v-if="APIRES.fileInfo && !FILE_LOADERS.isCtxLoad" class="p-4 wrap">
+          <p class="mb-1.5 text-gray-400 text-sm">上次编辑于 {{ APIRES.fileInfo?.lastEditTime }} by {{
+              APIRES.fileInfo?.editor
             }}</p>
           <div v-html="APIRES.fileInfo.fileContent" style="min-height: 20rem"></div>
           <div class="flex py-8 items-center gap-2">
@@ -78,7 +79,8 @@
               <p class="text-sm text-gray-500 text-center flex-1 m-2 truncate">
                 <span>{{ attach.name.split('.').slice(0, -1).join(".") }}</span>
               </p>
-              <p class="text-xs border p-px border-indigo-400 rounded-md text-indigo-400 cursor-default">{{ attach.name.split('.').pop() }}</p>
+              <p class="text-xs border p-px border-indigo-400 rounded-md text-indigo-400 cursor-default">
+                {{ attach.name.split('.').pop() }}</p>
               <svg class="cursor-pointer w-4 h-4 my-1 stroke-2 text-blue-400 transform duration-100 hover:scale-125"
                    viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor"
@@ -90,13 +92,14 @@
         <div v-if="APIRES.fileInfo" class="pb-16">
           <hr class="my-4">
           <z-comment :info="userInfo" :comments-list="APIRES.comments" :file-id=chooseFileId
-                     :is-comment-load="LOADER.isCommentLoad"/>
+                     :is-comment-load="commentLoader"/>
         </div>
       </template>
     </div>
   </div>
   <transition-group name="fade">
-    <z-dailog :key="1" v-show="LOADER.isShowCreateBtnDailog" v-model:click-toggle="LOADER.isShowCreateBtnDailog">
+    <z-dailog :key="1" v-show="FILE_LOADERS.isShowCreateBtnDailog"
+              v-model:click-toggle="FILE_LOADERS.isShowCreateBtnDailog">
       <template #title>请确认您的信息</template>
       <template #body>
         <form action="">
@@ -127,11 +130,13 @@
         </form>
       </template>
       <template #bottom>
-        <z-button fill="确认" @click="buttonClickHandler('newFileConfirm')" :load-visible="LOADER.isCreateFileLoad"/>
-        <z-button fill="取消" @click="LOADER.isShowCreateBtnDailog = !LOADER.isShowCreateBtnDailog"/>
+        <z-button fill="确认" @click="buttonClickHandler('newFileConfirm')"
+                  :load-visible="FILE_LOADERS.isCreateFileLoad"/>
+        <z-button fill="取消" @click="FILE_LOADERS.isShowCreateBtnDailog = !FILE_LOADERS.isShowCreateBtnDailog"/>
       </template>
     </z-dailog>
-    <z-dailog :key="2" v-show="LOADER.isShowSearchBtnDailog" v-model:click-toggle="LOADER.isShowSearchBtnDailog">
+    <z-dailog :key="2" v-show="FILE_LOADERS.isShowSearchBtnDailog"
+              v-model:click-toggle="FILE_LOADERS.isShowSearchBtnDailog">
       <template #body>
         <input type="text" v-model="search.input" placeholder="查询内容" spellcheck="false"
                class="border rounded-md text-gray-500 p-2 w-full text-2xl focus:outline-none focus:ring-blue-500 focus:ring-2">
@@ -160,7 +165,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, reactive, ref, watch} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import Header from "@/components/ZHeader.vue";
 import ZHeadMenu from "@/components/ZHeadMenu";
 import ZButton from "@/components/ZButton";
@@ -169,76 +174,41 @@ import ZAvatar from "@/components/ZAvatar.vue";
 import ZTree from "@/components/ZTree.vue";
 import ZComment from "@/components/ZComment.vue";
 import ZDailog from "@/components/ZDailog";
-import {
-  GET_COMMENT,
-  GET_FILE,
-  UPDATE_FILE,
-  CREATE_FILE,
-  UPLOAD_ATTACH,
-  DOWNLOAD_ATTACH,
-  DELETE_ATTACH
-} from "@/api";
 import ZEditor from "@/components/ZEditor";
-import {json2html, html2json} from "html2json"
 import ZLocationSelect from "@/components/ZLocationSelect";
-import {emitNotice, transformTime} from "@/tool/utils";
 import ZSelect from "@/components/ZSelect";
-import { toRequest } from '@/tool/docConverter';
-import { useBu } from '@/composables/useBu';
-import { useUser } from '@/composables/useUser';
-import { useSearcher } from "@/composables/useSearcher";
+import {useBu} from '@/composables/useBu';
+import {useUser} from '@/composables/useUser';
+import {useSearcher} from "@/composables/useSearcher";
 import {useMenu} from "@/composables/useMenu";
+import {useDoc} from "@/composables/useDoc";
+import {useAttach} from "@/composables/useAttach";
 
-const { initBu, buModels, userBuModel, userBuIdRef } = useBu()
+const {initBu, buModels, userBuModel} = useBu()
 
-const { loadUserWithCheck } = useUser()
+const {loadUserWithCheck} = useUser()
+const {search} = useSearcher()
+const {menuModel, getMenuByBuId} = useMenu()
+const {
+  APIRES,
+  commentLoader,
+  chooseFileId,
+  FILE_LOADERS,
+  newFile,
+  createFile,
+  selectFileHandler,
+  edit,
+  searchDirectHander
+} = useDoc()
+const {downloadAttach, attachSelectHandler, deleteAttach} = useAttach()
+
 const userInfo = loadUserWithCheck()
 
-const { search } = useSearcher()
-
-const { menuModel, getMenuByBuId } = useMenu()
-
-const APIRES = reactive({
-  fileInfo: undefined,
-  rootAttr: undefined,
-  comments: []
-})
-
-const LOADER = reactive({
-  isEditorShow: false,
-  isCtxLoad: false,
-  isCommentLoad: false,
-  isShowCreateBtnDailog: false,
-  isUpdateFileLoad: false,
-  isCreateFileLoad: false,
-  isShowSearchBtnDailog: false,
-})
-const chooseFileId = ref(0)
-const editorStatus = computed(() => LOADER.isEditorShow ? '更新' : '编辑')
-const newFile = reactive({
-  isDir: false,
-  name: '',
-  parentDirId: 1
-})
+const editorStatus = computed(() => FILE_LOADERS.isEditorShow ? '更新' : '编辑')
 
 const selectAttachInput = ref()
 
-function attachSelectHandler(event) {
-  UPLOAD_ATTACH({
-    file: event.target.files[0],
-    docId: chooseFileId.value
-  }).then(it => {
-    const attach = {
-      name: it.attach.name,
-      link: it.attach.link,
-      isAttachDeleting: false
-    }
-    APIRES.fileInfo.attaches.unshift(attach)
-    emitNotice({type: 1, message: '附件上传成功'})
-  }).catch(() => {
-    emitNotice({type: 2, message: '附件上传失败'})
-  })
-}
+const buID = ref(userBuModel().value.buId)
 
 onMounted(() => {
   getMenuByBuId(userInfo.value.bu)
@@ -246,118 +216,30 @@ onMounted(() => {
 })
 
 watch(
-    () => userBuModel.value,
-    (nv) => {
-      console.log(nv)
-      getMenuByBuId(nv)
-    }
+    () => buID.value,
+    getMenuByBuId
 )
 
 const buttonClickHandler = (index) => {
   switch (index) {
     case 'search':
-      LOADER.isShowSearchBtnDailog = true
+      FILE_LOADERS.isShowSearchBtnDailog = true
       break
     case 'newFile':
-      LOADER.isShowCreateBtnDailog = true
+      FILE_LOADERS.isShowCreateBtnDailog = true
       break
     case 'uploadAttach':
       selectAttachInput.value.value = null
       selectAttachInput.value.click()
       break
-    case 'edit': {
-      if (APIRES.fileInfo === undefined) {
-        emitNotice({ type: 3, message: '当前没有可编辑的文件' })
-        return
-      }
-      if (LOADER.isEditorShow) {
-        LOADER.isUpdateFileLoad = true
-        UPDATE_FILE({
-          fileId: chooseFileId.value,
-          ...toRequest(html2json(APIRES.fileInfo.fileContent), APIRES.rootAttr)
-        })
-            .then(() => emitNotice({type: 1, message: '更新成功'}))
-            .finally(() => LOADER.isUpdateFileLoad = LOADER.isEditorShow = false)
-      } else {
-        LOADER.isEditorShow = true
-      }
+    case 'edit':
+      edit();
       break
-    }
-    case 'newFileConfirm': {
-      if (newFile.name === '') {
-        emitNotice({type: 2, message: '文件名不能为空'})
-        break
-      }
-      LOADER.isCreateFileLoad = true
-      CREATE_FILE({
-        title: newFile.name,
-        bu: userBuIdRef.value,
-        isDir: newFile.isDir,
-        parentId: newFile.parentDirId
-      }).then(it => {
-        APIRES.fileInfo = {
-          editor: userInfo.value.username,
-          fileContent: '',
-          lastEditTime: transformTime()
-        }
-        chooseFileId.value = it.fileId
-        buttonClickHandler('edit')
-        emitNotice({type: 1, message: '创建成功'})
-      }).finally(() => LOADER.isCreateFileLoad = LOADER.isShowCreateBtnDailog = false)
+    case 'newFileConfirm':
+      createFile(userInfo.value?.name, buID.value, buttonClickHandler, 'edit')
       break
-    }
+
   }
-}
-
-function downloadAttach(link) {
-  const attach = APIRES.fileInfo.attaches.find(it => it.link === link);
-  DOWNLOAD_ATTACH({link: link})
-      .then(it => {
-        let url = window.URL.createObjectURL(new Blob([it]))
-        let link = document.createElement('a')
-        link.style.display = 'none'
-        link.href = url
-        link.setAttribute('download', attach.name)
-        document.body.append(link)
-        link.click()
-        link.parentElement.removeChild(link)
-      })
-}
-
-function deleteAttach(link) {
-  const attach = APIRES.fileInfo.attaches.find(it => it.link === link);
-  attach.isAttachDeleting = true
-  DELETE_ATTACH({attachId: link})
-      .then(() => {
-        APIRES.fileInfo.attaches = APIRES.fileInfo.attaches.filter(it => it.link !== link)
-        emitNotice({type: 1, message: '文件删除成功'})
-      })
-      .finally(() => attach.isAttachDeleting = false)
-}
-
-const searchDirectHander = (item) => {
-  LOADER.isShowSearchBtnDailog = !LOADER.isShowSearchBtnDailog
-  chooseFileId.value = item.id
-  selectFileHandler({id: item.id})
-}
-
-const selectFileHandler = (param) => {
-  LOADER.isEditorShow = false
-  LOADER.isCtxLoad = LOADER.isCommentLoad = true
-  chooseFileId.value = param.id
-  GET_FILE({id: param.id}).then(it => {
-    LOADER.isCtxLoad = false
-    APIRES.fileInfo = it.fileInfo
-    APIRES.rootAttr = it.rootAttr
-    APIRES.fileInfo.fileContent = json2html(JSON.parse(APIRES.fileInfo.fileContent))
-    APIRES.fileInfo.attaches.forEach(it => it.isAttachDeleting = false)
-  }).catch(() => LOADER.isCtxLoad = false)
-
-  GET_COMMENT({id: param.id}).then(it => {
-    LOADER.isCommentLoad = false
-    APIRES.comments.splice(0, APIRES.comments.length)
-    it.comments.forEach((comment) => APIRES.comments.push(comment))
-  }).catch(() => LOADER.isCommentLoad = false)
 }
 
 </script>
@@ -406,9 +288,17 @@ const selectFileHandler = (param) => {
   @apply border border-gray-300 px-4 py-1
 }
 
-:deep(.wrap h1) { font-size: 2em; }
-:deep(.wrap h2) { font-size: 1.5em; }
-:deep(.wrap h3) { font-size: 1.17em; }
+:deep(.wrap h1) {
+  font-size: 2em;
+}
+
+:deep(.wrap h2) {
+  font-size: 1.5em;
+}
+
+:deep(.wrap h3) {
+  font-size: 1.17em;
+}
 
 
 </style>

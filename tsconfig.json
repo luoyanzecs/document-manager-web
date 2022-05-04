@@ -32,8 +32,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
-, "src/composables/useUser.js", "src/composables/useBu.js"  ],
+    "tests/**/*.tsx",
+  ],
   "exclude": [
     "node_modules"
   ]

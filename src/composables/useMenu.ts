@@ -1,5 +1,6 @@
 import {FILE_MENU} from "@/api";
 import {reactive} from "vue";
+import {BaseResponse} from "@/main";
 
 interface MenuModel {
     id: number,
@@ -8,7 +9,7 @@ interface MenuModel {
     children: MenuModel[]
 }
 
-interface ResponseModel {
+interface ResponseModel extends BaseResponse{
     items: MenuModel[]
 }
 
@@ -19,7 +20,7 @@ export const useMenu = () => {
         loader: true
     })
 
-    const getMenuByBuId = (id: number) => {
+    const getMenuByBuId = (id: number): void => {
         menuModel.loader = true
         FILE_MENU({ bu: id }).then((it: ResponseModel) => {
             menuModel.items = Array(0)
